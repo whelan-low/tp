@@ -4,6 +4,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 
 /**
  * Abstract class for DeleteStudentCommand
@@ -31,4 +32,6 @@ public abstract class DeleteStudentCommand extends Command {
     public abstract boolean equals(Object other);
 
     public abstract String toString();
+
+    public abstract void deleteStudentFromTutorialClasses(Model model, Person student);
 }
