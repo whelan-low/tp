@@ -1,10 +1,16 @@
 package seedu.address.logic.commands.deletestudentcommands;
 
+import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.module.ModuleCode;
+import seedu.address.model.module.TutorialClass;
 import seedu.address.model.person.Person;
+
 
 /**
  * Abstract class for DeleteStudentCommand
@@ -33,5 +39,19 @@ public abstract class DeleteStudentCommand extends Command {
 
     public abstract String toString();
 
-    public abstract void deleteStudentFromTutorialClasses(Model model, Person student);
+    /**
+     * Deletes a specified student from all tutorial classes from all modules in a model.
+     *
+     * @param model that contains the modules and tutorial classes
+     * @param student to be deleted
+     */
+    public void deleteStudentFromTutorialClasses(Model model, Person student) {
+        ObservableList<ModuleCode> list = model.getAddressBook().getModuleList();
+        for (ModuleCode module : list) {
+            ArrayList<TutorialClass> tutorialClassesOfModule = module.getTutorialClasses();
+            for (TutorialClass tutorialClass : tutorialClassesOfModule) {
+                tutorialClass.deleteStudent(student);
+            }
+        }
+    }
 }

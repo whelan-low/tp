@@ -2,17 +2,12 @@ package seedu.address.logic.commands.deletestudentcommands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.ArrayList;
-
-import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.messages.PersonMessages;
 import seedu.address.model.Model;
-import seedu.address.model.module.ModuleCode;
-import seedu.address.model.module.TutorialClass;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
 
@@ -67,15 +62,5 @@ public class DeleteStudentByIdCommand extends DeleteStudentCommand {
         return new ToStringBuilder(this)
                 .add("studentId", studentId)
                 .toString();
-    }
-    @Override
-    public void deleteStudentFromTutorialClasses(Model model, Person student) {
-        ObservableList<ModuleCode> list = model.getAddressBook().getModuleList();
-        for (ModuleCode module : list) {
-            ArrayList<TutorialClass> tutorialClassesOfModule = module.getTutorialClasses();
-            for (TutorialClass tutorialClass : tutorialClassesOfModule) {
-                tutorialClass.deleteStudent(student);
-            }
-        }
     }
 }
