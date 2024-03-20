@@ -21,7 +21,7 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -34,6 +34,9 @@ import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
 import seedu.address.testutil.PersonBuilder;
 
+/**
+ * Contains unit tests for the LogicManager class.
+ */
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
     private static final IOException DUMMY_AD_EXCEPTION = new AccessDeniedException("dummy access denied exception");
@@ -67,8 +70,8 @@ public class LogicManagerTest {
 
     @Test
     public void execute_validCommand_success() throws Exception {
-        String listCommand = ListCommand.COMMAND_WORD;
-        assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+        String listCommand = ListStudentsCommand.COMMAND_WORD;
+        assertCommandSuccess(listCommand, ListStudentsCommand.MESSAGE_SUCCESS, model);
     }
     @Test
     public void execute_storageThrowsIoException_throwsCommandException() {

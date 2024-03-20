@@ -12,12 +12,19 @@ public class EmailContainsKeywordPredicate implements Predicate<Person> {
 
     private final String keyword;
 
+    /**
+     * Constructs an {@code EmailContainsKeywordPredicate} with the specified keyword.
+     * @param keyword The keyword to be used for testing.
+     */
     public EmailContainsKeywordPredicate(String keyword) {
         this.keyword = keyword;
     }
 
     @Override
     public boolean test(Person person) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return false;
+        }
         return StringUtil.containsPartialWordIgnoreCase(person.getEmail().value, keyword);
     }
 

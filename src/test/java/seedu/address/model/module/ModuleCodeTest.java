@@ -7,6 +7,9 @@ import static seedu.address.model.module.ModuleCode.isValidModuleCode;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Contains unit tests for the ModuleCode class.
+ */
 public class ModuleCodeTest {
 
     public static final String VALID_MODULE_CODE = "CS2103T";
@@ -84,5 +87,32 @@ public class ModuleCodeTest {
         ModuleCode moduleCode = new ModuleCode(VALID_MODULE_CODE);
         String expectedString = "Tutorials in CS2103T: None!";
         assertEquals(moduleCode.listTutorialClasses(), expectedString);
+    }
+
+    @Test
+    void deleteTutorialClass_notInList_failure() {
+
+        // Creating TutorialClass objects
+        TutorialClass tutorialClass1 = new TutorialClass("T01");
+        TutorialClass tutorialClass2 = new TutorialClass("T02");
+
+        ModuleCode moduleCode = new ModuleCode("CS2103T");
+        moduleCode.addTutorialClass(tutorialClass1);
+
+        assertFalse(moduleCode.deleteTutorialClass(tutorialClass2));
+        assertEquals(1, moduleCode.getTutorialClasses().size());
+    }
+
+    @Test
+    void deleteTutorialClass_inList_success() {
+
+        // Creating TutorialClass objects
+        TutorialClass tutorialClass1 = new TutorialClass("T01");
+
+        ModuleCode moduleCode = new ModuleCode("CS2103T");
+        moduleCode.addTutorialClass(tutorialClass1);
+
+        assertTrue(moduleCode.deleteTutorialClass(tutorialClass1));
+        assertEquals(0, moduleCode.getTutorialClasses().size());
     }
 }
