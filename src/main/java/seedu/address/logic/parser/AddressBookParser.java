@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddClassCommand;
-import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddStudentCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteClassCommand;
@@ -18,8 +18,9 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListClassesCommand;
-import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.commands.SearchStudentCommand;
+import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassCommand;
 import seedu.address.logic.commands.deletestudentcommands.DeleteStudentCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -58,8 +59,8 @@ public class AddressBookParser {
 
         switch (commandWord) {
 
-        case AddCommand.COMMAND_WORD:
-            return new AddCommandParser().parse(arguments);
+        case AddStudentCommand.COMMAND_WORD:
+            return new AddStudentCommandParser().parse(arguments);
 
         case EditCommand.COMMAND_WORD:
             return new EditCommandParser().parse(arguments);
@@ -79,8 +80,8 @@ public class AddressBookParser {
         case AddClassCommand.COMMAND_WORD:
             return new AddClassCommandParser().parse(arguments);
 
-        case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+        case ListStudentsCommand.COMMAND_WORD:
+            return new ListStudentsCommand();
 
         case ListClassesCommand.COMMAND_WORD:
             return new ListClassesCommand();
@@ -93,6 +94,9 @@ public class AddressBookParser {
 
         case SearchStudentCommand.COMMAND_WORD:
             return new SearchStudentCommandParser().parse(arguments);
+
+        case AddStudentToClassCommand.COMMAND_WORD:
+            return new AddStudentToClassCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

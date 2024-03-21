@@ -7,16 +7,16 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.messages.PersonMessages;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+
+
 
 /**
  * Deletes a student identified using index from the address book.
  */
 public class DeleteStudentByIndexCommand extends DeleteStudentCommand {
-
-    public static final String MESSAGE_PERSON_INDEX_NOT_FOUND = "The student at index %s "
-            + "does not exist in the address book";
 
     private final Index targetIndex;
 
@@ -35,9 +35,11 @@ public class DeleteStudentByIndexCommand extends DeleteStudentCommand {
         try {
             personToDelete = model.getFilteredPersonList().get(targetIndex.getZeroBased());
         } catch (IndexOutOfBoundsException e) {
-            throw new CommandException(String.format(MESSAGE_PERSON_INDEX_NOT_FOUND, targetIndex.getOneBased()));
+            throw new CommandException(String.format(PersonMessages.MESSAGE_PERSON_INDEX_NOT_FOUND,
+                    targetIndex.getOneBased()));
         }
         model.deletePerson(personToDelete);
+        deleteStudentFromTutorialClasses(model, personToDelete);
 
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
     }

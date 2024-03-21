@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddStudentCommand;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -70,8 +70,8 @@ public class LogicManagerTest {
 
     @Test
     public void execute_validCommand_success() throws Exception {
-        String listCommand = ListCommand.COMMAND_WORD;
-        assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+        String listCommand = ListStudentsCommand.COMMAND_WORD;
+        assertCommandSuccess(listCommand, ListStudentsCommand.MESSAGE_SUCCESS, model);
     }
     @Test
     public void execute_storageThrowsIoException_throwsCommandException() {
@@ -168,7 +168,7 @@ public class LogicManagerTest {
         logic = new LogicManager(model, storage);
 
         // Triggers the saveAddressBook method by executing an add command
-        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY
+        String addCommand = AddStudentCommand.COMMAND_WORD + NAME_DESC_AMY
                 + EMAIL_DESC_AMY + STUDENT_ID_DESC_AMY;
         Person expectedPerson = new PersonBuilder(AMY).withTags().build();
         ModelManager expectedModel = new ModelManager();
