@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.address.logic.commands.CommandTestUtil.INDEX_ONE;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID_AMY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -24,6 +25,7 @@ import seedu.address.logic.commands.AddStudentCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteClassCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteModuleCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -80,7 +82,7 @@ public class AddressBookParserTest {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
         EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+                + INDEX_ONE + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
         assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
@@ -130,6 +132,16 @@ public class AddressBookParserTest {
         assertEquals(new DeleteClassCommand(new ModuleCode(moduleCode),
                 new TutorialClass(tutorialClass)), command);
     }
+
+    @Test
+    public void parseCommand_deleteModule() throws Exception {
+        final String moduleCode = "CS2103T";
+        DeleteModuleCommand command = (DeleteModuleCommand) parser.parseCommand(DeleteModuleCommand.COMMAND_WORD + " "
+                + PREFIX_MODULECODE + moduleCode);
+        assertEquals(new DeleteModuleCommand(new ModuleCode(moduleCode)), command);
+    }
+
+
 
     @Test
     public void parseCommand_listClasses() throws Exception {
