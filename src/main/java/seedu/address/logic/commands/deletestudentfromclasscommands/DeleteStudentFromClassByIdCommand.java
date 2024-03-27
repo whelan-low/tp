@@ -27,7 +27,7 @@ public class DeleteStudentFromClassByIdCommand extends DeleteStudentFromClassCom
     private final StudentId studentId;
 
     /**
-     * Adds a student to a class by student id.
+     * Deletes a student from a class by student id.
      * @param studentId
      * @param module
      * @param tutorialClass

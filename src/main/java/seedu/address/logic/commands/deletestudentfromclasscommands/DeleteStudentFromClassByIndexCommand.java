@@ -23,7 +23,7 @@ public class DeleteStudentFromClassByIndexCommand extends DeleteStudentFromClass
     private final Index targetIndex;
 
     /**
-     * Adds a student to a class by index.
+     * Deletes a student from a class by index.
      * @param targetIndex
      * @param module
      * @param tutorialClass

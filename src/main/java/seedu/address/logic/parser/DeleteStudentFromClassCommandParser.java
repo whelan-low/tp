@@ -27,7 +27,7 @@ public class DeleteStudentFromClassCommandParser implements Parser<DeleteStudent
 
     /**
      * Parses the given {@code String} of arguments in the context of the
-     * AddStudentToClass and returns an AddStudentToClassCommand object for
+     * DeleteStudentFromClass and returns a DeleteStudentFromClassCommand object for
      * execution.
      * @throws ParseException if the user input does not conform the expected format
      */

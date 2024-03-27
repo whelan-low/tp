@@ -60,16 +60,21 @@ public class DeleteStudentFromClassCommandTest {
         DeleteStudentFromClassByEmailCommand deleteStudentFromClassByEmailCommand =
                 new DeleteStudentFromClassByEmailCommand(new Email(INVALID_PERSON_EMAIL),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         DeleteStudentFromClassByIdCommand deleteStudentFromClassByIdCommand =
                 new DeleteStudentFromClassByIdCommand(new StudentId(INVALID_PERSON_STUDENT_ID),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         DeleteStudentFromClassByIndexCommand deleteStudentFromClassByIndexCommand =
                 new DeleteStudentFromClassByIndexCommand(Index.fromOneBased(1000),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         assertCommandFailure(deleteStudentFromClassByEmailCommand, model,
                 String.format(PersonMessages.MESSAGE_PERSON_EMAIL_NOT_FOUND, INVALID_PERSON_EMAIL));
+
         assertCommandFailure(deleteStudentFromClassByIdCommand, model,
                 String.format(PersonMessages.MESSAGE_PERSON_STUDENT_ID_NOT_FOUND, INVALID_PERSON_STUDENT_ID));
+
         assertCommandFailure(deleteStudentFromClassByIndexCommand, model,
                 String.format(PersonMessages.MESSAGE_PERSON_INDEX_NOT_FOUND, 1000));
     }
@@ -80,15 +85,19 @@ public class DeleteStudentFromClassCommandTest {
         Person otherPerson = new PersonBuilder().withName("otherPerson").build();
         model.addPerson(person);
         tutorialClass.addStudent(otherPerson);
+
         DeleteStudentFromClassByEmailCommand addStudentToClassByEmailCommand =
                 new DeleteStudentFromClassByEmailCommand(person.getEmail(),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         DeleteStudentFromClassByIdCommand addStudentToClassByIdCommand =
                 new DeleteStudentFromClassByIdCommand(person.getStudentId(),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         assertCommandFailure(addStudentToClassByIdCommand, model,
                 String.format(TutorialClassMessages.MESSAGE_STUDENT_NOT_FOUND_IN_CLASS, Messages.format(person),
                         tutorialClass));
+
         assertCommandFailure(addStudentToClassByEmailCommand, model,
                 String.format(TutorialClassMessages.MESSAGE_STUDENT_NOT_FOUND_IN_CLASS, Messages.format(person),
                         tutorialClass));
@@ -101,9 +110,11 @@ public class DeleteStudentFromClassCommandTest {
         DeleteStudentFromClassByIndexCommand deleteStudentFromClassByIndexFirstCommand =
                 new DeleteStudentFromClassByIndexCommand(INDEX_FIRST_PERSON,
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         DeleteStudentFromClassByIndexCommand deleteStudentFromClassByIndexSecondCommand =
                 new DeleteStudentFromClassByIndexCommand(INDEX_SECOND_PERSON,
                 new ModuleCode(VALID_MODULE_BOB), new TutorialClass(VALID_TUTORIAL_BOB));
+
         // same object -> returns true
         assertTrue(deleteStudentFromClassByIndexFirstCommand.equals(deleteStudentFromClassByIndexFirstCommand));
         // different types -> returns false
@@ -119,6 +130,7 @@ public class DeleteStudentFromClassCommandTest {
         DeleteStudentFromClassByEmailCommand deleteStudentFromClassByEmailFirstCommand =
                 new DeleteStudentFromClassByEmailCommand(new Email(VALID_EMAIL_AMY),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         DeleteStudentFromClassByEmailCommand deleteStudentFromClassByEmailSecondCommand =
                 new DeleteStudentFromClassByEmailCommand(new Email(VALID_EMAIL_BOB),
                 new ModuleCode(VALID_MODULE_BOB), new TutorialClass(VALID_TUTORIAL_BOB));
@@ -138,6 +150,7 @@ public class DeleteStudentFromClassCommandTest {
         DeleteStudentFromClassByIdCommand deleteStudentFromClassByIdFirstCommand =
                 new DeleteStudentFromClassByIdCommand(new StudentId(VALID_STUDENT_ID_AMY),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+
         DeleteStudentFromClassByIdCommand deleteStudentFromClassByIdSecondCommand =
                 new DeleteStudentFromClassByIdCommand(new StudentId(VALID_STUDENT_ID_BOB),
                 new ModuleCode(VALID_MODULE_BOB), new TutorialClass(VALID_TUTORIAL_BOB));

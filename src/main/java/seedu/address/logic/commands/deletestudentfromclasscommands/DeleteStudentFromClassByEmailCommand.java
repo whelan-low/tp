@@ -26,7 +26,7 @@ public class DeleteStudentFromClassByEmailCommand extends DeleteStudentFromClass
     private final Email email;
 
     /**
-     * Adds a student to a class by email.
+     * Deletes a student from a class by email.
      * @param email
      * @param module
      * @param tutorialClass
