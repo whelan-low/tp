@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -13,7 +14,9 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.StudentId;
 
 
 /**
@@ -98,6 +101,19 @@ public class ModelManager implements Model {
         requireNonNull(person);
         return addressBook.hasPerson(person);
     }
+
+    @Override
+    public boolean hasPersonWithStudentId(StudentId id) {
+        requireAllNonNull(id);
+        return addressBook.hasPersonWithStudentId(id);
+    }
+
+    @Override
+    public boolean hasPersonWithEmail(Email email) {
+        requireAllNonNull(email);
+        return addressBook.hasPersonWithEmail(email);
+    }
+
     @Override
     public ModuleCode findModuleFromList(ModuleCode module) {
         requireNonNull(module);
@@ -119,6 +135,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void deleteModule(ModuleCode target) {
+        addressBook.removeModule(target);
+    }
+
+    @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
@@ -133,6 +154,11 @@ public class ModelManager implements Model {
     @Override
     public void addPersonToTutorialClass(Person person, ModuleCode module, TutorialClass tutorialClass) {
         addressBook.addPersonToTutorialClass(person, module, tutorialClass);
+    }
+
+    @Override
+    public void deletePersonFromTutorialClass(Person person, ModuleCode module, TutorialClass tutorialClass) {
+        addressBook.deletePersonFromTutorialClass(person, module, tutorialClass);
     }
 
     @Override
@@ -159,6 +185,12 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<ModuleCode> getFilteredModuleList() {
         return filteredModules;
+    }
+
+    @Override
+    public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
+        addressBook.setSortedPersonList(comparator);
+        return addressBook.getSortedPersonList();
     }
 
     @Override

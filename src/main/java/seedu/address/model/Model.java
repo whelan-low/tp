@@ -1,13 +1,16 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.StudentId;
 
 /**
  * The API of the Model component.
@@ -60,6 +63,17 @@ public interface Model {
      * Returns true if a person with the same identity as {@code person} exists in the address book.
      */
     boolean hasPerson(Person person);
+
+    /**
+     * Returns true if a person with the same email as {@code person} exists in the address book.
+     */
+    boolean hasPersonWithEmail(Email email);
+
+    /**
+     * Returns true if a person with the same student id as {@code person} exists in the address book.
+     */
+    boolean hasPersonWithStudentId(StudentId id);
+
     /**
      * Finds the module object from the list if it exists. Else, returns null.
      *
@@ -80,6 +94,12 @@ public interface Model {
      * The person must exist in the address book.
      */
     void deletePerson(Person target);
+
+    /**
+     * Deletes the given module.
+     * The module must exist in the address book.
+     */
+    void deleteModule(ModuleCode target);
 
     /**
      * Adds the given person.
@@ -108,6 +128,7 @@ public interface Model {
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
     ObservableList<ModuleCode> getFilteredModuleList();
+    ObservableList<Person> getSortedPersonList(Comparator<Person> comparator);
 
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
@@ -129,4 +150,8 @@ public interface Model {
      */
     Person searchPersonByPredicate(Predicate<Person> predicate);
 
+    /**
+     * Deletes the given person from the given tutorial class in the given module.
+     */
+    void deletePersonFromTutorialClass(Person personToAdd, ModuleCode module, TutorialClass tutorialClass);
 }
