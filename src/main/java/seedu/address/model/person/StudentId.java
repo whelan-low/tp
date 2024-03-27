@@ -38,6 +38,16 @@ public class StudentId {
         return test.matches(VALIDATION_REGEX);
     }
 
+    /**
+     * Returns true if 2 student ids are identical to {@code studentId} id value.
+     * @param studentId
+     * @return boolean if they are identical.
+     */
+    public boolean isSameStudentId(StudentId studentId) {
+        requireNonNull(studentId);
+        return this.value.equals(studentId.value);
+    }
+
     @Override
     public String toString() {
         return value;

@@ -11,9 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.module.ModuleCode;
-import seedu.address.model.module.TutorialClass;
-import seedu.address.model.person.Person;
+import seedu.address.model.module.*;
+import seedu.address.model.person.*;
 
 
 /**
@@ -98,6 +97,25 @@ public class ModelManager implements Model {
         requireNonNull(person);
         return addressBook.hasPerson(person);
     }
+
+    @Override
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.hasTeamInTutorial(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
+        requireAllNonNull(studentId, tutorialClass);
+        return addressBook.isStudentInAnyTeam(studentId, tutorialClass);
+    }
+
+    @Override
+    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
+        requireAllNonNull(studentId, tutorialTeam);
+        addressBook.allocateStudentToTeam(studentId, tutorialTeam);
+    }
+
     @Override
     public ModuleCode findModuleFromList(ModuleCode module) {
         requireNonNull(module);

@@ -5,7 +5,8 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 
-import seedu.address.model.person.Person;
+import javafx.collections.*;
+import seedu.address.model.person.*;
 
 /**
  * Represents a Module's tutorial team.
@@ -175,6 +176,19 @@ public class TutorialTeam {
     public boolean hasStudent(Person student) {
         return students.contains(student);
     }
+
+
+    /**
+     * Checks if the student is in the tutorial team.
+     * @param studentId to check with.
+     * @return true if the student is in the tutorial class
+     */
+    public boolean hasStudentVerified(StudentId studentId) {
+        ObservableList<Person> obList = FXCollections.observableList(students);
+        return obList.stream().anyMatch(person -> person.getStudentId().isSameStudentId(studentId));
+    }
+
+
 
     @Override
     public String toString() {

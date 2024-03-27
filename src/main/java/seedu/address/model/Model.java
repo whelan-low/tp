@@ -5,9 +5,8 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.model.module.ModuleCode;
-import seedu.address.model.module.TutorialClass;
-import seedu.address.model.person.Person;
+import seedu.address.model.module.*;
+import seedu.address.model.person.*;
 
 /**
  * The API of the Model component.
@@ -124,9 +123,30 @@ public interface Model {
      */
 
     void updateFilteredModuleList(Predicate<ModuleCode> predicate);
+
     /**
      * Search for person by a given {@code predicate}.
      */
     Person searchPersonByPredicate(Predicate<Person> predicate);
 
+    /**
+     * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}
+     * @param tutorialClass of the tutorialTeam.
+     * @param tutorialTeam to check if it exist.
+     */
+    boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam);
+
+    /**
+     * Returns true if the {@code studentId} is already in a team of {@code tutorialClass}.
+     * @param tutorialClass of the teams.
+     * @param studentId to search for.
+     */
+    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass);
+
+    /**
+     * Allocates the student to the {@code tutorialTeam} under that {@code tutorialClass} of that {@code moduleCode}
+     * @param studentId to find the Person to add into the team.
+     * @param tutorialTeam to allocate the student into.
+     */
+    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam);
 }

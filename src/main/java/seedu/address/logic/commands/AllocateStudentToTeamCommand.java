@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.commons.util.CollectionUtil;
-import seedu.address.logic.*;
 import seedu.address.logic.commands.exceptions.*;
 import seedu.address.model.*;
 import seedu.address.model.module.*;
@@ -34,6 +33,11 @@ public class AllocateStudentToTeamCommand extends Command {
             + PREFIX_TEAMNAME + "Team 1 ";
 
     public static final String MESSAGE_SUCCESS = "Allocate student to team: ";
+    public static final String MESSAGE_TEAM_DOES_NOT_EXIST = "Team does not exist in tutorial class";
+    public static final String MESSAGE_DUPLICATE_PERSON_IN_TEAM = "This person already exists in a team"
+            + " in the tutorial class!";
+
+    public static final String MESSAGE_CLASS_DOES_NOT_EXIST = "Tutorial class does not exist in module";
 
     private final StudentId studentId;
     private final ModuleCode moduleCode;
@@ -55,6 +59,21 @@ public class AllocateStudentToTeamCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+
+        if (model.findTutorialClassFromList(tutorialClass, moduleCode) == null) {
+            throw new CommandException(MESSAGE_CLASS_DOES_NOT_EXIST);
+        }
+
+        if (!model.hasTeamInTutorial(tutorialClass, tutorialTeam)) {
+            throw new CommandException(MESSAGE_TEAM_DOES_NOT_EXIST);
+        }
+
+        if (model.isStudentInAnyTeam(studentId, tutorialClass)) {
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON_IN_TEAM);
+        }
+
+        model.allocateStudentToTeam(studentId, tutorialTeam);
+
         return new CommandResult(String.format(MESSAGE_SUCCESS));
     }
 

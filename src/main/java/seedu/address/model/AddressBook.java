@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,8 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.messages.ModuleMessages;
-import seedu.address.model.module.ModuleCode;
-import seedu.address.model.module.TutorialClass;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.module.*;
+import seedu.address.model.person.*;
 
 /**
  * Wraps all data at the address-book level
@@ -97,6 +96,41 @@ public class AddressBook implements ReadOnlyAddressBook {
     public boolean hasPerson(Person person) {
         requireNonNull(person);
         return persons.contains(person);
+    }
+
+    /**
+     * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}
+     * @param tutorialClass of the tutorialTeam.
+     * @param tutorialTeam to check if it exist.
+     */
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        ArrayList<TutorialTeam> listOfTeams = tutorialClass.getTeams();
+        ObservableList<TutorialTeam> teams = FXCollections.observableList(listOfTeams);
+        return teams.stream().anyMatch(tutorialClass::hasTeam);
+    }
+
+    /**
+     * Returns true if the {@code studentId} is already in a team of {@code tutorialClass}.
+     * @param tutorialClass of the teams.
+     * @param studentId to search for.
+     */
+    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
+        boolean isStudentExist = false;
+        for (TutorialTeam tutorialTeam : tutorialClass.getTeams()) {
+            isStudentExist = tutorialTeam.hasStudentVerified(studentId);
+        }
+        return isStudentExist;
+    };
+
+    /**
+     * Allocates the {@code studentId} to the {@code tutorialTeam}
+     * @param tutorialTeam to allocate the student into.
+     */
+    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
+        requireAllNonNull(studentId, tutorialTeam);
+        Person person = persons.getPerson(studentId);
+        tutorialTeam.addStudent(person);
     }
 
     /**
