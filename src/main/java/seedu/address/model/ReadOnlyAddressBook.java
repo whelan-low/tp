@@ -3,6 +3,7 @@ package seedu.address.model;
 import javafx.collections.ObservableList;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Person;
 
 /**
@@ -32,4 +33,5 @@ public interface ReadOnlyAddressBook {
     void addModule(ModuleCode moduleCode, String description);
 
     ObservableList<TutorialClass> getTutorialList();
+    ObservableList<TutorialTeam> getTeamList();
 }

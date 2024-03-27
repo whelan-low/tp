@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -13,6 +14,8 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.module.TutorialTeamName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -28,6 +31,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final FilteredList<ModuleCode> filteredModules;
+    private final FilteredList<TutorialTeam> filteredTeams;
 
 
     /**
@@ -42,6 +46,7 @@ public class ModelManager implements Model {
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         filteredModules = new FilteredList<>(this.addressBook.getModuleList());
+        filteredTeams = new FilteredList<>(this.addressBook.getTeamList());
     }
 
     public ModelManager() {
@@ -127,6 +132,16 @@ public class ModelManager implements Model {
             return null;
         }
     }
+    @Override
+    public TutorialTeam findTutorialTeamFromList(TutorialTeam tutorialTeam, TutorialClass tutorialClass,
+                                                 ModuleCode moduleCode) {
+        try {
+            return addressBook.findTutorialClassFromList(tutorialClass,
+                moduleCode).getTeam(tutorialTeam.toString());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @Override
     public void deletePerson(Person target) {
@@ -185,6 +200,10 @@ public class ModelManager implements Model {
     public ObservableList<ModuleCode> getFilteredModuleList() {
         return filteredModules;
     }
+    @Override
+    public ObservableList<TutorialTeam> getFilteredTeamList() {
+        return filteredTeams;
+    }
 
     @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
@@ -196,6 +215,12 @@ public class ModelManager implements Model {
     public void updateFilteredModuleList(Predicate<ModuleCode> predicate) {
         requireNonNull(predicate);
         filteredModules.setPredicate(predicate);
+    }
+
+    @Override
+    public void updateFilteredTeamList(Predicate<TutorialTeam> predicate) {
+        requireNonNull(predicate);
+        filteredTeams.setPredicate(predicate);
     }
     /**
      * Searches for a person in the list of filtered persons based on the given predicate.
@@ -224,5 +249,23 @@ public class ModelManager implements Model {
         return addressBook.equals(otherModelManager.addressBook)
             && userPrefs.equals(otherModelManager.userPrefs)
             && filteredPersons.equals(otherModelManager.filteredPersons);
+    }
+
+    public boolean hasTeamWithStudentId(TutorialTeamName teamName) {
+        requireNonNull(teamName);
+        requireNonNull(teamName);
+        for (TutorialTeam team : filteredTeams) {
+            if (team.getTeamName().equalsIgnoreCase(teamName.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public TutorialTeam searchTeamByPredicate(Predicate<TutorialTeam> predicate, TutorialClass tutorialClass,
+                                              ModuleCode moduleCode) {
+        requireNonNull(predicate);
+        List<TutorialTeam> teams = findTutorialClassFromList(tutorialClass, moduleCode).getTeams();
+        return teams.stream().filter(predicate).findFirst().orElse(null);
     }
 }

@@ -24,6 +24,7 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -163,6 +164,12 @@ public class AddStudentCommandTest {
         }
 
         @Override
+        public TutorialTeam findTutorialTeamFromList(TutorialTeam tutorialTeam, TutorialClass tutorialClass,
+                                                     ModuleCode moduleCode) {
+            return null;
+        }
+
+        @Override
         public void addPersonToTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
         }
@@ -170,6 +177,12 @@ public class AddStudentCommandTest {
         @Override
         public void deletePersonFromTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public TutorialTeam searchTeamByPredicate(Predicate<TutorialTeam> predicate, TutorialClass tutorialClass,
+                                                  ModuleCode moduleCode) {
+            return null;
         }
 
         @Override
@@ -207,6 +220,11 @@ public class AddStudentCommandTest {
         }
 
         @Override
+        public ObservableList<TutorialTeam> getFilteredTeamList() {
+            return null;
+        }
+
+        @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
@@ -214,6 +232,11 @@ public class AddStudentCommandTest {
         @Override
         public void updateFilteredModuleList(Predicate<ModuleCode> predicate) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredTeamList(Predicate<TutorialTeam> predicate) {
+
         }
 
         public Person searchPersonByPredicate(Predicate<Person> predicate) {

@@ -12,6 +12,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.messages.ModuleMessages;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.module.TutorialTeamName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -26,6 +28,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     private final UniquePersonList persons;
     private final ArrayList<ModuleCode> modules;
     private final ArrayList<TutorialClass> tutorialClasses;
+    private final ArrayList<TutorialTeam> tutorialTeams;
 
     /*
      * The 'unusual' code block below is a non-static initialization block,
@@ -41,6 +44,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons = new UniquePersonList();
         modules = new ArrayList<>();
         tutorialClasses = new ArrayList<>();
+        tutorialTeams = new ArrayList<>();
     }
 
     public AddressBook() {
@@ -79,6 +83,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.tutorialClasses.addAll(tutorialClasses);
     }
 
+    public void setTeams(List<TutorialTeam> tutorialTeams) {
+        requireNonNull(tutorialTeams);
+        this.tutorialTeams.clear();
+        this.tutorialTeams.addAll(tutorialTeams);
+    }
+
     /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
@@ -87,6 +97,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         setPersons(newData.getPersonList());
         setModules(newData.getModuleList());
         setClass(newData.getTutorialList());
+        setTeams(newData.getTeamList());
 
     }
 
@@ -276,6 +287,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         return FXCollections.observableList(tutorialClasses);
     }
     @Override
+    public ObservableList<TutorialTeam> getTeamList() { return FXCollections.observableList(tutorialTeams); }
+    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -293,5 +306,24 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public int hashCode() {
         return persons.hashCode();
+    }
+    public boolean hasTeam(TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        return tutorialTeams.contains(tutorialTeam);
+    }
+
+    /**
+     * Returns true if a person with the same identity as {@code person} exists in
+     * the address book.
+     */
+    public boolean hasTeamWithStudentId(TutorialTeamName teamName) {
+        requireNonNull(teamName);
+        requireNonNull(teamName);
+        for (TutorialTeam team : tutorialTeams) {
+            if (team.getTeamName().equalsIgnoreCase(teamName.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

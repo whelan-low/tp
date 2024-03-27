@@ -74,11 +74,12 @@ public class AddTeamCommand extends Command {
         ModuleCode module = moduleAndTutorialClass.getModule();
         TutorialClass tutorialClass = moduleAndTutorialClass.getTutorialClass();
 
-        TutorialTeam newTeam = new TutorialTeam(teamName, teamSize);
+        TutorialTeam existingTeam = tutorialClass.findTeamByNameAndSize(teamName, teamSize);
 
-        if (tutorialClass.hasTeam(newTeam)) {
+        if (existingTeam != null) {
             throw new CommandException(String.format(MESSAGE_DUPLICATE_TEAM, teamName, module, tutorialClass));
         } else {
+            TutorialTeam newTeam = new TutorialTeam(teamName, teamSize);
             tutorialClass.addTeam(newTeam);
         }
 

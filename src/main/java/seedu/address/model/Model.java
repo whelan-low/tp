@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -88,6 +89,9 @@ public interface Model {
      */
     TutorialClass findTutorialClassFromList(TutorialClass tutorialClass, ModuleCode moduleCode);
 
+    TutorialTeam findTutorialTeamFromList(TutorialTeam tutorialTeam, TutorialClass tutorialClass,
+                                          ModuleCode moduleCode);
+
     /**
      * Deletes the given person.
      * The person must exist in the address book.
@@ -128,6 +132,8 @@ public interface Model {
     ObservableList<Person> getFilteredPersonList();
     ObservableList<ModuleCode> getFilteredModuleList();
 
+    ObservableList<TutorialTeam> getFilteredTeamList();
+
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
      *
@@ -143,6 +149,9 @@ public interface Model {
      */
 
     void updateFilteredModuleList(Predicate<ModuleCode> predicate);
+
+    void updateFilteredTeamList(Predicate<TutorialTeam> predicate);
+
     /**
      * Search for person by a given {@code predicate}.
      */
@@ -152,4 +161,7 @@ public interface Model {
      * Deletes the given person from the given tutorial class in the given module.
      */
     void deletePersonFromTutorialClass(Person personToAdd, ModuleCode module, TutorialClass tutorialClass);
+
+    TutorialTeam searchTeamByPredicate(Predicate<TutorialTeam> predicate, TutorialClass tutorialClass,
+                                       ModuleCode moduleCode);
 }

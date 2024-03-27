@@ -4,6 +4,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import seedu.address.model.person.Person;
 
@@ -22,7 +23,7 @@ public class TutorialTeam {
 
     public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
 
-    public final String teamName;
+    public final TutorialTeamName teamName;
     public final int teamSize;
     private final ArrayList<Person> students;
 
@@ -32,7 +33,7 @@ public class TutorialTeam {
      * list for {@code students} and sets the {@code teamSize} to the maximum.
      */
     public TutorialTeam() {
-        this.teamName = "";
+        this.teamName = new TutorialTeamName("");
         this.students = new ArrayList<>();
         this.teamSize = Integer.MAX_VALUE;
     }
@@ -45,7 +46,7 @@ public class TutorialTeam {
     public TutorialTeam(String tutorialTeam) {
         requireAllNonNull(tutorialTeam);
         checkArgument(isValidTeamName(tutorialTeam), MESSAGE_NAME_CONSTRAINTS);
-        this.teamName = tutorialTeam;
+        this.teamName = new TutorialTeamName(tutorialTeam);
         this.students = new ArrayList<>();
         this.teamSize = Integer.MAX_VALUE;
     }
@@ -60,20 +61,20 @@ public class TutorialTeam {
         requireAllNonNull(tutorialTeam, teamSize);
         checkArgument(isValidTeamName(tutorialTeam), MESSAGE_NAME_CONSTRAINTS);
         checkArgument(isValidSize(teamSize), MESSAGE_SIZE_CONSTRAINTS);
-        this.teamName = tutorialTeam;
+        this.teamName = new TutorialTeamName(tutorialTeam);
         this.students = new ArrayList<>();
         this.teamSize = teamSize;
     }
 
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students.
-     * @param tutorialClass to be added
+     * @param tutorialTeam to be added
      * @param students      in the tutorial class
      */
     public TutorialTeam(String tutorialTeam, ArrayList<Person> students) {
         requireAllNonNull(tutorialTeam);
         checkArgument(isValidTeamName(tutorialTeam), MESSAGE_NAME_CONSTRAINTS);
-        this.teamName = tutorialTeam;
+        this.teamName = new TutorialTeamName(tutorialTeam);
         this.students = students;
         this.teamSize = Integer.MAX_VALUE;
     }
@@ -81,7 +82,7 @@ public class TutorialTeam {
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students and
      * team size.
-     * @param tutorialClass to be added
+     * @param tutorialTeam to be added
      * @param students      in the tutorial class
      * @param teamSize      of the tutorial team
      */
@@ -89,7 +90,7 @@ public class TutorialTeam {
         requireAllNonNull(tutorialTeam);
         checkArgument(isValidTeamName(tutorialTeam), MESSAGE_NAME_CONSTRAINTS);
         checkArgument(isValidSize(teamSize), MESSAGE_SIZE_CONSTRAINTS);
-        this.teamName = tutorialTeam;
+        this.teamName = new TutorialTeamName(tutorialTeam);
         this.students = students;
         this.teamSize = teamSize;
     }
@@ -131,7 +132,7 @@ public class TutorialTeam {
      * @return The team name.
      */
     public String getTeamName() {
-        return teamName;
+        return teamName.toString();
     }
 
     /**
@@ -178,7 +179,7 @@ public class TutorialTeam {
 
     @Override
     public String toString() {
-        return teamName;
+        return teamName.toString();
     }
 
     @Override
@@ -193,11 +194,11 @@ public class TutorialTeam {
         }
 
         TutorialTeam otherTutorialTeam = (TutorialTeam) other;
-        return teamName.equals(otherTutorialTeam.teamName);
+        return teamName.equals(otherTutorialTeam.teamName) && teamSize == otherTutorialTeam.teamSize;
     }
 
     @Override
     public int hashCode() {
-        return teamName.hashCode();
+        return Objects.hash(teamName, teamSize);
     }
 }

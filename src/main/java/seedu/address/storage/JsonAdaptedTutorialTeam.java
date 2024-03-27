@@ -37,7 +37,7 @@ public class JsonAdaptedTutorialTeam {
      * Converts a given {@code TutorialTeam} into this class for Jackson use.
      */
     public JsonAdaptedTutorialTeam(TutorialTeam source) {
-        this.teamName = source.teamName;
+        this.teamName = source.teamName.fullName;
         this.teamSize = source.teamSize;
         this.students = source.getStudents().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList());
     }
