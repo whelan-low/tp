@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.module.*;
-import seedu.address.model.person.*;
+import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.person.Person;
 
 /**
  * Jackson-friendly version of {@link TutorialTeam}.
@@ -70,11 +70,11 @@ public class JsonAdaptedTutorialTeam {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, teamName));
         }
         if (!TutorialTeam.isValidTeamName(teamName)) {
-            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(TutorialTeam.MESSAGE_NAME_CONSTRAINTS);
         }
 
         if (!TutorialTeam.isValidSize(teamSize)) {
-            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+            throw new IllegalValueException(TutorialTeam.MESSAGE_SIZE_CONSTRAINTS);
         }
         for (JsonAdaptedPerson student : students) {
             listOfStudents.add(student.toModelType());

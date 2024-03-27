@@ -261,7 +261,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      * @param tutorialTeam size to check.
      * @return a boolean that indicates whether the team size will be exceeded by adding another person.
      */
-    boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+    public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
         requireNonNull(tutorialTeam);
         int maxTeamSize = tutorialTeam.getTeamSize();
         int currTeamSize = tutorialTeam.getStudents().size();

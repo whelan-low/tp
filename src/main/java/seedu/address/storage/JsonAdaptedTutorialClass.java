@@ -10,9 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
-import seedu.address.model.person.*;
-
-import static seedu.address.storage.JsonAdaptedModule.MISSING_FIELD_MESSAGE_FORMAT;
+import seedu.address.model.person.Person;
 
 /**
  * Jackson-friendly version of {@link TutorialClass}.
@@ -73,18 +71,18 @@ public class JsonAdaptedTutorialClass {
         ArrayList<Person> listOfStudents = new ArrayList<>();
         ArrayList<TutorialTeam> listOfTeams = new ArrayList<>();
 
-        for (JsonAdaptedPerson student : students) {
-            listOfStudents.add(student.toModelType());
-        }
-        for (JsonAdaptedTutorialTeam team : teams) {
-            listOfTeams.add(team.toModelType());
-        }
-
         if (tutorialName == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, tutorialName));
         }
         if (!TutorialClass.isValidTutorialClass(tutorialName)) {
             throw new IllegalValueException(TutorialClass.MESSAGE_CONSTRAINTS);
+        }
+
+        for (JsonAdaptedPerson student : students) {
+            listOfStudents.add(student.toModelType());
+        }
+        for (JsonAdaptedTutorialTeam team : teams) {
+            listOfTeams.add(team.toModelType());
         }
         return new TutorialClass(tutorialName, listOfStudents, listOfTeams);
     }

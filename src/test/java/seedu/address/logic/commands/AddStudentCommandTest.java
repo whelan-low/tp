@@ -160,6 +160,11 @@ public class AddStudentCommandTest {
         };
 
         @Override
+        public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }

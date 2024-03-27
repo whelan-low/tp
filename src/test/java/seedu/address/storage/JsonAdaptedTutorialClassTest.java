@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.testutil.PersonBuilder;
 
@@ -36,7 +37,7 @@ class JsonAdaptedTutorialClassTest {
         JsonAdaptedTutorialClass jsonTutorialClass = new JsonAdaptedTutorialClass(INVALID_TUTORIAL_NAME,
                 VALID_TEAMS_LIST, VALID_STUDENTS_LIST);
         String expectedMessage = TutorialClass.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalArgumentException.class, expectedMessage, jsonTutorialClass::toModelType);
+        assertThrows(IllegalValueException.class, expectedMessage, jsonTutorialClass::toModelType);
     }
 
 }

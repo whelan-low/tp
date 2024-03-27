@@ -3,11 +3,8 @@ package seedu.address.model.module;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.lang.reflect.*;
 import java.util.ArrayList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
 
@@ -196,6 +193,7 @@ public class TutorialTeam {
             };
         }
         return false;
+
     }
 
     @Override
