@@ -1,7 +1,6 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +10,12 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.messages.ModuleMessages;
-import seedu.address.model.module.*;
-import seedu.address.model.person.*;
+import seedu.address.model.module.ModuleCode;
+import seedu.address.model.module.TutorialClass;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 
 /**
  * Wraps all data at the address-book level
@@ -99,38 +102,21 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}
-     * @param tutorialClass of the tutorialTeam.
-     * @param tutorialTeam to check if it exist.
+     * Returns true if a person with the same identity as {@code person} exists in
+     * the address book.
      */
-    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
-        requireAllNonNull(tutorialClass, tutorialTeam);
-        ArrayList<TutorialTeam> listOfTeams = tutorialClass.getTeams();
-        ObservableList<TutorialTeam> teams = FXCollections.observableList(listOfTeams);
-        return teams.stream().anyMatch(tutorialClass::hasTeam);
+    public boolean hasPersonWithStudentId(StudentId id) {
+        requireNonNull(id);
+        return persons.asUnmodifiableObservableList().stream().anyMatch(s -> s.getStudentId().equals(id));
     }
 
     /**
-     * Returns true if the {@code studentId} is already in a team of {@code tutorialClass}.
-     * @param tutorialClass of the teams.
-     * @param studentId to search for.
+     * Returns true if a person with the same identity as {@code person} exists in
+     * the address book.
      */
-    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
-        boolean isStudentExist = false;
-        for (TutorialTeam tutorialTeam : tutorialClass.getTeams()) {
-            isStudentExist = tutorialTeam.hasStudentVerified(studentId);
-        }
-        return isStudentExist;
-    };
-
-    /**
-     * Allocates the {@code studentId} to the {@code tutorialTeam}
-     * @param tutorialTeam to allocate the student into.
-     */
-    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
-        requireAllNonNull(studentId, tutorialTeam);
-        Person person = persons.getPerson(studentId);
-        tutorialTeam.addStudent(person);
+    public boolean hasPersonWithEmail(Email email) {
+        requireNonNull(email);
+        return persons.asUnmodifiableObservableList().stream().anyMatch(s -> s.getEmail().equals(email));
     }
 
     /**
@@ -220,6 +206,26 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Deletes a person from the students list of a specific tutorial class within a
+     * module.
+     */
+    public void deletePersonFromTutorialClass(Person person, ModuleCode module, TutorialClass tutorialClass) {
+        requireNonNull(person);
+        requireNonNull(module);
+        requireNonNull(tutorialClass);
+
+        ModuleCode moduleInList = findModuleFromList(module);
+        if (moduleInList == null) {
+            throw new IllegalArgumentException("Module does not exist in the address book.");
+        }
+        TutorialClass tutorialClassInList = moduleInList.getTutorialClasses().stream()
+                .filter(tutorial -> tutorial.equals(tutorialClass))
+                .findFirst()
+                .orElse(null);
+        tutorialClassInList.deleteStudent(person);
+    }
+
+    /**
      * Replaces the given person {@code target} in the list with
      * {@code editedPerson}.
      * {@code target} must exist in the address book.
@@ -233,13 +239,20 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Removes {@code key} from this {@code AddressBook}.
+     * Removes Person {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
      */
     public void removePerson(Person key) {
         persons.remove(key);
     }
 
+    /**
+     * Removes ModuleCode {@code key} from this {@code AddressBook}.
+     * {@code key} must exist in the address book.
+     */
+    public void removeModule(ModuleCode key) {
+        modules.remove(key);
+    }
     //// util methods
 
     @Override

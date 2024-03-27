@@ -5,8 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 
-import javafx.collections.*;
-import seedu.address.model.person.*;
+import seedu.address.model.person.Person;
 
 /**
  * Represents a Module's tutorial team.
@@ -39,19 +38,6 @@ public class TutorialTeam {
     }
 
     /**
-     * Constructs a {@code TutorialTeam} with the specific teamName.
-     * Initializes the {@code teamName} field to the specified teamName, creates an empty
-     * list for {@code students} and sets the {@code teamSize} to the maximum.
-     */
-    public TutorialTeam(String teamName) {
-        this.teamName = teamName;
-        this.students = new ArrayList<>();
-        this.teamSize = Integer.MAX_VALUE;
-    }
-
-
-
-    /**
      * A constructor for TutorialTeam. Creates a tutorial team of a certain size
      * with no students.
      * @param tutorialTeam
@@ -68,7 +54,7 @@ public class TutorialTeam {
 
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students.
-     * @param tutorialTeam to be added
+     * @param tutorialClass to be added
      * @param students      in the tutorial class
      */
     public TutorialTeam(String tutorialTeam, ArrayList<Person> students) {
@@ -82,7 +68,7 @@ public class TutorialTeam {
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students and
      * team size.
-     * @param tutorialTeam to be added
+     * @param tutorialClass to be added
      * @param students      in the tutorial class
      * @param teamSize      of the tutorial team
      */
@@ -176,19 +162,6 @@ public class TutorialTeam {
     public boolean hasStudent(Person student) {
         return students.contains(student);
     }
-
-
-    /**
-     * Checks if the student is in the tutorial team.
-     * @param studentId to check with.
-     * @return true if the student is in the tutorial class
-     */
-    public boolean hasStudentVerified(StudentId studentId) {
-        ObservableList<Person> obList = FXCollections.observableList(students);
-        return obList.stream().anyMatch(person -> person.getStudentId().isSameStudentId(studentId));
-    }
-
-
 
     @Override
     public String toString() {
