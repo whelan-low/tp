@@ -5,6 +5,7 @@ import java.util.Comparator;
 import javafx.collections.ObservableList;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Person;
 
 /**
@@ -26,6 +27,8 @@ public interface ReadOnlyAddressBook {
 
     void setSortedPersonList(Comparator<Person> comparator);
     ObservableList<Person> getSortedPersonList();
+    ObservableList<TutorialTeam> getTutorialTeamList();
+    ObservableList<Person> getStudentInTeamList();
 
     /**
      * Checks if the address book contains the specified module code.

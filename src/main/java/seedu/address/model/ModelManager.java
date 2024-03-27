@@ -14,6 +14,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -143,6 +144,45 @@ public class ModelManager implements Model {
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    }
+
+    @Override
+    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
+        addressBook.allocateStudentToTeam(studentId, tutorialTeam);
+    }
+
+    @Override
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.hasTeamInTutorial(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.getTutorialTeam(tutorialClass, tutorialTeam);
+    }
+
+    /**
+     * Add a team to the tutorial class
+     * @param tutorialTeam to be added to the tutorial class
+     */
+    @Override
+    public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        addressBook.addTeam(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        return addressBook.hasTeamSizeExceeded(tutorialTeam);
+    };
+
+    @Override
+    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
+        requireAllNonNull(studentId, tutorialClass);
+        return addressBook.isStudentInAnyTeam(studentId, tutorialClass);
     }
 
     @Override

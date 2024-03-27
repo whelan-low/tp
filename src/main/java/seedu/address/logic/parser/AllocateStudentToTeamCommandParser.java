@@ -1,25 +1,19 @@
 package seedu.address.logic.parser;
 
-
-import seedu.address.logic.commands.*;
-import seedu.address.logic.commands.addstudenttoclasscommands.*;
-import seedu.address.logic.parser.exceptions.*;
-import seedu.address.model.module.*;
-import seedu.address.model.person.*;
-import seedu.address.model.tag.*;
-
-import java.util.*;
-import java.util.stream.*;
-
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAMNAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
+
+import java.util.stream.Stream;
+
+import seedu.address.logic.commands.AllocateStudentToTeamCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.module.ModuleCode;
+import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.person.StudentId;
 
 /**
  * Parses input arguments and creates a new AllocateStudentToTeamCommand object

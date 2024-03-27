@@ -25,6 +25,7 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -139,6 +140,26 @@ public class AddStudentCommandTest {
         }
 
         @Override
+        public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
         public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
@@ -167,6 +188,11 @@ public class AddStudentCommandTest {
         public void addPersonToTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        };
 
         @Override
         public void deletePersonFromTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {

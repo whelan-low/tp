@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -96,10 +97,19 @@ public interface Model {
     void deletePerson(Person target);
 
     /**
+     * adds a team into the tutorial class
+     * @param tutorialClass to add the tutorialTeam to.
+     * @param tutorialTeam to be added into the tutorialClass.
+     */
+    public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam);
+
+    /**
      * Deletes the given module.
      * The module must exist in the address book.
      */
     void deleteModule(ModuleCode target);
+
+    public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam);
 
     /**
      * Adds the given person.
@@ -112,6 +122,33 @@ public interface Model {
      * {@code ModuleCode} must not already exist in the address book.
      */
     void addModule(ModuleCode module);
+
+    /**
+     * Allocates the {@code studentId} to the {@code tutorialTeam}
+     * @param tutorialTeam to allocate the student into.
+     */
+    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam);
+
+    /**
+     * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}
+     * @param tutorialClass of the tutorialTeam.
+     * @param tutorialTeam to check if it exist.
+     */
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam);
+
+    /**
+     * Returns true if the {@code studentId} is already in a team of {@code tutorialClass}.
+     * @param tutorialClass of the teams.
+     * @param studentId to search for.
+     */
+    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass);
+
+    /**
+     * Returns true if the {@code tutorialTeam} size has exceeded its limit.
+     * @param tutorialTeam size to check.
+     * @return a boolean that indicates whether the team size will be exceeded by adding another person.
+     */
+    boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam);
 
     /**
      * Adds the given person to the given tutorial class in the given module.

@@ -1,17 +1,19 @@
 package seedu.address.logic.commands;
 
-import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.commons.util.CollectionUtil;
-import seedu.address.logic.commands.exceptions.*;
-import seedu.address.model.*;
-import seedu.address.model.module.*;
-import seedu.address.model.person.*;
-
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAMNAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
+
+import seedu.address.commons.util.CollectionUtil;
+import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.Model;
+import seedu.address.model.module.ModuleCode;
+import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.person.StudentId;
 
 /**
  * Allocates a student to a team in a tutorial Class in TAHelper.
@@ -38,6 +40,7 @@ public class AllocateStudentToTeamCommand extends Command {
             + " in the tutorial class!";
 
     public static final String MESSAGE_CLASS_DOES_NOT_EXIST = "Tutorial class does not exist in module";
+    public static final String MESSAGE_TEAM_SIZE_EXCEEDED = "Max team size reached";
 
     private final StudentId studentId;
     private final ModuleCode moduleCode;
@@ -64,15 +67,27 @@ public class AllocateStudentToTeamCommand extends Command {
             throw new CommandException(MESSAGE_CLASS_DOES_NOT_EXIST);
         }
 
-        if (!model.hasTeamInTutorial(tutorialClass, tutorialTeam)) {
+        ModuleCode module = model.findModuleFromList(moduleCode);
+        TutorialClass tutClass = model.findTutorialClassFromList(tutorialClass, module);
+
+        if (!model.hasTeamInTutorial(tutClass, tutorialTeam)) {
             throw new CommandException(MESSAGE_TEAM_DOES_NOT_EXIST);
         }
 
-        if (model.isStudentInAnyTeam(studentId, tutorialClass)) {
+        TutorialTeam tutTeam = model.getTutorialTeam(tutClass, tutorialTeam);
+        if (tutTeam == null) {
+            throw new CommandException(MESSAGE_TEAM_DOES_NOT_EXIST);
+        }
+
+        if (model.isStudentInAnyTeam(studentId, tutClass)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON_IN_TEAM);
         }
 
-        model.allocateStudentToTeam(studentId, tutorialTeam);
+        if (model.hasTeamSizeExceeded(tutTeam)) {
+            throw new CommandException(MESSAGE_TEAM_SIZE_EXCEEDED);
+        }
+
+        model.allocateStudentToTeam(studentId, tutTeam);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS));
     }

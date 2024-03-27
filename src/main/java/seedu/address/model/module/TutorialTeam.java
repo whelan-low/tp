@@ -3,9 +3,13 @@ package seedu.address.model.module;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.lang.reflect.*;
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.StudentId;
 
 /**
  * Represents a Module's tutorial team.
@@ -67,7 +71,7 @@ public class TutorialTeam {
 
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students.
-     * @param tutorialClass to be added
+     * @param tutorialTeam to be added
      * @param students      in the tutorial class
      */
     public TutorialTeam(String tutorialTeam, ArrayList<Person> students) {
@@ -81,7 +85,7 @@ public class TutorialTeam {
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students and
      * team size.
-     * @param tutorialClass to be added
+     * @param tutorialTeam to be added
      * @param students      in the tutorial class
      * @param teamSize      of the tutorial team
      */
@@ -174,6 +178,24 @@ public class TutorialTeam {
      */
     public boolean hasStudent(Person student) {
         return students.contains(student);
+    }
+
+    /**
+     * Checks if a student exist by their id
+     * @param studentId
+     * @return true if a person is in the list of students
+     */
+    public boolean hasStudentVerified(StudentId studentId, TutorialTeam tutorialTeam) {
+        ArrayList<Person> teamList = tutorialTeam.getStudents();
+        if (teamList.size() == 0 || teamList == null) {
+            return false;
+        }
+        for (Person student : teamList) {
+            if (student.getStudentId().value.equals(studentId.value)) {
+                return true;
+            };
+        }
+        return false;
     }
 
     @Override

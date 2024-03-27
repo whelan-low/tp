@@ -10,16 +10,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
-import seedu.address.model.person.Person;
+import seedu.address.model.person.*;
+
+import static seedu.address.storage.JsonAdaptedModule.MISSING_FIELD_MESSAGE_FORMAT;
 
 /**
  * Jackson-friendly version of {@link TutorialClass}.
  */
 public class JsonAdaptedTutorialClass {
 
+    public static final String MISSING_FIELD_MESSAGE_FORMAT = "tutorial name is missing!";
     private final String tutorialName;
-    private final List<JsonAdaptedPerson> students;
-    private final List<JsonAdaptedTutorialTeam> teams;
+    private final List<JsonAdaptedPerson> students = new ArrayList<>();
+    private final List<JsonAdaptedTutorialTeam> teams = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedTutorialClass} with the given
@@ -30,17 +33,21 @@ public class JsonAdaptedTutorialClass {
             @JsonProperty("teams") List<JsonAdaptedTutorialTeam> teams,
             @JsonProperty("students") List<JsonAdaptedPerson> students) {
         this.tutorialName = tutorialName;
-        this.teams = teams != null ? new ArrayList<>(teams) : new ArrayList<>();
-        this.students = students != null ? new ArrayList<>(students) : new ArrayList<>();
+        if (teams != null) {
+            this.teams.addAll(teams);
+        }
+        if (students != null) {
+            this.students.addAll(students);
+        }
     }
 
     /**
      * Converts a given {@code TutorialClass} into this class for Jackson use.
      */
     public JsonAdaptedTutorialClass(TutorialClass source) {
-        this.tutorialName = source.tutorialName;
-        this.teams = source.getTeams().stream().map(JsonAdaptedTutorialTeam::new).collect(Collectors.toList());
-        this.students = source.getStudents().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList());
+        this.tutorialName = source.getTutorialClass().tutorialName;
+        teams.addAll(source.getTeams().stream().map(JsonAdaptedTutorialTeam::new).collect(Collectors.toList()));
+        students.addAll(source.getStudents().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
     }
 
     public String getTutorialName() {
@@ -63,19 +70,23 @@ public class JsonAdaptedTutorialClass {
      *                               the adapted tutorial class.
      */
     public TutorialClass toModelType() throws IllegalValueException {
-        try {
-            ArrayList<Person> students = new ArrayList<>();
-            for (JsonAdaptedPerson student : this.students) {
-                students.add(student.toModelType());
-            }
-            ArrayList<TutorialTeam> teams = new ArrayList<>();
-            for (JsonAdaptedTutorialTeam team : this.teams) {
-                teams.add(team.toModelType());
-            }
-            return new TutorialClass(tutorialName, students, teams);
-        } catch (IllegalValueException e) {
+        ArrayList<Person> listOfStudents = new ArrayList<>();
+        ArrayList<TutorialTeam> listOfTeams = new ArrayList<>();
+
+        for (JsonAdaptedPerson student : students) {
+            listOfStudents.add(student.toModelType());
+        }
+        for (JsonAdaptedTutorialTeam team : teams) {
+            listOfTeams.add(team.toModelType());
+        }
+
+        if (tutorialName == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, tutorialName));
+        }
+        if (!TutorialClass.isValidTutorialClass(tutorialName)) {
             throw new IllegalValueException(TutorialClass.MESSAGE_CONSTRAINTS);
         }
+        return new TutorialClass(tutorialName, listOfStudents, listOfTeams);
     }
 
     @Override
