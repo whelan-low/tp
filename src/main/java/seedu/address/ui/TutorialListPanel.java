@@ -32,9 +32,11 @@ public class TutorialListPanel extends UiPart<Region> implements SelectedArea {
      * Creates a {@code TutorialListPanel} with the given {@code ObservableList}.
      */
     public TutorialListPanel(ObservableList<TutorialClass> tutorialClassList,
-                             Consumer<TutorialClass> tutorialCardClicker) {
+                             Consumer<TutorialClass> tutorialCardClicker,
+                             PersonListPanel personListPanel) {
         super(FXML);
         this.tutorialCardClickHandler = tutorialCardClicker;
+        this.personListPanel = personListPanel;
         tutorialListView.setItems(tutorialClassList);
         tutorialListView.setCellFactory(listView -> new TutorialListViewCell());
         tutorialListView.focusedProperty().addListener((arg, oldVal, focused) -> {
@@ -68,7 +70,7 @@ public class TutorialListPanel extends UiPart<Region> implements SelectedArea {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new TutorialClassCard(tutorialClass).getRoot());
+                setGraphic(new TutorialClassCard(tutorialClass, personListPanel).getRoot());
                 setOnMouseClicked(event -> tutorialCardClickHandler.accept(tutorialClass));
             }
         }
