@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -199,9 +200,11 @@ public class ModelManager implements Model {
     public ObservableList<ModuleCode> getFilteredModuleList() {
         return filteredModules;
     }
+
     @Override
-    public ObservableList<TutorialTeam> getFilteredTeamList() {
-        return filteredTeams;
+    public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
+        addressBook.setSortedPersonList(comparator);
+        return addressBook.getSortedPersonList();
     }
 
     @Override
@@ -214,12 +217,6 @@ public class ModelManager implements Model {
     public void updateFilteredModuleList(Predicate<ModuleCode> predicate) {
         requireNonNull(predicate);
         filteredModules.setPredicate(predicate);
-    }
-
-    @Override
-    public void updateFilteredTeamList(Predicate<TutorialTeam> predicate) {
-        requireNonNull(predicate);
-        filteredTeams.setPredicate(predicate);
     }
     /**
      * Searches for a person in the list of filtered persons based on the given predicate.

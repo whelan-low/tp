@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -220,8 +221,8 @@ public class AddStudentCommandTest {
         }
 
         @Override
-        public ObservableList<TutorialTeam> getFilteredTeamList() {
-            return null;
+        public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
+            throw new AssertionError("This method should not be called.");
         }
 
         @Override
@@ -232,11 +233,6 @@ public class AddStudentCommandTest {
         @Override
         public void updateFilteredModuleList(Predicate<ModuleCode> predicate) {
             throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public void updateFilteredTeamList(Predicate<TutorialTeam> predicate) {
-
         }
 
         public Person searchPersonByPredicate(Predicate<Person> predicate) {

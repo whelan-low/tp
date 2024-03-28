@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -131,8 +132,7 @@ public interface Model {
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
     ObservableList<ModuleCode> getFilteredModuleList();
-
-    ObservableList<TutorialTeam> getFilteredTeamList();
+    ObservableList<Person> getSortedPersonList(Comparator<Person> comparator);
 
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
@@ -149,8 +149,6 @@ public interface Model {
      */
 
     void updateFilteredModuleList(Predicate<ModuleCode> predicate);
-
-    void updateFilteredTeamList(Predicate<TutorialTeam> predicate);
 
     /**
      * Search for person by a given {@code predicate}.
