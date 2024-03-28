@@ -14,6 +14,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -138,6 +139,11 @@ public class AddressBookTest {
     }
 
     @Test
+    public void getSortedPersonList_modifyList_throwsUnsupportedOperationException() {
+
+    }
+
+    @Test
     public void toStringMethod() {
         String expected = AddressBook.class.getCanonicalName() + "{persons=" + addressBook.getPersonList() + "}";
         assertEquals(expected, addressBook.toString());
@@ -148,6 +154,8 @@ public class AddressBookTest {
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private ObservableList<Person> sortedPersons;
+
         AddressBookStub(Collection<Person> persons) {
             this.persons.setAll(persons);
         }
@@ -160,6 +168,16 @@ public class AddressBookTest {
         @Override
         public ObservableList<ModuleCode> getModuleList() {
             return null;
+        }
+
+        @Override
+        public void setSortedPersonList(Comparator<Person> comparator) {
+            sortedPersons = FXCollections.observableArrayList();
+        }
+
+        @Override
+        public ObservableList<Person> getSortedPersonList() {
+            return sortedPersons;
         }
 
         @Override

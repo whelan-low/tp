@@ -3,10 +3,12 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.messages.ModuleMessages;
@@ -26,6 +28,7 @@ import seedu.address.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private ObservableList<Person> sortedPersons;
     private final ArrayList<ModuleCode> modules;
     private final ArrayList<TutorialClass> tutorialClasses;
     private final ArrayList<TutorialTeam> tutorialTeams;
@@ -290,6 +293,15 @@ public class AddressBook implements ReadOnlyAddressBook {
     public ObservableList<TutorialTeam> getTeamList() {
         return FXCollections.observableList(tutorialTeams);
     }
+    @Override
+    public void setSortedPersonList(Comparator<Person> comparator) {
+        sortedPersons = new FilteredList<>(persons.asUnmodifiableObservableList().sorted(comparator));
+    }
+    @Override
+    public ObservableList<Person> getSortedPersonList() {
+        return sortedPersons;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
