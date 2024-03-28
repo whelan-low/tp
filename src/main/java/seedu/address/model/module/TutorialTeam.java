@@ -177,6 +177,24 @@ public class TutorialTeam {
         return students.contains(student);
     }
 
+    /**
+     * Checks if a student exist, check by their studentId.
+     * @return true if a person is in the list of students
+     */
+    public boolean hasStudentVerified(Person student, TutorialTeam tutorialTeam) {
+        ArrayList<Person> teamList = tutorialTeam.getStudents();
+        if (teamList.size() == 0 || teamList == null) {
+            return false;
+        }
+        for (Person eachStudent : teamList) {
+            if (eachStudent.getStudentId().value.equals(student.getStudentId().value)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     @Override
     public String toString() {
         return teamName.toString();

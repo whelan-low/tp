@@ -78,7 +78,7 @@ public class AddTeamCommand extends Command {
         if (tutorialClass.hasTeam(newTeam)) {
             throw new CommandException(String.format(MESSAGE_DUPLICATE_TEAM, teamName, module, tutorialClass));
         } else {
-            tutorialClass.addTeam(newTeam);
+            model.addTeam(tutorialClass, newTeam);
         }
 
         if (teamSize != Integer.MAX_VALUE) {

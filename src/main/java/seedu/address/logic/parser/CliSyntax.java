@@ -13,6 +13,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_STUDENTID = new Prefix("id/");
     public static final Prefix PREFIX_MODULECODE = new Prefix("module/");
     public static final Prefix PREFIX_TUTORIALCLASS = new Prefix("tutorial/");
+    public static final Prefix PREFIX_TEAMNAME = new Prefix("team/");
     public static final Prefix PREFIX_TAG = new Prefix("tag/");
     public static final Prefix PREFIX_DESCRIPTION = new Prefix("description/");
     public static final Prefix PREFIX_TEAM_SIZE = new Prefix("size/");

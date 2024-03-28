@@ -11,6 +11,7 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.StudentId;
@@ -107,6 +108,20 @@ public class ParserUtil {
             throw new ParseException(TutorialClass.MESSAGE_CONSTRAINTS);
         }
         return new TutorialClass(trimmedTutorial);
+    }
+
+    /**
+     * Parses a {@code String team} into an {@code TutorialTeam}.
+     * Leading and trailing whitespaces will be trimmed.
+     * @throws ParseException if the given {@code team} is invalid.
+     */
+    public static TutorialTeam parseTutorialTeam(String team) throws ParseException {
+        requireNonNull(team);
+        String trimmedTeam = team.trim();
+        if (!TutorialTeam.isValidTeamName(trimmedTeam)) {
+            throw new ParseException(TutorialTeam.MESSAGE_CONSTRAINTS);
+        }
+        return new TutorialTeam(trimmedTeam);
     }
 
     /**

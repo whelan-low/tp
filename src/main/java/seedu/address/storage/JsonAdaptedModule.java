@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.person.StudentId;
 
 /**
  * Jackson-friendly version of {@link ModuleCode}.
@@ -18,7 +20,7 @@ class JsonAdaptedModule {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Module name is missing!";
 
     private final String name;
-    private final ArrayList<JsonAdaptedTutorialClass> tutorialClasses;
+    private final List<JsonAdaptedTutorialClass> tutorialClasses = new ArrayList<>();
     private final String description;
 
     /**
@@ -26,11 +28,13 @@ class JsonAdaptedModule {
      */
     @JsonCreator
     public JsonAdaptedModule(@JsonProperty("name") String name,
-                             @JsonProperty("tutorialClasses") ArrayList<JsonAdaptedTutorialClass> tutorialClasses,
+                             @JsonProperty("tutorialClasses") List<JsonAdaptedTutorialClass> tutorialClasses,
                              @JsonProperty("description") String description) {
         this.name = name;
-        this.tutorialClasses = tutorialClasses;
         this.description = description;
+        if (tutorialClasses != null) {
+            this.tutorialClasses.addAll(tutorialClasses);
+        }
     }
 
     /**
@@ -38,8 +42,8 @@ class JsonAdaptedModule {
      */
     public JsonAdaptedModule(ModuleCode source) {
         name = source.toString();
-        this.tutorialClasses = source.getTutorialClasses().stream().map(JsonAdaptedTutorialClass::new)
-            .collect(Collectors.toCollection(ArrayList::new));
+        tutorialClasses.addAll(source.getTutorialClasses().stream().map(JsonAdaptedTutorialClass::new)
+            .collect(Collectors.toCollection(ArrayList::new)));
         this.description = source.getDescription();
     }
 
@@ -53,7 +57,7 @@ class JsonAdaptedModule {
     /**
      * Retrieves tutorial classes from the module.
      */
-    public ArrayList<JsonAdaptedTutorialClass> getTutorialClasses() {
+    public List<JsonAdaptedTutorialClass> getTutorialClasses() {
         return tutorialClasses;
     }
 
@@ -66,16 +70,21 @@ class JsonAdaptedModule {
         if (!ModuleCode.isValidModuleCode(name)) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, name));
         }
-        ArrayList<TutorialClass> tutorialClasses = new ArrayList<>();
+        final List<TutorialClass> listOfClass = new ArrayList<>();
         for (JsonAdaptedTutorialClass tutorialClass : this.tutorialClasses) {
-            tutorialClasses.add(tutorialClass.toModelType());
+            listOfClass.add(tutorialClass.toModelType());
         }
+
         ModuleCode moduleCode;
+        if (!ModuleCode.isValidModuleCode(name)) {
+            throw new IllegalValueException(StudentId.MESSAGE_CONSTRAINTS);
+        }
+
         if (description != null && !description.isEmpty()) {
-            moduleCode = new ModuleCode(name, tutorialClasses,
+            moduleCode = new ModuleCode(name, listOfClass,
                 description);
         } else {
-            moduleCode = new ModuleCode(name, tutorialClasses);
+            moduleCode = new ModuleCode(name, listOfClass);
         }
 
         return moduleCode;

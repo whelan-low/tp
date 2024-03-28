@@ -29,6 +29,7 @@ import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 import seedu.address.testutil.PersonBuilder;
 
 /**
@@ -140,6 +141,36 @@ public class AddStudentCommandTest {
         }
 
         @Override
+        public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public ReadOnlyAddressBook getAddressBook() {
             throw new AssertionError("This method should not be called.");
         }
@@ -168,6 +199,11 @@ public class AddStudentCommandTest {
         public void addPersonToTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+            throw new AssertionError("This method should not be called.");
+        };
 
         @Override
         public void deletePersonFromTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {
@@ -214,6 +250,21 @@ public class AddStudentCommandTest {
             throw new AssertionError("This method should not be called.");
         }
         public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public UniquePersonList getUniquePersonList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Person> getStudentsInTeamList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
         }
 
