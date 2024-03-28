@@ -17,4 +17,5 @@ public class CliSyntax {
     public static final Prefix PREFIX_DESCRIPTION = new Prefix("description/");
     public static final Prefix PREFIX_TEAM_SIZE = new Prefix("size/");
     public static final Prefix PREFIX_SORT_BY = new Prefix("by/");
+    public static final Prefix INVALID_PREFIX = new Prefix("a/");
 }

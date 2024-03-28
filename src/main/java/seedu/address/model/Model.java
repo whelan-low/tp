@@ -90,9 +90,6 @@ public interface Model {
      */
     TutorialClass findTutorialClassFromList(TutorialClass tutorialClass, ModuleCode moduleCode);
 
-    TutorialTeam findTutorialTeamFromList(TutorialTeam tutorialTeam, TutorialClass tutorialClass,
-                                          ModuleCode moduleCode);
-
     /**
      * Deletes the given person.
      * The person must exist in the address book.

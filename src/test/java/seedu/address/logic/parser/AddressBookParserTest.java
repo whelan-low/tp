@@ -10,6 +10,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID_AMY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT_BY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -22,10 +23,12 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddClassCommand;
 import seedu.address.logic.commands.AddStudentCommand;
+import seedu.address.logic.commands.AddTeamCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteClassCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteModuleCommand;
+import seedu.address.logic.commands.DeleteTeamCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -33,6 +36,8 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListClassesCommand;
 import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.commands.SearchStudentCommand;
+import seedu.address.logic.commands.SortStudentCommand;
+import seedu.address.logic.commands.ViewTeamCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByEmailCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByIdCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassCommand;
@@ -193,6 +198,53 @@ public class AddressBookParserTest {
 
         assertEquals(new DeleteStudentFromClassByIdCommand(new StudentId(VALID_STUDENT_ID_AMY),
                 new ModuleCode(moduleCode), new TutorialClass(tutorialClass)), deleteByIdCommand);
+    }
+
+    @Test
+    public void parseCommand_addTeam() throws Exception {
+        ModuleCode moduleCode = new ModuleCode("CS2103T");
+        TutorialClass tutorialClass = new TutorialClass("T01");
+        String teamName = "Team A";
+
+        AddTeamCommand command = (AddTeamCommand) parser.parseCommand(
+            AddTeamCommand.COMMAND_WORD + " " + PREFIX_MODULECODE + " " + moduleCode + " "
+                + PREFIX_TUTORIALCLASS + " " + tutorialClass + " "
+                + PREFIX_NAME + " " + teamName);
+        assertEquals(new AddTeamCommand(moduleCode, tutorialClass, teamName), command);
+    }
+
+    @Test
+    public void parseCommand_sortStudent() throws Exception {
+        String sortBy = "name"; // Choose any valid sorting parameter for testing
+        SortStudentCommand command = (SortStudentCommand) parser.parseCommand(
+            SortStudentCommand.COMMAND_WORD + " " + PREFIX_SORT_BY + sortBy);
+        assertEquals(new SortStudentCommand(sortBy), command);
+    }
+
+    @Test
+    public void parseCommand_deleteTeam() throws Exception {
+        ModuleCode moduleCode = new ModuleCode("CS2103T");
+        TutorialClass tutorialClass = new TutorialClass("T01");
+        String teamName = "Team A";
+
+        DeleteTeamCommand command = (DeleteTeamCommand) parser.parseCommand(
+            DeleteTeamCommand.COMMAND_WORD + " " + PREFIX_MODULECODE + " " + moduleCode + " "
+                + PREFIX_TUTORIALCLASS + " " + tutorialClass + " "
+                + PREFIX_NAME + " " + teamName);
+        assertEquals(new DeleteTeamCommand(moduleCode, tutorialClass, teamName), command);
+    }
+
+    @Test
+    public void parseCommand_viewTeam() throws Exception {
+        ModuleCode moduleCode = new ModuleCode("CS2103T");
+        TutorialClass tutorialClass = new TutorialClass("T01");
+        String teamName = "Team A";
+
+        ViewTeamCommand command = (ViewTeamCommand) parser.parseCommand(
+            ViewTeamCommand.COMMAND_WORD + " " + PREFIX_MODULECODE + " " + moduleCode + " "
+                + PREFIX_TUTORIALCLASS + " " + tutorialClass + " "
+                + PREFIX_NAME + " " + teamName);
+        assertEquals(new ViewTeamCommand(PREFIX_NAME, teamName, moduleCode, tutorialClass), command);
     }
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {

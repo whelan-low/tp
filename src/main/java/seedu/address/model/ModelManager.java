@@ -132,16 +132,6 @@ public class ModelManager implements Model {
             return null;
         }
     }
-    @Override
-    public TutorialTeam findTutorialTeamFromList(TutorialTeam tutorialTeam, TutorialClass tutorialClass,
-                                                 ModuleCode moduleCode) {
-        try {
-            return addressBook.findTutorialClassFromList(tutorialClass,
-                moduleCode).getTeam(tutorialTeam.toString());
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
     @Override
     public void deletePerson(Person target) {

@@ -30,7 +30,7 @@ public class ViewTeamCommand extends Command {
     public static final String MESSAGE_EMPTY = "No teams available in %1$s %2$s";
     public static final String MESSAGE_NO_TUTORIAL_CLASSES = "No tutorial classes available in %1$s";
     public static final String MESSAGE_TEAM_NOT_FOUND = "Team with %1$s %2$s not found!";
-    private static final String MESSAGE_NO_MODULE = "Module not available";
+    public static final String MESSAGE_NO_MODULE = "Module not available";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": View teams of the tutorial class "
         + "based on their name or index. \n"
         + "Parameters: [name/NAME | index/TEAM_INDEX]"
@@ -115,8 +115,8 @@ public class ViewTeamCommand extends Command {
         return model.searchTeamByPredicate(namePredicate, tutorialClass, moduleCode);
     }
 
-    private TutorialTeam findTeamByIndex(Model model, Index index, TutorialClass tutorialClass,
-                                         ModuleCode moduleCode) throws CommandException {
+    TutorialTeam findTeamByIndex(Model model, Index index, TutorialClass tutorialClass,
+                                 ModuleCode moduleCode) throws CommandException {
         TutorialClass tutorialInList = model.findTutorialClassFromList(tutorialClass, moduleCode);
         if (tutorialInList == null) {
             throw new CommandException("No such tutorial class.");

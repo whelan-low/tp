@@ -165,12 +165,6 @@ public class AddStudentCommandTest {
         }
 
         @Override
-        public TutorialTeam findTutorialTeamFromList(TutorialTeam tutorialTeam, TutorialClass tutorialClass,
-                                                     ModuleCode moduleCode) {
-            return null;
-        }
-
-        @Override
         public void addPersonToTutorialClass(Person person, ModuleCode moduleCode, TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
         }

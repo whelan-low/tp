@@ -172,14 +172,6 @@ public class TutorialClass {
     public String toString() {
         return tutorialName;
     }
-    public TutorialTeam getTeam(String teamName) {
-        for (TutorialTeam team : teams) {
-            if (team.getTeamName().equalsIgnoreCase(teamName)) {
-                return team;
-            }
-        }
-        return null;
-    }
 
     @Override
     public boolean equals(Object other) {

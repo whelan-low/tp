@@ -15,7 +15,6 @@ import seedu.address.logic.messages.ModuleMessages;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
-import seedu.address.model.module.TutorialTeamName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -320,20 +319,5 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public int hashCode() {
         return persons.hashCode();
-    }
-
-    /**
-     * Returns true if a person with the same identity as {@code person} exists in
-     * the address book.
-     */
-    public boolean hasTeamWithStudentId(TutorialTeamName teamName) {
-        requireNonNull(teamName);
-        requireNonNull(teamName);
-        for (TutorialTeam team : tutorialTeams) {
-            if (team.getTeamName().equalsIgnoreCase(teamName.toString())) {
-                return true;
-            }
-        }
-        return false;
     }
 }
