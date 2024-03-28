@@ -18,6 +18,7 @@ import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 
 
 /**
@@ -147,8 +148,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
-        addressBook.allocateStudentToTeam(studentId, tutorialTeam);
+    public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
+        requireAllNonNull(student, tutorialTeam);
+        addressBook.allocateStudentToTeam(student, tutorialTeam);
     }
 
     @Override
@@ -180,9 +182,15 @@ public class ModelManager implements Model {
     };
 
     @Override
-    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
-        requireAllNonNull(studentId, tutorialClass);
-        return addressBook.isStudentInAnyTeam(studentId, tutorialClass);
+    public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
+        requireAllNonNull(student, tutorialClass);
+        return addressBook.isStudentInAnyTeam(student, tutorialClass);
+    }
+
+    @Override
+    public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
+        requireAllNonNull(student, tutorialClass);
+        return addressBook.isStudentInTutorialClass(student, tutorialClass);
     }
 
     @Override
@@ -218,6 +226,17 @@ public class ModelManager implements Model {
     public ObservableList<Person> getFilteredPersonList() {
         return filteredPersons;
     }
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     * @Return UniquePersonList.
+     */
+    @Override
+    public UniquePersonList getUniquePersonList() {
+        return addressBook.getUniquePersonList();
+    }
+
     /**
      * Returns an unmodifiable view of the list of {@code Module} backed by the internal list of
      * {@code versionedAddressBook}
@@ -231,6 +250,11 @@ public class ModelManager implements Model {
     public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
         addressBook.setSortedPersonList(comparator);
         return addressBook.getSortedPersonList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTeamList() {
+        return addressBook.getStudentsInTeamList();
     }
 
     @Override

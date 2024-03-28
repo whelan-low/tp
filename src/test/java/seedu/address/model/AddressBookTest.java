@@ -25,6 +25,7 @@ import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.testutil.PersonBuilder;
 
@@ -171,11 +172,6 @@ public class AddressBookTest {
         }
 
         @Override
-        public ObservableList<Person> getStudentInTeamList() {
-            return null;
-        }
-
-        @Override
         public void setSortedPersonList(Comparator<Person> comparator) {
             sortedPersons = FXCollections.observableArrayList();
         }
@@ -196,6 +192,16 @@ public class AddressBookTest {
 
         @Override
         public ObservableList<TutorialClass> getTutorialList() {
+            return null;
+        }
+
+        @Override
+        public ObservableList<Person> getStudentsInTeamList() {
+            return null;
+        }
+
+        @Override
+        public UniquePersonList getUniquePersonList() {
             return null;
         }
 

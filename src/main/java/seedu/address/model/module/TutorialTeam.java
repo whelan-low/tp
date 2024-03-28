@@ -6,7 +6,6 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.ArrayList;
 
 import seedu.address.model.person.Person;
-import seedu.address.model.person.StudentId;
 
 /**
  * Represents a Module's tutorial team.
@@ -178,19 +177,18 @@ public class TutorialTeam {
     }
 
     /**
-     * Checks if a student exist by their id
-     * @param studentId
+     * Checks if a student exist, check by their studentId.
      * @return true if a person is in the list of students
      */
-    public boolean hasStudentVerified(StudentId studentId, TutorialTeam tutorialTeam) {
+    public boolean hasStudentVerified(Person student, TutorialTeam tutorialTeam) {
         ArrayList<Person> teamList = tutorialTeam.getStudents();
         if (teamList.size() == 0 || teamList == null) {
             return false;
         }
-        for (Person student : teamList) {
-            if (student.getStudentId().value.equals(studentId.value)) {
+        for (Person eachStudent : teamList) {
+            if (eachStudent.getStudentId().value.equals(student.getStudentId().value)) {
                 return true;
-            };
+            }
         }
         return false;
 

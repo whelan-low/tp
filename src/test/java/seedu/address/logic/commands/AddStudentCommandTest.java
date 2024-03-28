@@ -29,6 +29,7 @@ import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 import seedu.address.testutil.PersonBuilder;
 
 /**
@@ -140,7 +141,7 @@ public class AddStudentCommandTest {
         }
 
         @Override
-        public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
+        public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
             throw new AssertionError("This method should not be called.");
         };
 
@@ -155,7 +156,12 @@ public class AddStudentCommandTest {
         }
 
         @Override
-        public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
+        public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
+            throw new AssertionError("This method should not be called.");
+        };
+
+        @Override
+        public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
             throw new AssertionError("This method should not be called.");
         };
 
@@ -240,6 +246,16 @@ public class AddStudentCommandTest {
 
         @Override
         public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public UniquePersonList getUniquePersonList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ObservableList<Person> getStudentsInTeamList() {
             throw new AssertionError("This method should not be called.");
         }
 

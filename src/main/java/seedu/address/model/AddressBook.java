@@ -107,7 +107,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         setModules(newData.getModuleList());
         setClass(newData.getTutorialList());
         setTutorialTeams(newData.getTutorialTeamList());
-        setStudentsInTeam(newData.getStudentInTeamList());
+        setStudentsInTeam(newData.getStudentsInTeamList());
     }
 
     //// person-level operations
@@ -246,13 +246,23 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Checks if a student is in the {@code tutorialClass} of that {@code moduleCode}
+     * @param student to check if student exist in tutorialClass.
+     * @param tutorialClass to check if the student is in
+     * @return a boolean indicating if the student is in that {@code tutorialClass}
+     */
+    public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
+        List<Person> students = tutorialClass.getStudents();
+        return students.stream().anyMatch(student::isSamePerson);
+    }
+
+    /**
      * Allocates the {@code studentId} to the {@code tutorialTeam}
      * @param tutorialTeam to allocate the student into.
      */
-    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam) {
-        requireNonNull(studentId);
+    public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
+        requireNonNull(student);
         requireNonNull(tutorialTeam);
-        Person student = persons.getPerson(studentId);
         tutorialTeam.addStudent(student);
     }
 
@@ -265,18 +275,23 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(tutorialTeam);
         int maxTeamSize = tutorialTeam.getTeamSize();
         int currTeamSize = tutorialTeam.getStudents().size();
-        return (maxTeamSize >= currTeamSize);
+        System.out.println(currTeamSize);
+        System.out.println(maxTeamSize);
+        return (maxTeamSize <= currTeamSize);
     };
 
     /**
-     * Returns true if the {@code studentId} is already in a team of {@code tutorialClass}.
+     * Returns true if the {@code student} is already in a team of {@code tutorialClass}.
      * @param tutorialClass of the teams.
-     * @param studentId to search for.
+     * @param student to search for.
      */
-    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass) {
+    public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
         boolean isStudentExist = false;
         for (TutorialTeam tutorialTeam : tutorialClass.getTeams()) {
-            isStudentExist = tutorialTeam.hasStudentVerified(studentId, tutorialTeam);
+            isStudentExist = tutorialTeam.hasStudentVerified(student, tutorialTeam);
+            if (isStudentExist) {
+                break;
+            }
         }
         return isStudentExist;
     };
@@ -353,6 +368,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
+    public UniquePersonList getUniquePersonList() {
+        return this.persons;
+    }
+
+    @Override
     public ObservableList<Person> getPersonList() {
         return persons.asUnmodifiableObservableList();
     }
@@ -363,7 +383,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
-    public ObservableList<Person> getStudentInTeamList() {
+    public ObservableList<Person> getStudentsInTeamList() {
         return studentsInTeam.asUnmodifiableObservableList();
     }
 

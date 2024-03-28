@@ -1,4 +1,4 @@
-package seedu.address.logic.commands;
+package seedu.address.logic.commands.allocatestudenttoteamcommands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
@@ -8,17 +8,19 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
 
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
 
 /**
  * Allocates a student to a team in a tutorial Class in TAHelper.
  */
-public class AllocateStudentToTeamCommand extends Command {
+public class AllocateStudentToTeamByStuIdCommand extends AllocateStudentToTeamCommand {
 
     public static final String COMMAND_WORD = "/allocate_team";
 
@@ -33,14 +35,7 @@ public class AllocateStudentToTeamCommand extends Command {
             + PREFIX_MODULECODE + "CS2101 "
             + PREFIX_TUTORIALCLASS + "T01 "
             + PREFIX_TEAMNAME + "Team 1 ";
-
-    public static final String MESSAGE_SUCCESS = "Allocate student to team: ";
-    public static final String MESSAGE_TEAM_DOES_NOT_EXIST = "Team does not exist in tutorial class";
-    public static final String MESSAGE_DUPLICATE_PERSON_IN_TEAM = "This person already exists in a team"
-            + " in the tutorial class!";
-
-    public static final String MESSAGE_CLASS_DOES_NOT_EXIST = "Tutorial class does not exist in module";
-    public static final String MESSAGE_TEAM_SIZE_EXCEEDED = "Max team size reached";
+    public static final String MESSAGE_STUDENT_DOES_NOT_EXIST = "Student does not exist in tutorial class";
 
     private final StudentId studentId;
     private final ModuleCode moduleCode;
@@ -50,7 +45,7 @@ public class AllocateStudentToTeamCommand extends Command {
     /**
      * Creates an AllocateStudentToTeam object.
      */
-    public AllocateStudentToTeamCommand(StudentId studentId, ModuleCode moduleCode,
+    public AllocateStudentToTeamByStuIdCommand(StudentId studentId, ModuleCode moduleCode,
                                         TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
         CollectionUtil.requireAllNonNull(studentId, moduleCode, tutorialClass, tutorialTeam);
         this.studentId = studentId;
@@ -70,26 +65,22 @@ public class AllocateStudentToTeamCommand extends Command {
         ModuleCode module = model.findModuleFromList(moduleCode);
         TutorialClass tutClass = model.findTutorialClassFromList(tutorialClass, module);
 
-        if (!model.hasTeamInTutorial(tutClass, tutorialTeam)) {
-            throw new CommandException(MESSAGE_TEAM_DOES_NOT_EXIST);
-        }
-
+        Person student = model.getUniquePersonList().getPerson(studentId);
         TutorialTeam tutTeam = model.getTutorialTeam(tutClass, tutorialTeam);
+
+        if (student == null) {
+            throw new CommandException(MESSAGE_STUDENT_DOES_NOT_EXIST);
+        }
+
         if (tutTeam == null) {
-            throw new CommandException(MESSAGE_TEAM_DOES_NOT_EXIST);
+            throw new CommandException(String.format(MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
         }
 
-        if (model.isStudentInAnyTeam(studentId, tutClass)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON_IN_TEAM);
-        }
+        // throws commandException if any condition fails
+        checkAllocateCondition(model, student, tutClass, tutTeam);
+        model.allocateStudentToTeam(student, tutTeam);
 
-        if (model.hasTeamSizeExceeded(tutTeam)) {
-            throw new CommandException(MESSAGE_TEAM_SIZE_EXCEEDED);
-        }
-
-        model.allocateStudentToTeam(studentId, tutTeam);
-
-        return new CommandResult(String.format(MESSAGE_SUCCESS));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, tutTeam));
     }
 
     @Override
@@ -103,7 +94,7 @@ public class AllocateStudentToTeamCommand extends Command {
             return false;
         }
 
-        AllocateStudentToTeamCommand otherAllocateCommand = (AllocateStudentToTeamCommand) other;
+        AllocateStudentToTeamByStuIdCommand otherAllocateCommand = (AllocateStudentToTeamByStuIdCommand) other;
         return this.studentId.equals(otherAllocateCommand.studentId)
                 && this.moduleCode.equals(otherAllocateCommand.moduleCode)
                 && this.tutorialClass.equals(otherAllocateCommand.tutorialClass)

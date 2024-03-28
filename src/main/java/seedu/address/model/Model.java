@@ -12,6 +12,7 @@ import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 
 /**
  * The API of the Model component.
@@ -124,24 +125,24 @@ public interface Model {
     void addModule(ModuleCode module);
 
     /**
-     * Allocates the {@code studentId} to the {@code tutorialTeam}
+     * Allocates the {@code student} to the {@code tutorialTeam}
      * @param tutorialTeam to allocate the student into.
      */
-    public void allocateStudentToTeam(StudentId studentId, TutorialTeam tutorialTeam);
+    void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam);
 
     /**
      * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}
      * @param tutorialClass of the tutorialTeam.
      * @param tutorialTeam to check if it exist.
      */
-    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam);
+    boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam);
 
     /**
-     * Returns true if the {@code studentId} is already in a team of {@code tutorialClass}.
+     * Returns true if the {@code student} is already in a team of {@code tutorialClass}.
      * @param tutorialClass of the teams.
-     * @param studentId to search for.
+     * @param student to search for.
      */
-    public boolean isStudentInAnyTeam(StudentId studentId, TutorialClass tutorialClass);
+    public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass);
 
     /**
      * Returns true if the {@code tutorialTeam} size has exceeded its limit.
@@ -149,6 +150,14 @@ public interface Model {
      * @return a boolean that indicates whether the team size will be exceeded by adding another person.
      */
     boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam);
+
+    /**
+     * Checks if a student is in the {@code tutorialClass} of that {@code moduleCode}
+     * @param student to check if student exist in tutorialClass.
+     * @param tutorialClass to check if the student is in
+     * @return a boolean indicating if the student is in that {@code tutorialClass}
+     */
+    boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass);
 
     /**
      * Adds the given person to the given tutorial class in the given module.
@@ -164,8 +173,10 @@ public interface Model {
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
+    UniquePersonList getUniquePersonList();
     ObservableList<ModuleCode> getFilteredModuleList();
     ObservableList<Person> getSortedPersonList(Comparator<Person> comparator);
+    ObservableList<Person> getStudentsInTeamList();
 
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.

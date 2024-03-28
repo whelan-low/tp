@@ -49,6 +49,18 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Return the Person object if the list contains the person with {@code email}
+     */
+    public Person getPersonByEmail(Email email) {
+        requireNonNull(email);
+        Person personMatch = internalList.stream()
+                .filter(person -> person.getEmail().isSameEmail(email))
+                .findFirst()
+                .orElse(null);
+        return personMatch;
+    }
+
+    /**
      * Adds a person to the list.
      * The person must not already exist in the list.
      */
