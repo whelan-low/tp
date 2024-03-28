@@ -194,7 +194,7 @@ public class TutorialTeam {
         }
 
         TutorialTeam otherTutorialTeam = (TutorialTeam) other;
-        return teamName.equals(otherTutorialTeam.teamName) && teamSize == otherTutorialTeam.teamSize;
+        return teamName.toString().equalsIgnoreCase(otherTutorialTeam.teamName.toString());
     }
 
     @Override

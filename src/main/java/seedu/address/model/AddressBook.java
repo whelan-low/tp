@@ -287,7 +287,9 @@ public class AddressBook implements ReadOnlyAddressBook {
         return FXCollections.observableList(tutorialClasses);
     }
     @Override
-    public ObservableList<TutorialTeam> getTeamList() { return FXCollections.observableList(tutorialTeams); }
+    public ObservableList<TutorialTeam> getTeamList() {
+        return FXCollections.observableList(tutorialTeams);
+    }
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -306,10 +308,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public int hashCode() {
         return persons.hashCode();
-    }
-    public boolean hasTeam(TutorialTeam tutorialTeam) {
-        requireNonNull(tutorialTeam);
-        return tutorialTeams.contains(tutorialTeam);
     }
 
     /**

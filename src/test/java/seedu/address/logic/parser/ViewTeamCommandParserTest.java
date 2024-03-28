@@ -1,15 +1,16 @@
 package seedu.address.logic.parser;
 
-import org.junit.jupiter.api.Test;
-import seedu.address.logic.commands.ViewTeamCommand;
-import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.module.ModuleCode;
-import seedu.address.model.module.TutorialClass;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+
+import org.junit.jupiter.api.Test;
+
+import seedu.address.logic.commands.ViewTeamCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.module.ModuleCode;
+import seedu.address.model.module.TutorialClass;
 
 public class ViewTeamCommandParserTest {
 

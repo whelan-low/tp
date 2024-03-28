@@ -29,8 +29,8 @@ public class ViewTeamCommand extends Command {
     public static final String COMMAND_WORD = "/view_teams";
     public static final String MESSAGE_EMPTY = "No teams available in %1$s %2$s";
     public static final String MESSAGE_NO_TUTORIAL_CLASSES = "No tutorial classes available in %1$s";
-    private static final String MESSAGE_NO_MODULE = "Module not available";
     public static final String MESSAGE_TEAM_NOT_FOUND = "Team with %1$s %2$s not found!";
+    private static final String MESSAGE_NO_MODULE = "Module not available";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": View teams of the tutorial class "
         + "based on their name or index. \n"
         + "Parameters: [name/NAME | index/TEAM_INDEX]"
@@ -44,7 +44,16 @@ public class ViewTeamCommand extends Command {
     private final String predicateValue;
     private final ModuleCode moduleCode;
     private final TutorialClass tutorialClass;
-
+    /**
+     * Constructs a ViewTeamCommand object with the specified predicate type, predicate value, module code,
+     * and tutorial class.
+     *
+     * @param predicateType The type of predicate used for filtering teams (either PREFIX_NAME or PREFIX_INDEX).
+     * @param predicateValue The value associated with the predicate (either team name or team index).
+     * @param moduleCode The code of the module to which the tutorial class belongs.
+     * @param tutorialClass The tutorial class to filter teams from.
+     * @throws NullPointerException if any of the arguments are null.
+     */
     public ViewTeamCommand(Prefix predicateType, String predicateValue, ModuleCode moduleCode,
                            TutorialClass tutorialClass) {
         requireAllNonNull(predicateType, predicateValue, moduleCode, tutorialClass);

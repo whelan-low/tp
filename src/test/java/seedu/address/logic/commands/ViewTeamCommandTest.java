@@ -1,10 +1,16 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+
+import java.util.HashSet;
+
 import org.junit.jupiter.api.Test;
+
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
-import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
@@ -13,11 +19,6 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import java.util.HashSet;
 
 public class ViewTeamCommandTest {
 
@@ -31,8 +32,10 @@ public class ViewTeamCommandTest {
 
         TutorialTeamName teamName = new TutorialTeamName("Team A");
         TutorialTeam team = new TutorialTeam(teamName.fullName, 2);
-        Person john = new Person(new Name("John"), new Email("john@example.com"), new StudentId("A1234561Z"), new HashSet<>());
-        Person alice = new Person(new Name("Alice"), new Email("alice@example.com"), new StudentId("A1234562Z"), new HashSet<>());
+        Person john = new Person(new Name("John"), new Email("john@example.com"),
+            new StudentId("A1234561Z"), new HashSet<>());
+        Person alice = new Person(new Name("Alice"), new Email("alice@example.com"),
+            new StudentId("A1234562Z"), new HashSet<>());
         team.addStudent(john);
         team.addStudent(alice);
         tutorialClass.addTeam(team);
@@ -54,8 +57,12 @@ public class ViewTeamCommandTest {
 
         TutorialTeamName teamName = new TutorialTeamName("Team A");
         TutorialTeam team = new TutorialTeam(teamName.fullName, 2);
-        Person john = new Person(new Name("John"), new Email("john@example.com"), new StudentId("A1234561Z"), new HashSet<>());
-        Person alice = new Person(new Name("Alice"), new Email("alice@example.com"), new StudentId("A1234562Z"), new HashSet<>());
+        Person john = new Person(new Name("John"), new Email("john@example.com"),
+            new StudentId("A1234561Z"), new HashSet<>());
+        Person alice = new Person(new Name("Alice"), new Email("alice@example.com"),
+            new StudentId("A1234562Z"), new HashSet<>());
+        team.addStudent(john);
+        team.addStudent(alice);
         tutorialClass.addTeam(team);
 
         ViewTeamCommand command = new ViewTeamCommand(PREFIX_NAME, "Team B", moduleCode, tutorialClass);

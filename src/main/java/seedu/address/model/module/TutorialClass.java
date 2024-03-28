@@ -1,6 +1,5 @@
 package seedu.address.model.module;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
@@ -200,21 +199,5 @@ public class TutorialClass {
     @Override
     public int hashCode() {
         return tutorialName.hashCode();
-    }
-
-    /**
-     * Finds a team in the tutorial class with the specified name and size.
-     * Returns the team if found, otherwise returns null.
-     * @param teamName The name of the team to find.
-     * @param teamSize The size of the team to find.
-     * @return The team with the specified name and size, or null if not found.
-     */
-    public TutorialTeam findTeamByNameAndSize(String teamName, int teamSize) {
-        for (TutorialTeam team : teams) {
-            if (team.getTeamName().equalsIgnoreCase(teamName) && team.getTeamSize() == teamSize) {
-                return team;
-            }
-        }
-        return null;
     }
 }

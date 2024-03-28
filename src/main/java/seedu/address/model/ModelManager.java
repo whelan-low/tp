@@ -15,7 +15,6 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
-import seedu.address.model.module.TutorialTeamName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -251,17 +250,15 @@ public class ModelManager implements Model {
             && filteredPersons.equals(otherModelManager.filteredPersons);
     }
 
-    public boolean hasTeamWithStudentId(TutorialTeamName teamName) {
-        requireNonNull(teamName);
-        requireNonNull(teamName);
-        for (TutorialTeam team : filteredTeams) {
-            if (team.getTeamName().equalsIgnoreCase(teamName.toString())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    /**
+     * Searches for a tutorial team within the specified tutorial class and module using the given predicate.
+     *
+     * @param predicate     The predicate used to filter teams.
+     * @param tutorialClass The tutorial class to search within.
+     * @param moduleCode    The code of the module containing the tutorial class.
+     * @return The tutorial team that matches the predicate, or {@code null} if no team matches the predicate.
+     * @throws NullPointerException if the predicate is null.
+     */
     public TutorialTeam searchTeamByPredicate(Predicate<TutorialTeam> predicate, TutorialClass tutorialClass,
                                               ModuleCode moduleCode) {
         requireNonNull(predicate);
