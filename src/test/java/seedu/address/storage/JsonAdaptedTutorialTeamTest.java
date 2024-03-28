@@ -33,6 +33,13 @@ class JsonAdaptedTutorialTeamTest {
     }
 
     @Test
+    void toModelType_test_success() throws Exception {
+        TutorialTeam tutorialTeam = new TutorialTeam(VALID_TEAM_NAME, VALID_TEAM_SIZE);
+        JsonAdaptedTutorialTeam jsonTutorialTeam = new JsonAdaptedTutorialTeam(tutorialTeam);
+        assertEquals(tutorialTeam, jsonTutorialTeam.toModelType());
+    }
+
+    @Test
     void toModelType_invalidTeamName_throwsIllegalValueException() {
         JsonAdaptedTutorialTeam jsonTutorialTeam = new JsonAdaptedTutorialTeam(INVALID_TEAM_NAME, VALID_TEAM_SIZE,
                 VALID_STUDENTS_LIST);

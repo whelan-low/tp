@@ -33,6 +33,13 @@ class JsonAdaptedTutorialClassTest {
     }
 
     @Test
+    void toModelType_test_success() throws Exception {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_NAME);
+        JsonAdaptedTutorialClass jsonTutorialClass = new JsonAdaptedTutorialClass(tutorialClass);
+        assertEquals(tutorialClass, jsonTutorialClass.toModelType());
+    }
+
+    @Test
     void toModelType_invalidTutorialName_throwsIllegalValueException() {
         JsonAdaptedTutorialClass jsonTutorialClass = new JsonAdaptedTutorialClass(INVALID_TUTORIAL_NAME,
                 VALID_TEAMS_LIST, VALID_STUDENTS_LIST);
