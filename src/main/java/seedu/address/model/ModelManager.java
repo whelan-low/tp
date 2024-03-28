@@ -14,9 +14,11 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 
 
 /**
@@ -146,6 +148,52 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
+        requireAllNonNull(student, tutorialTeam);
+        addressBook.allocateStudentToTeam(student, tutorialTeam);
+    }
+
+    @Override
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.hasTeamInTutorial(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.getTutorialTeam(tutorialClass, tutorialTeam);
+    }
+
+    /**
+     * Add a team to the tutorial class
+     * @param tutorialTeam to be added to the tutorial class
+     */
+    @Override
+    public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        addressBook.addTeam(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        return addressBook.hasTeamSizeExceeded(tutorialTeam);
+    };
+
+    @Override
+    public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
+        requireAllNonNull(student, tutorialClass);
+        return addressBook.isStudentInAnyTeam(student, tutorialClass);
+    }
+
+    @Override
+    public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
+        requireAllNonNull(student, tutorialClass);
+        return addressBook.isStudentInTutorialClass(student, tutorialClass);
+    }
+
+    @Override
     public void addModule(ModuleCode module) {
         addressBook.addModule(module,
             module.getDescription());
@@ -178,6 +226,17 @@ public class ModelManager implements Model {
     public ObservableList<Person> getFilteredPersonList() {
         return filteredPersons;
     }
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     * @Return UniquePersonList.
+     */
+    @Override
+    public UniquePersonList getUniquePersonList() {
+        return addressBook.getUniquePersonList();
+    }
+
     /**
      * Returns an unmodifiable view of the list of {@code Module} backed by the internal list of
      * {@code versionedAddressBook}
@@ -191,6 +250,16 @@ public class ModelManager implements Model {
     public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
         addressBook.setSortedPersonList(comparator);
         return addressBook.getSortedPersonList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTeamList() {
+        return addressBook.getStudentsInTeamList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
+        return addressBook.getStudentsInTutorialClass(tutorialClass);
     }
 
     @Override
