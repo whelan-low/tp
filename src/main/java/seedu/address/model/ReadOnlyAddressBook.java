@@ -43,4 +43,5 @@ public interface ReadOnlyAddressBook {
     void addModule(ModuleCode moduleCode, String description);
 
     ObservableList<TutorialClass> getTutorialList();
+    ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass);
 }

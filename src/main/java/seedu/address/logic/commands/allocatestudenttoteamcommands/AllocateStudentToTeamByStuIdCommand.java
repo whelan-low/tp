@@ -35,7 +35,6 @@ public class AllocateStudentToTeamByStuIdCommand extends AllocateStudentToTeamCo
             + PREFIX_MODULECODE + "CS2101 "
             + PREFIX_TUTORIALCLASS + "T01 "
             + PREFIX_TEAMNAME + "Team 1 ";
-    public static final String MESSAGE_STUDENT_DOES_NOT_EXIST = "Student does not exist in tutorial class";
 
     private final StudentId studentId;
     private final ModuleCode moduleCode;

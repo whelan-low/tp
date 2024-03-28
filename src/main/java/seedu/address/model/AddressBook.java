@@ -275,8 +275,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(tutorialTeam);
         int maxTeamSize = tutorialTeam.getTeamSize();
         int currTeamSize = tutorialTeam.getStudents().size();
-        System.out.println(currTeamSize);
-        System.out.println(maxTeamSize);
         return (maxTeamSize <= currTeamSize);
     };
 
@@ -385,6 +383,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Person> getStudentsInTeamList() {
         return studentsInTeam.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
+        return FXCollections.observableList(tutorialClass.getStudents());
     }
 
     @Override

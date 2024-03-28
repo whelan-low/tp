@@ -37,7 +37,7 @@ public class AllocateStudentToTeamByIndexCommand extends AllocateStudentToTeamCo
             + PREFIX_TEAMNAME + "Team 1 ";
 
     public static final String MESSAGE_PERSON_INDEX_NOT_FOUND =
-            "Student at index %s not found inside tutorial class %s";
+            "Student at index %d not found inside tutorial class %s";
     private final Index index;
     private final ModuleCode moduleCode;
     private final TutorialClass tutorialClass;
@@ -68,7 +68,7 @@ public class AllocateStudentToTeamByIndexCommand extends AllocateStudentToTeamCo
 
         Person studentToAllocate;
         try {
-            studentToAllocate = model.getStudentsInTeamList().get(index.getZeroBased());
+            studentToAllocate = model.getStudentsInTutorialClass(tutClass).get(index.getZeroBased());
         } catch (IndexOutOfBoundsException err) {
             throw new CommandException(
                     String.format(MESSAGE_PERSON_INDEX_NOT_FOUND, index.getOneBased(), tutClass));

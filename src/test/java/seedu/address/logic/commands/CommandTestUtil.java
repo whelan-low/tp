@@ -41,6 +41,7 @@ public class CommandTestUtil {
     public static final String VALID_MODULE_BOB = "CS1231S";
     public static final String VALID_TUTORIAL_AMY = "T01";
     public static final String VALID_TUTORIAL_BOB = "T02";
+    public static final String VALID_TEAM_NAME = "Team 1";
 
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
@@ -61,6 +62,8 @@ public class CommandTestUtil {
 
     public static final String INVALID_PERSON_EMAIL = "test@example.com";
     public static final String INVALID_PERSON_STUDENT_ID = "A2222222A";
+    public static final String INVALID_MODULECODE = "22JK";
+    public static final String INVALID_TUTORIAL = "HHHH@";
 
     // Team related constants
     public static final String VALID_TEAM_NAME_AMY = "Team 1";

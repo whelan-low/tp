@@ -177,6 +177,7 @@ public interface Model {
     ObservableList<ModuleCode> getFilteredModuleList();
     ObservableList<Person> getSortedPersonList(Comparator<Person> comparator);
     ObservableList<Person> getStudentsInTeamList();
+    ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass);
 
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.

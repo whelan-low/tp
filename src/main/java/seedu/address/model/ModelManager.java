@@ -258,6 +258,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
+        return addressBook.getStudentsInTutorialClass(tutorialClass);
+    }
+
+    @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
