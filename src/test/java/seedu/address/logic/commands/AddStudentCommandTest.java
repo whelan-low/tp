@@ -219,8 +219,6 @@ public class AddStudentCommandTest {
         public ObservableList<ModuleCode> getFilteredModuleList() {
             throw new AssertionError("This method should not be called.");
         }
-
-        @Override
         public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
             throw new AssertionError("This method should not be called.");
         }
