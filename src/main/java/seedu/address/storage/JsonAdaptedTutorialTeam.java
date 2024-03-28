@@ -16,9 +16,10 @@ import seedu.address.model.person.Person;
  */
 public class JsonAdaptedTutorialTeam {
 
+    public static final String MISSING_FIELD_MESSAGE_FORMAT = "team name is missing!";
     private final String teamName;
     private final int teamSize;
-    private final List<JsonAdaptedPerson> students;
+    private final List<JsonAdaptedPerson> students = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedTutorialTeam} with the given
@@ -29,7 +30,9 @@ public class JsonAdaptedTutorialTeam {
             @JsonProperty("teamSize") int teamSize,
             @JsonProperty("students") List<JsonAdaptedPerson> students) {
         this.teamName = teamName;
-        this.students = students != null ? new ArrayList<>(students) : new ArrayList<>();
+        if (students != null) {
+            this.students.addAll(students);
+        }
         this.teamSize = teamSize;
     }
 
@@ -37,9 +40,9 @@ public class JsonAdaptedTutorialTeam {
      * Converts a given {@code TutorialTeam} into this class for Jackson use.
      */
     public JsonAdaptedTutorialTeam(TutorialTeam source) {
-        this.teamName = source.teamName;
-        this.teamSize = source.teamSize;
-        this.students = source.getStudents().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList());
+        this.teamName = source.getTeamName();
+        this.teamSize = source.getTeamSize();
+        students.addAll(source.getStudents().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
     }
 
     public String getTeamName() {
@@ -51,7 +54,7 @@ public class JsonAdaptedTutorialTeam {
     }
 
     public List<JsonAdaptedPerson> getStudents() {
-        return new ArrayList<>(students);
+        return this.students;
     }
 
     /**
@@ -62,15 +65,21 @@ public class JsonAdaptedTutorialTeam {
      *                               the adapted tutorial team.
      */
     public TutorialTeam toModelType() throws IllegalValueException {
-        try {
-            ArrayList<Person> students = new ArrayList<>();
-            for (JsonAdaptedPerson student : this.students) {
-                students.add(student.toModelType());
-            }
-            return new TutorialTeam(teamName, students, teamSize);
-        } catch (IllegalValueException e) {
-            throw new IllegalValueException(TutorialTeam.MESSAGE_CONSTRAINTS);
+        final ArrayList<Person> listOfStudents = new ArrayList<>();
+        if (teamName == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, teamName));
         }
+        if (!TutorialTeam.isValidTeamName(teamName)) {
+            throw new IllegalValueException(TutorialTeam.MESSAGE_NAME_CONSTRAINTS);
+        }
+
+        if (!TutorialTeam.isValidSize(teamSize)) {
+            throw new IllegalValueException(TutorialTeam.MESSAGE_SIZE_CONSTRAINTS);
+        }
+        for (JsonAdaptedPerson student : students) {
+            listOfStudents.add(student.toModelType());
+        }
+        return new TutorialTeam(teamName, listOfStudents, teamSize);
     }
 
     @Override

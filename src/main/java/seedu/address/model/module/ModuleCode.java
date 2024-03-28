@@ -22,7 +22,7 @@ public class ModuleCode {
     public static final String VALIDATION_REGEX = "^[A-Z]{2,3}\\d{4}[A-Z]?$";
 
     public final String moduleCode;
-    private final ArrayList<TutorialClass> tutorialClasses;
+    private final List<TutorialClass> tutorialClasses;
     private String description;
 
     /**
@@ -75,7 +75,7 @@ public class ModuleCode {
      * @param moduleCode of the module to be created
      * @param tutorialClasses of the module to be created
      */
-    public ModuleCode(String moduleCode, ArrayList<TutorialClass> tutorialClasses) {
+    public ModuleCode(String moduleCode, List<TutorialClass> tutorialClasses) {
         requireAllNonNull(moduleCode);
         checkArgument(isValidModuleCode(moduleCode), MESSAGE_CONSTRAINTS);
         this.moduleCode = moduleCode;
@@ -94,7 +94,7 @@ public class ModuleCode {
      * @return the ArrayList of tutorial classes.
      */
     public ArrayList<TutorialClass> getTutorialClasses() {
-        return tutorialClasses;
+        return (ArrayList<TutorialClass>) tutorialClasses;
     }
 
     /**
