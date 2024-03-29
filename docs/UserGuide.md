@@ -13,6 +13,14 @@ TAHelper is a **desktop app for managing contacts, optimized for use via a Line 
 
 ---
 
+## Target Audience
+
+TAHelper is specifically designed to assist and help Teaching Assistants (TA) of NUS Computer Science Modules,
+which caters to their need to store information in a way that is easy to track and visualise, as well as keep student's
+details in a centralised storage. Our target audience is specifically only TAs of NUS Computer Science Modules.
+
+## Purpose of User Guide
+
 ## Quick start
 
 1. Ensure you have Java `11` or above installed in your Computer.

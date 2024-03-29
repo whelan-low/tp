@@ -33,7 +33,7 @@ class JsonSerializableAddressBook {
      */
     @JsonCreator
     public JsonSerializableAddressBook(@JsonProperty("persons") List<JsonAdaptedPerson> persons,
-            @JsonProperty("modules") List<JsonAdaptedModule> modules) {
+                                       @JsonProperty("modules") List<JsonAdaptedModule> modules) {
         if (persons != null) {
             this.persons.addAll(persons);
         }
@@ -72,7 +72,7 @@ class JsonSerializableAddressBook {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_MODULE);
             }
             addressBook.addModule(module,
-                module.getDescription());
+                    module.getDescription());
         }
         return addressBook;
     }
@@ -111,5 +111,4 @@ class JsonSerializableAddressBook {
             throw new IllegalValueException("Module containing tutorial class '" + tutorialName + "' not found.");
         }
     }
-
 }

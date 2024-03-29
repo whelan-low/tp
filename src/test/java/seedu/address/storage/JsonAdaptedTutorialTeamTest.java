@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.module.TutorialTeam;
 import seedu.address.testutil.PersonBuilder;
 
@@ -32,11 +33,18 @@ class JsonAdaptedTutorialTeamTest {
     }
 
     @Test
+    void toModelType_test_success() throws Exception {
+        TutorialTeam tutorialTeam = new TutorialTeam(VALID_TEAM_NAME, VALID_TEAM_SIZE);
+        JsonAdaptedTutorialTeam jsonTutorialTeam = new JsonAdaptedTutorialTeam(tutorialTeam);
+        assertEquals(tutorialTeam, jsonTutorialTeam.toModelType());
+    }
+
+    @Test
     void toModelType_invalidTeamName_throwsIllegalValueException() {
         JsonAdaptedTutorialTeam jsonTutorialTeam = new JsonAdaptedTutorialTeam(INVALID_TEAM_NAME, VALID_TEAM_SIZE,
                 VALID_STUDENTS_LIST);
         String expectedMessage = TutorialTeam.MESSAGE_NAME_CONSTRAINTS;
-        assertThrows(IllegalArgumentException.class, expectedMessage, jsonTutorialTeam::toModelType);
+        assertThrows(IllegalValueException.class, expectedMessage, jsonTutorialTeam::toModelType);
     }
 
     @Test
@@ -44,7 +52,7 @@ class JsonAdaptedTutorialTeamTest {
         JsonAdaptedTutorialTeam jsonTutorialTeam = new JsonAdaptedTutorialTeam(VALID_TEAM_NAME, INVALID_TEAM_SIZE,
                 VALID_STUDENTS_LIST);
         String expectedMessage = TutorialTeam.MESSAGE_SIZE_CONSTRAINTS;
-        assertThrows(IllegalArgumentException.class, expectedMessage, jsonTutorialTeam::toModelType);
+        assertThrows(IllegalValueException.class, expectedMessage, jsonTutorialTeam::toModelType);
     }
 
 }

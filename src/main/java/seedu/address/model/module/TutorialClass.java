@@ -157,7 +157,12 @@ public class TutorialClass {
      * @param team
      */
     public boolean hasTeam(TutorialTeam team) {
-        return teams.contains(team);
+        for (TutorialTeam tutorialTeam : this.teams) {
+            if (tutorialTeam.getTeamName().equals(team.getTeamName())) {
+                return true;
+            }
+        };
+        return false;
     }
 
     /**
