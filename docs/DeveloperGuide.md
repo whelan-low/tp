@@ -256,9 +256,61 @@ _{more aspects and alternatives to be added}_
 
 _{Explain here how the data archiving feature will be implemented}_
 
+----
+### \[Implemented\] Add student to TAHelper with unique ID or Email
+
+The implemented add mechanism is facilitated by the abstract `AddStudentCommand` along with its specific commands `AddStudentCommand`, as well as the parser `AddStudentCommandParser`.
+
+`AddStudentCommandParser` implements the `Parser` interface and its relevant operations.
+
+`AddStudentCommand` extends the `Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/add_student name/john email/john@example.com id/A1234567L tags/`
+
+<puml src="diagrams/AddStudentSequence.puml" alt="AddStudentSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/add_student name/john email/john@example.com id/A1234567L tags/` command to add a student with name `john`, along with
+a unique email `john@example.com` and unique id `A1234567L`
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `AddStudentCommandParser` and calls `AddStudentCommandParser#parse()`, with `name/john`, `email/john@example.com`, `id/A1234567L` as the arguments for the function.
+
+Step 3. The `AddStudentCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the name, email and id of the student to add.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for name, email and id.
+Additionally, email and id must be unique compared to the values already present in the system to get achieve a sucessful add.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `AddStudentCommandParser` creates an `AddStudentCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `AddStudentCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate email or id, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is added to the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique email and id is required when adding students into the TAHelper system, as well as user have to specify all fields, name, email and id in order to add a new student successfully.
+  - Pros: Ensures that all students can be identified in 2 ways, email and id. This helps facilitate other commands such as search and add student to classes as checking the email or id for those commands checks the whole system to find a match, rather than a subset of the system.
+  - Cons: An individual, at least in the context of NUS, can be uniquely identified by either their email E....@u.nus.edu, or by their Student ID. Therefore, specifying both may not be required and may cause extra work.
+
+* **Alternative 2:** Allow user to specify more information about themselves such as year of study, course of study, just to name a few. This way we can support even more commands that searches say based on course of study, year of study etc.
+  - Pros: Search, add, delete, sort commands all can become more specfic, and the commands can make use of more information to achieve its desired outcome as well, instead of solely relying on email or id, which although present in the system, may not be readily available or easily remembered by the users themselves.
+  - Cons: The addition of these fields to the system could lead to increase complexity of the codebase and increased coupling between components in the codebase. This will make the codebase harder to debug and maintain. Also, these field possibly being optional may lead to an increase in the number of null values and thus null checks in the system, which can make the codes in the codebase harder to reason about and refactor in the future.
+
 ### \[Implemented\] Add student to tutorial class
 
-The implemented search mechanism is facilitated by the abstract `AddStudentToClassCommand` along with its specific commands `AddStudentToClassByEmailCommand`, `AddStudentToClassByIdCommand` and `AddStudentToClassByIndexCommand`, as well as the parser `AddStudentToClassCommandParser`.
+The implemented add mechanism is facilitated by the abstract `AddStudentToClassCommand` along with its specific commands `AddStudentToClassByEmailCommand`, `AddStudentToClassByIdCommand` and `AddStudentToClassByIndexCommand`, as well as the parser `AddStudentToClassCommandParser`.
 
 `AddStudentToClassCommandParser` implements the `Parser` interface and its operations.
 
