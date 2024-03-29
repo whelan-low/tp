@@ -43,7 +43,7 @@ public class TutorialClassCard extends UiPart<Region> {
      * to the circle for enhanced visual appearance.
      */
     public void updateImage() {
-        Image moduleImage = new Image("images/class.png");
+        Image moduleImage = new Image("images/damith2.png");
         circle.setStroke(Color.ROSYBROWN);
         circle.setFill(new ImagePattern(moduleImage));
         circle.setEffect(new DropShadow(+10d, 0d, +2d, Color.ROSYBROWN));

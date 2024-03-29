@@ -39,12 +39,12 @@ public class AddStudentToClassCommandParserTest {
 
         // Add by email
         AddStudentToClassByEmailCommand expectedAddByEmailCommand = new AddStudentToClassByEmailCommand(BOB.getEmail(),
-                new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+            new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
         assertParseSuccess(parser, EMAIL_DESC_BOB + commandSuffix, expectedAddByEmailCommand);
 
         // Add by student Id
         AddStudentToClassByIdCommand expectedAddByIdCommand = new AddStudentToClassByIdCommand(BOB.getStudentId(),
-                new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
+            new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
         assertParseSuccess(parser, STUDENT_ID_DESC_BOB + commandSuffix, expectedAddByIdCommand);
 
     }

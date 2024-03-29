@@ -22,20 +22,25 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddClassCommand;
 import seedu.address.logic.commands.AddStudentCommand;
+import seedu.address.logic.commands.AddTeamCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteClassCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteModuleCommand;
+import seedu.address.logic.commands.DeleteTeamCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListClassesCommand;
 import seedu.address.logic.commands.ListStudentsCommand;
+import seedu.address.logic.commands.ListStudentsOfClassCommand;
 import seedu.address.logic.commands.SearchStudentCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByEmailCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByIdCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassCommand;
+import seedu.address.logic.commands.deletestudentcommands.DeleteStudentByIdCommand;
+import seedu.address.logic.commands.deletestudentcommands.DeleteStudentCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassByEmailCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassByIdCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassCommand;
@@ -204,5 +209,50 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
+    }
+    @Test
+    public void parseCommand_addTeam() throws Exception {
+        final String teamName = "Team 1";
+        final String moduleCode = "CS2103T";
+        final String tutorialClass = "T09";
+        AddTeamCommand command = (AddTeamCommand) parser.parseCommand(AddTeamCommand.COMMAND_WORD + " "
+            + PREFIX_MODULECODE + moduleCode + " "
+            + PREFIX_TUTORIALCLASS + tutorialClass + " "
+            + PREFIX_NAME + teamName);
+        assertEquals(new AddTeamCommand(new ModuleCode(moduleCode),
+            new TutorialClass(tutorialClass), teamName), command);
+    }
+
+
+    @Test
+    public void parseCommand_listStudentsOfClass() throws Exception {
+        final String moduleCode = "CS2103T";
+        final String tutorialClass = "T09";
+        ListStudentsOfClassCommand command = (ListStudentsOfClassCommand) parser.parseCommand(
+            ListStudentsOfClassCommand.COMMAND_WORD + " "
+                + PREFIX_MODULECODE + moduleCode + " " + PREFIX_TUTORIALCLASS + tutorialClass);
+        assertEquals(new ListStudentsOfClassCommand(new ModuleCode(moduleCode),
+            new TutorialClass(tutorialClass)), command);
+    }
+
+    @Test
+    public void parseCommand_deleteTeam() throws Exception {
+        final String teamName = "Team 1";
+        final String moduleCode = "CS2103T";
+        final String tutorialClass = "T09";
+        DeleteTeamCommand command = (DeleteTeamCommand) parser.parseCommand(DeleteTeamCommand.COMMAND_WORD + " "
+            + PREFIX_MODULECODE + moduleCode + " "
+            + PREFIX_TUTORIALCLASS + tutorialClass + " "
+            + PREFIX_NAME + teamName);
+        assertEquals(new DeleteTeamCommand(new ModuleCode(moduleCode),
+            new TutorialClass(tutorialClass), teamName), command);
+    }
+    @Test
+    public void parseCommand_deleteStudent() throws Exception {
+        final String studentId = "A1234561Z";
+        DeleteStudentCommand
+            command = (DeleteStudentCommand) parser.parseCommand(DeleteStudentCommand.COMMAND_WORD + " "
+            + PREFIX_STUDENTID + studentId);
+        assertEquals(new DeleteStudentByIdCommand(new StudentId(studentId)), command);
     }
 }
