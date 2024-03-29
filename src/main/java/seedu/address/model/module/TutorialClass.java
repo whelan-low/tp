@@ -157,7 +157,20 @@ public class TutorialClass {
      * @param team
      */
     public boolean hasTeam(TutorialTeam team) {
-        return teams.contains(team);
+        for (TutorialTeam tutorialTeam : this.teams) {
+            if (tutorialTeam.getTeamName().equals(team.getTeamName())) {
+                return true;
+            }
+        };
+        return false;
+    }
+
+    /**
+     * Deletes a team from the tutorial class.
+     * @param team
+     */
+    public void deleteTeam(TutorialTeam team) {
+        teams.remove(team);
     }
 
     @Override

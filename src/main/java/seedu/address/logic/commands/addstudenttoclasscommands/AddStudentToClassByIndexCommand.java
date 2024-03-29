@@ -65,7 +65,7 @@ public class AddStudentToClassByIndexCommand extends AddStudentToClassCommand {
             return true;
         }
 
-        if (!(other instanceof AddStudentToClassByIdCommand)) {
+        if (!(other instanceof AddStudentToClassByIndexCommand)) {
             return false;
         }
 

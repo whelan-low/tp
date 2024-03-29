@@ -4,14 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TUTORIAL_AMY;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +26,10 @@ import org.junit.jupiter.api.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.module.ModuleCode;
+import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.testutil.PersonBuilder;
 
@@ -83,8 +93,161 @@ public class AddressBookTest {
     }
 
     @Test
+    public void hasPersonWithEmail_nullEmail_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasPersonWithEmail(null));
+    }
+    @Test
+    public void hasPersonWithEmail_personInAddressBook_returnsTrue() {
+        addressBook.addPerson(AMY);
+        assertTrue(addressBook.hasPersonWithEmail(AMY.getEmail()));
+    }
+
+    @Test
+    public void hasPersonWithEmail_personNotInAddressBook_returnsFalse() {
+        assertFalse(addressBook.hasPersonWithEmail(AMY.getEmail()));
+    }
+
+    @Test
+    public void isStudentInTutorialClass_personNotInClass_failure() {
+        Person person = new PersonBuilder(ALICE).build();
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        assertFalse(addressBook.isStudentInTutorialClass(person, tutorialClass));
+    }
+
+    @Test
+    public void isStudentInTutorialClass_classIsNull_failure() {
+        Person person = new PersonBuilder(ALICE).build();
+        assertThrows(NullPointerException.class, () -> addressBook.isStudentInTutorialClass(person, null));
+    }
+
+    @Test
+    public void isStudentInTutorialClass_personIsNull_failure() {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        assertThrows(NullPointerException.class, () -> addressBook.isStudentInTutorialClass(null, tutorialClass));
+    }
+
+    @Test
+    public void allocateStudentToTeam_personIsNull_failure() {
+        TutorialTeam tutorialTeam = new TutorialTeam(VALID_TEAM_NAME);
+        assertThrows(NullPointerException.class, () -> addressBook.allocateStudentToTeam(null, tutorialTeam));
+    }
+
+    @Test
+    public void allocateStudentToTeam_tutorialTeamIsNull_failure() {
+        Person person = new PersonBuilder(ALICE).build();
+        assertThrows(NullPointerException.class, () -> addressBook.allocateStudentToTeam(person, null));
+    }
+
+    @Test
+    public void hasTeamSizeExceeded_teamSizeNotExceeded_failure() {
+        TutorialTeam tutorialTeam = new TutorialTeam(VALID_TEAM_NAME, 3);
+        assertFalse(addressBook.hasTeamSizeExceeded(tutorialTeam));
+    }
+
+    @Test
+    public void hasTeamSizeExceeded_teamSizeExceeded_success() {
+        TutorialTeam tutorialTeam = new TutorialTeam(VALID_TEAM_NAME, 1);
+        Person student = new PersonBuilder(ALICE).build();
+        tutorialTeam.addStudent(student);
+        assertTrue(addressBook.hasTeamSizeExceeded(tutorialTeam));
+    }
+
+    @Test
+    public void isStudentInAnyTeam_studentNotInAny_failure() {
+        TutorialClass tutorialClass = new TutorialClass();
+        TutorialTeam firstTutorialTeam = new TutorialTeam(VALID_TEAM_NAME, 1);
+        TutorialTeam secondtutorialTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, 2);
+        tutorialClass.addTeam(firstTutorialTeam);
+        tutorialClass.addTeam(secondtutorialTeam);
+        Person person = new PersonBuilder(ALICE).build();
+        assertFalse(addressBook.isStudentInAnyTeam(person, tutorialClass));
+    }
+
+    @Test
+    public void isStudentInAnyTeam_studentIsNull_failure() {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        TutorialTeam firstTutorialTeam = new TutorialTeam(VALID_TEAM_NAME_AMY, 1);
+        TutorialTeam secondtutorialTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, 2);
+        tutorialClass.addTeam(firstTutorialTeam);
+        tutorialClass.addTeam(secondtutorialTeam);
+        assertFalse(addressBook.isStudentInAnyTeam(null, tutorialClass));
+    }
+
+    @Test
+    public void hasTeamInTutorial_success() {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        TutorialTeam firstTutorialTeam = new TutorialTeam(VALID_TEAM_NAME, 1);
+        TutorialTeam secondtutorialTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, 2);
+        tutorialClass.addTeam(firstTutorialTeam);
+        tutorialClass.addTeam(secondtutorialTeam);
+        assertTrue(addressBook.hasTeamInTutorial(tutorialClass, firstTutorialTeam));
+    }
+
+    @Test
+    public void hasTeamInTutorial_tutorialTeamIsNull_failure() {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        TutorialTeam firstTutorialTeam = new TutorialTeam(VALID_TEAM_NAME, 1);
+        TutorialTeam secondtutorialTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, 2);
+        tutorialClass.addTeam(firstTutorialTeam);
+        tutorialClass.addTeam(secondtutorialTeam);
+        assertThrows(NullPointerException.class, () -> addressBook.hasTeamInTutorial(tutorialClass, null));
+    }
+
+    @Test
+    public void getTutorialTeam_tutorialTeamIsNull_failure() {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        assertThrows(NullPointerException.class, () -> addressBook.getTutorialTeam(tutorialClass, null));
+    }
+
+    @Test
+    public void getTutorialTeam_tutorialTeamMatch_success() {
+        TutorialClass tutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
+        TutorialTeam firstTutorialTeam = new TutorialTeam(VALID_TEAM_NAME, 1);
+        TutorialTeam secondtutorialTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, 2);
+        tutorialClass.addTeam(firstTutorialTeam);
+        tutorialClass.addTeam(secondtutorialTeam);
+        assertEquals(addressBook.getTutorialTeam(tutorialClass, firstTutorialTeam), firstTutorialTeam);
+    }
+
+    @Test
+    public void hasPersonWithEmail_differentPersonWithSameEmail_returnsTrue() {
+        addressBook.addPerson(AMY);
+        Person alice = new PersonBuilder(ALICE).withEmail(VALID_EMAIL_AMY)
+                .build();
+        assertTrue(addressBook.hasPersonWithEmail(alice.getEmail()));
+    }
+
+    @Test
+    public void hasPersonWithStudentId_nullStudentId_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.hasPersonWithStudentId(null));
+    }
+    @Test
+    public void hasPersonWithStudentId_personInAddressBook_returnsTrue() {
+        addressBook.addPerson(AMY);
+        assertTrue(addressBook.hasPersonWithStudentId(AMY.getStudentId()));
+    }
+
+    @Test
+    public void hasPersonWithStudentId_personNotInAddressBook_returnsFalse() {
+        assertFalse(addressBook.hasPersonWithStudentId(AMY.getStudentId()));
+    }
+
+    @Test
+    public void hasPersonWithStudentId_differentPersonWithSameStudentId_returnsTrue() {
+        addressBook.addPerson(AMY);
+        Person alice = new PersonBuilder(ALICE).withStudentId(VALID_STUDENT_ID_AMY)
+                .build();
+        assertTrue(addressBook.hasPersonWithStudentId(alice.getStudentId()));
+    }
+
+    @Test
     public void getPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> addressBook.getPersonList().remove(0));
+    }
+
+    @Test
+    public void getSortedPersonList_modifyList_throwsUnsupportedOperationException() {
+
     }
 
     @Test
@@ -98,6 +261,8 @@ public class AddressBookTest {
      */
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Person> persons = FXCollections.observableArrayList();
+        private ObservableList<Person> sortedPersons;
+
         AddressBookStub(Collection<Person> persons) {
             this.persons.setAll(persons);
         }
@@ -113,12 +278,47 @@ public class AddressBookTest {
         }
 
         @Override
+        public void setSortedPersonList(Comparator<Person> comparator) {
+            sortedPersons = FXCollections.observableArrayList();
+        }
+
+        @Override
+        public ObservableList<Person> getSortedPersonList() {
+            return sortedPersons;
+        }
+
+        @Override
         public boolean hasModule(ModuleCode moduleCode) {
             return false;
         }
 
         @Override
-        public void addModule(ModuleCode moduleCode) {
+        public void addModule(ModuleCode moduleCode, String description) {
+        }
+
+        @Override
+        public ObservableList<TutorialClass> getTutorialList() {
+            return null;
+        }
+
+        @Override
+        public ObservableList<Person> getStudentsInTeamList() {
+            return null;
+        }
+
+        @Override
+        public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
+            return null;
+        }
+
+        @Override
+        public UniquePersonList getUniquePersonList() {
+            return null;
+        }
+
+        @Override
+        public ObservableList<TutorialTeam> getTutorialTeamList() {
+            return null;
         }
     }
 }

@@ -67,19 +67,19 @@ public class AddTeamCommandIntegrationTest {
     public void execute_addTeamToInvalidModule_throwsCommandException() {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
-        ModuleCode invalidModule = new ModuleCode(VALID_MODULE_BOB);
-        assertCommandFailure(new AddTeamCommand(invalidModule, testTutorial, VALID_TEAM_NAME_AMY),
+        ModuleCode wrongModule = new ModuleCode(VALID_MODULE_BOB);
+        assertCommandFailure(new AddTeamCommand(wrongModule, testTutorial, VALID_TEAM_NAME_AMY),
                 expectedModel,
-                String.format(ModuleMessages.MESSAGE_MODULE_NOT_FOUND, invalidModule));
+                String.format(ModuleMessages.MESSAGE_MODULE_NOT_FOUND, wrongModule));
     }
 
     @Test
     public void execute_addTeamToInvalidTutorial_throwsCommandException() {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
-        TutorialClass invalidTutorial = new TutorialClass(VALID_TUTORIAL_BOB);
-        assertCommandFailure(new AddTeamCommand(testModule, invalidTutorial, VALID_TEAM_NAME_AMY),
+        TutorialClass wrongTutorial = new TutorialClass(VALID_TUTORIAL_BOB);
+        assertCommandFailure(new AddTeamCommand(testModule, wrongTutorial, VALID_TEAM_NAME_AMY),
                 expectedModel,
-                String.format(ModuleMessages.MESSAGE_TUTORIAL_DOES_NOT_BELONG_TO_MODULE, invalidTutorial, testModule));
+                String.format(ModuleMessages.MESSAGE_TUTORIAL_DOES_NOT_BELONG_TO_MODULE, wrongTutorial, testModule));
     }
 }

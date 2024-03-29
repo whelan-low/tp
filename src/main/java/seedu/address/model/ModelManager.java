@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -13,7 +14,11 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
+import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.StudentId;
+import seedu.address.model.person.UniquePersonList;
 
 
 /**
@@ -26,6 +31,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final FilteredList<ModuleCode> filteredModules;
+
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -97,6 +103,19 @@ public class ModelManager implements Model {
         requireNonNull(person);
         return addressBook.hasPerson(person);
     }
+
+    @Override
+    public boolean hasPersonWithStudentId(StudentId id) {
+        requireAllNonNull(id);
+        return addressBook.hasPersonWithStudentId(id);
+    }
+
+    @Override
+    public boolean hasPersonWithEmail(Email email) {
+        requireAllNonNull(email);
+        return addressBook.hasPersonWithEmail(email);
+    }
+
     @Override
     public ModuleCode findModuleFromList(ModuleCode module) {
         requireNonNull(module);
@@ -118,19 +137,76 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void deleteModule(ModuleCode target) {
+        addressBook.removeModule(target);
+    }
+
+    @Override
     public void addPerson(Person person) {
         addressBook.addPerson(person);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
+    public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
+        requireAllNonNull(student, tutorialTeam);
+        addressBook.allocateStudentToTeam(student, tutorialTeam);
+    }
+
+    @Override
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.hasTeamInTutorial(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireAllNonNull(tutorialClass, tutorialTeam);
+        return addressBook.getTutorialTeam(tutorialClass, tutorialTeam);
+    }
+
+    /**
+     * Add a team to the tutorial class
+     * @param tutorialTeam to be added to the tutorial class
+     */
+    @Override
+    public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        addressBook.addTeam(tutorialClass, tutorialTeam);
+    }
+
+    @Override
+    public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        return addressBook.hasTeamSizeExceeded(tutorialTeam);
+    };
+
+    @Override
+    public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
+        requireAllNonNull(student, tutorialClass);
+        return addressBook.isStudentInAnyTeam(student, tutorialClass);
+    }
+
+    @Override
+    public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
+        requireAllNonNull(student, tutorialClass);
+        return addressBook.isStudentInTutorialClass(student, tutorialClass);
+    }
+
+    @Override
     public void addModule(ModuleCode module) {
-        addressBook.addModule(module);
+        addressBook.addModule(module,
+            module.getDescription());
     }
 
     @Override
     public void addPersonToTutorialClass(Person person, ModuleCode module, TutorialClass tutorialClass) {
         addressBook.addPersonToTutorialClass(person, module, tutorialClass);
+    }
+
+    @Override
+    public void deletePersonFromTutorialClass(Person person, ModuleCode module, TutorialClass tutorialClass) {
+        addressBook.deletePersonFromTutorialClass(person, module, tutorialClass);
     }
 
     @Override
@@ -150,6 +226,17 @@ public class ModelManager implements Model {
     public ObservableList<Person> getFilteredPersonList() {
         return filteredPersons;
     }
+
+    /**
+     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * {@code versionedAddressBook}
+     * @Return UniquePersonList.
+     */
+    @Override
+    public UniquePersonList getUniquePersonList() {
+        return addressBook.getUniquePersonList();
+    }
+
     /**
      * Returns an unmodifiable view of the list of {@code Module} backed by the internal list of
      * {@code versionedAddressBook}
@@ -157,6 +244,22 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<ModuleCode> getFilteredModuleList() {
         return filteredModules;
+    }
+
+    @Override
+    public ObservableList<Person> getSortedPersonList(Comparator<Person> comparator) {
+        addressBook.setSortedPersonList(comparator);
+        return addressBook.getSortedPersonList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTeamList() {
+        return addressBook.getStudentsInTeamList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
+        return addressBook.getStudentsInTutorialClass(tutorialClass);
     }
 
     @Override
