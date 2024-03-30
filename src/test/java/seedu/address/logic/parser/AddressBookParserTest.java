@@ -35,12 +35,15 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListClassesCommand;
 import seedu.address.logic.commands.ListStudentsCommand;
+import seedu.address.logic.commands.ListStudentsOfClassCommand;
 import seedu.address.logic.commands.SearchStudentCommand;
 import seedu.address.logic.commands.SortStudentCommand;
 import seedu.address.logic.commands.ViewTeamCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByEmailCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByIdCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassCommand;
+import seedu.address.logic.commands.deletestudentcommands.DeleteStudentByIdCommand;
+import seedu.address.logic.commands.deletestudentcommands.DeleteStudentCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassByEmailCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassByIdCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassCommand;
@@ -256,5 +259,26 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
+    }
+
+
+    @Test
+    public void parseCommand_listStudentsOfClass() throws Exception {
+        final String moduleCode = "CS2103T";
+        final String tutorialClass = "T09";
+        ListStudentsOfClassCommand command = (ListStudentsOfClassCommand) parser.parseCommand(
+            ListStudentsOfClassCommand.COMMAND_WORD + " "
+                + PREFIX_MODULECODE + moduleCode + " " + PREFIX_TUTORIALCLASS + tutorialClass);
+        assertEquals(new ListStudentsOfClassCommand(new ModuleCode(moduleCode),
+            new TutorialClass(tutorialClass)), command);
+    }
+
+    @Test
+    public void parseCommand_deleteStudent() throws Exception {
+        final String studentId = "A1234561Z";
+        DeleteStudentCommand
+            command = (DeleteStudentCommand) parser.parseCommand(DeleteStudentCommand.COMMAND_WORD + " "
+            + PREFIX_STUDENTID + studentId);
+        assertEquals(new DeleteStudentByIdCommand(new StudentId(studentId)), command);
     }
 }

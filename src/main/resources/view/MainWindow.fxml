@@ -30,10 +30,10 @@
             <BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
                         xmlns="http://javafx.com/javafx/8.0.171"
                         xmlns:fx="http://javafx.com/fxml/1">
-                        <top>
-                            <VBox minWidth="100.0" prefHeight="100.0" prefWidth="400.0"
-                                  xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-                                <children>
+                <top>
+                    <VBox minWidth="100.0" prefHeight="100.0" prefWidth="400.0"
+                          xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+                        <children>
                             <MenuBar fx:id="menuBar" prefWidth="400" prefHeight="50" >
                                 <Menu mnemonicParsing="false" text="File">
                                     <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit"/>
@@ -50,7 +50,7 @@
                                            VBox.vgrow="ALWAYS">
                                     <!-- Specify the path or URL for the image -->
                                     <image>
-                                        <Image url="/images/logo.png"/>
+                                        <Image url="/images/damith4.png"/>
                                     </image>
                                 </ImageView>
                             </HBox>
@@ -99,8 +99,8 @@
                                 <padding>
                                     <Insets bottom="10" />
                                 </padding>
-                            </VBox>
-                        </bottom>
+                    </VBox>
+                </bottom>
                 <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
             </BorderPane>
         </Scene>

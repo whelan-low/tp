@@ -48,7 +48,7 @@ public class ModuleCard extends UiPart<Region> {
      * to enhance visual appearance.
      */
     public void updateImage() {
-        Image moduleImage = new Image("images/group4.png");
+        Image moduleImage = new Image("images/damith3.png");
         circle.setStroke(Color.ROSYBROWN);
         circle.setFill(new ImagePattern(moduleImage));
         circle.setEffect(new DropShadow(+10d, 0d, +2d, Color.ROSYBROWN));

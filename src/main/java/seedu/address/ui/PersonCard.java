@@ -85,7 +85,7 @@ public class PersonCard extends UiPart<Region> {
             String path = "images/" + person.getName().toString() + ".png";
             File file = new File(path);
             if (!file.exists()) {
-                Image defaultImage = new Image("images/student.png");
+                Image defaultImage = new Image("images/damith1.png");
                 circle.setStroke(Color.ROSYBROWN);
                 circle.setFill(new ImagePattern(defaultImage));
                 circle.setEffect(new DropShadow(+10d, 0d, +2d, Color.ROSYBROWN));
