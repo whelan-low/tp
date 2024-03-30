@@ -308,6 +308,55 @@ Step 6. Finally, a `CommandResult` is created and the student is added to the TA
   - Pros: Search, add, delete, sort commands all can become more specfic, and the commands can make use of more information to achieve its desired outcome as well, instead of solely relying on email or id, which although present in the system, may not be readily available or easily remembered by the users themselves.
   - Cons: The addition of these fields to the system could lead to increase complexity of the codebase and increased coupling between components in the codebase. This will make the codebase harder to debug and maintain. Also, these field possibly being optional may lead to an increase in the number of null values and thus null checks in the system, which can make the codes in the codebase harder to reason about and refactor in the future.
 
+### \[Implemented\] Delete student
+
+The implemented add mechanism is facilitated by the abstract `DeleteStudentCommand` along with its specific commands `DeleteStudentByEmailCommand`, `DeleteStudentByIdCommand` and `DeleteStudentClassByIndexCommand`, as well as the parser `DeleteStudentCommandParser`.
+
+`DeleteStudentCommandParser` implements the `Parser` interface and its operations.
+
+`DeleteStudentCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `DeleteStudentCommand` based on its specific functionality:
+
+- `DeleteStudentByEmailCommand` — Delete student based on specified email.
+- `DeleteStudentByIdCommand` — Delete student based on specified student id.
+- `DeleteStudentByIndexCommand` — Delete student based on specified index (viewable from the UI).
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/delete_student id/A01234567X`
+
+<puml src="diagrams/DeleteStudentSequence.puml" alt="DeleteStudentSequence" />
+
+Step 1. The user executes `/delete_student id/A01234567X` command to delete the particular student with id `A01234567X`.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `DeleteStudentCommandParser` and calls `DeleteStudentCommandParser#parse()`, with `id/A01234567X` as the argument.
+
+Step 3. The `DeleteStudentCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id).
+
+<box type="info" seamless>
+
+**Important Note:** The id/email/index must be specified. To determine the target student, only one prefix should used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
+
+</box>
+
+Step 4. Based on the prefix used, `DeleteStudentCommandParser` creates the specific `DeleteStudentCommand` accordingly. Each command contains a specific predicate to find the student.
+
+Step 5. `LogicManager` calls `DeleteStudentCommand#execute()`, passing `Model` as an argument. This method retrieves the student to delete using the defined predicate. Throughout the process, error handling (e.g checking for invalid student) is utilised to mitigate potential discrepancies and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is deleted.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Seperate each specific command into a different class, while overlapping code is abstracted to an abstract class.
+  - Pros: Specific commands are instantiated and thus can be easily traced and is more readable. Any reusable code is defined in the abstract class which can then be reused by the subclasses.
+  - Cons: May have duplicate code to a certain extent.
+
+* **Alternative 2:** Lump into one generic command that handles each parameter accordingly.
+  - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
+  - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
+
 ### \[Implemented\] Add student to tutorial class
 
 The implemented add mechanism is facilitated by the abstract `AddStudentToClassCommand` along with its specific commands `AddStudentToClassByEmailCommand`, `AddStudentToClassByIdCommand` and `AddStudentToClassByIndexCommand`, as well as the parser `AddStudentToClassCommandParser`.
@@ -357,7 +406,99 @@ Step 6. Finally, a `CommandResult` is created and the student is added to the tu
   - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
   - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
 
-### \[Implemented\] Searching for students
+### \[Implemented\] Delete student from class
+
+The implemented add mechanism is facilitated by the abstract `DeleteStudentFromClassCommand` along with its specific commands `DeleteStudentFromClassByEmailCommand`, `DeleteStudentFromClassByIdCommand` and `DeleteStudentFromClassByIndexCommand`, as well as the parser `DeleteStudentFromClassCommandParser`.
+
+`DeleteStudentFromClassCommandParser` implements the `Parser` interface and its operations.
+
+`DeleteStudentFromClassCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `DeleteStudentCommand` based on its specific functionality:
+
+- `DeleteStudentFromClassByEmailCommand` — Delete student based on specified email from a tutorial class.
+- `DeleteStudentFromClassByIdCommand` — Delete student based on specified student id from a tutorial class.
+- `DeleteStudentByIndexCommand` — Delete student based on specified index (viewable from the UI) from a tutorial class
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/delete_student_from_class id/A01234567X module/CS2103T tutorial/T09`
+
+<puml src="diagrams/DeleteStudentFromClassSequence.puml" alt="DeleteStudentFromClassSequence" />
+
+Step 1. The user executes `/delete_student_from_class id/A01234567X module/CS2103T tutorial/T09` command to delete the particular student with id `A01234567X` from the module `CS2103T` and tutorial class `T09`.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `DeleteStudentFromClassCommandParser` and calls `DeleteStudentFromClassCommandParser#parse()`, with `id/A01234567X`, `module/CS2103T` and `tutorial/T09` as the arguments.
+
+Step 3. The `DeleteStudentFromClassCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id). Additionally, the `ModuleCode` and `TutorialClass` is determined.
+
+<box type="info" seamless>
+
+**Important Note:** The tutorial class and module code must be specified. To determine the target student, only one prefix should used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
+
+</box>
+
+Step 4. Based on the prefix used, `DeleteStudentFromClassCommandParser` creates the specific `DeleteStudentFromClassCommand` accordingly. Each command contains a specific predicate to find the student.
+
+Step 5. `LogicManager` calls `DeleteStudentFromClassCommand#execute()`, passing `Model` as an argument. This method retrieves the target module and tutorial class. Then, the method retrieves the student to delete using the defined predicate. Throughout the process, error handling (e.g checking for invalid student/module/tutorial) is utilised to mitigate potential discrepancies and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is deleted from the tutorial class.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Seperate each specific command into a different class, while overlapping code is abstracted to an abstract class.
+  - Pros: Specific commands are instantiated and thus can be easily traced and is more readable. Any reusable code is defined in the abstract class which can then be reused by the subclasses.
+  - Cons: May have duplicate code to a certain extent.
+
+* **Alternative 2:** Lump into one generic command that handles each parameter accordingly.
+  - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
+  - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
+
+### \[Implemented\] List students of class
+
+The implementation of adding a class is facilitated by the `ListStudentsOfClassCommand` and `ListStudentsOfClassCommandParser`. `ListStudentsOfClassCommandParser` implements the `Parser` interface and it's operations. `ListStudentsOfClassCommand` extends the
+`Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/class_list_students module/CS2103T tutorial/T09`
+
+<puml src="diagrams/ListStudentsOfClassSequence.puml" alt="ListStudentsOfClassSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/class_list_students module/CS2103T tutorial/T09` command to list students of the unique tutorial `T09` of a module `CS2103T`.
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `ListStudentsOfClassCommandParser` and calls `ListStudentsOfClassCommandParser#parse()`, with `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+
+Step 3. The `ListStudentsOfClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the tutorial of the module to delete.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for module and tutorial.
+Additionally, module and tutorial must match with one of the values already present in the system to get achieve a successful delete.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `ListStudentsOfClassCommandParser` creates an `ListStudentsOfClassCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `ListStudentsOfClassCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate email or id, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is added to the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Lists all students with their tutorial classes and modules in the result display panel.
+    - Pros: Ensures that all students are displayed correctly.
+    - Cons: Users may want to view all the student of a certain module but are unable to do so.
+
+### \[Implemented\] Search for students
 
 The implemented search mechanism is facilitated by `SearchStudentCommand` and `SearchStudentCommandParser`.
 `SearchStudentCommandParser` implements the `Parser` interface and it's operations. `SearchStudentCommand` extends the
@@ -400,12 +541,371 @@ Step 6. Finally, a `CommandResult` is created and the new filtered is displayed 
 
 ### Design considerations:
 
+**Aspect: Modularity and extensibility:**
+
 - **Alternative 1 (current choice):** Only one prefix allowed per command.
   - Pros: Easy to implement.
   - Cons: Does not allow users to fine tune searches based on multiple fields.
 - **Alternative 2:** Allow for multiple prefixes.
   - Pros: Users can filter searches to a higher degree
   - Cons: Handling combinations of different fields could be complex
+
+### \[Implemented\] Sort students
+
+The implemented search mechanism is facilitated by `SortStudentCommand` and `SortStudentCommandParser`.
+`SortStudentCommandParser` implements the `Parser` interface and it's operations. `SortStudentCommand` extends the
+`Command` class with the ability to update `Model`'s filtered person list using `Predicate`. It supports the following
+`Predicate`:
+
+- `name` — Sort students based on name.
+- `email` — Sort students based on email.
+- `id` — Sort students based on student id.
+
+Given below is an example usage scenario and how the search mechanism behaves at each step.
+
+Example: `/sort_student by/id`
+
+<puml src="diagrams/SortStudentSequence.puml" alt="SortStudentSequence" />
+
+Step 1. The user executes `/sort_student by/id` command to sort student based on the value of their id.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the
+arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `SortStudentCommandParser` and calling
+`SortStudentCommandParser#parse()`, with `by/id` as the argument.
+
+Step 3. The `SortStudentCommandParser` parses the arguments to determine which prefix the user is searching in.
+
+<box type="info" seamless>
+
+**Note:** Only one input: name or email or id can be used per command. If there are multiple inputs, the method will throw an exception.
+
+</box>
+
+Step 4. `SortStudentCommandParser` creates `SearchStudentCommand` and gets the value `id` from the prefix, passing the predicate
+as an argument into the command.
+
+Step 5. `LogicManager` calls `SortStudentCommand#execute()`, passing `Model` as an argument. This method calls
+`AddressBook#getSortedPersonList()` with the given predicate, returning the sorted list in `AddressBook` with the sorted order of the students.
+
+Step 6. Finally, a `CommandResult` is created and the sorted list of students is displayed to the user.
+
+### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Only one prefix allowed per command.
+    - Pros: Easy to implement.
+    - Cons: Does not allow users to fine tune searches based on multiple fields.
+- **Alternative 2:** Allow for multiple prefixes.
+    - Pros: Users can filter searches to a higher degree
+    - Cons: Handling combinations of different fields could be complex
+
+### \[Implemented\] Add class
+
+The implementation of adding a class is facilitated by the `AddClassCommand` and `AddClassCommandParser`. `AddClassCommandParser` implements the `Parser` interface and it's operations. `AddClassCommand` extends the
+`Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/add_class module/CS2103T tutorial/T09`
+
+<puml src="diagrams/AddClassSequence.puml" alt="AddClassSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/add_class module/CS2103T tutorial/T09` command to add a module `CS2103T`, along with
+a unique tutorial `T09`
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `AddClassCommandParser` and calls `AddClassCommandParser#parse()`, with `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+
+Step 3. The `AddClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the tutorial of the module to add.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for module and tutorial.
+Additionally, module and tutorial must be unique compared to the values already present in the system to get achieve a successful add.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `AddClassCommandParser` creates an `AddClassCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `AddClassCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the class is added to the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique module code and tutorial class is required when adding classes into the TAHelper system, as well as user have to specify all fields, module code and tutorial class in order to add a new class successfully.
+    - Pros: Ensures that all classes are unique and not repeated. This helps facilitate other commands such as add student to classes to find a match in class easily without duplicates.
+    - Cons: Users may inadvertently provide incorrect or non-existent module codes or tutorial class identifiers, leading to errors in the system. This could result in frustration and a poor user experience.
+  
+* **Alternative 2:** Allow user to specify only the module code when adding classes
+    - Pros: Users can add classes without needing to specify the tutorial class immediately, allowing for greater flexibility in the workflow. They can add the class first and then specify the tutorial class later, as needed. The input process is also streamlined, reducing the burden on users. This simplicity can lead to faster data entry and a more intuitive user experience.
+    - Cons: Users may inadvertently create duplicate classes if they do not specify the tutorial class identifier accurately or if they forget to add it later. This could result in redundancy and inconsistencies within the system.
+
+### \[Implemented\] Delete class
+
+The implementation of adding a class is facilitated by the `DeleteClassCommand` and `DeleteClassCommandParser`. `DeleteClassCommandParser` implements the `Parser` interface and it's operations. `DeleteClassCommand` extends the
+`Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/delete_class module/CS2103T tutorial/T09`
+
+<puml src="diagrams/DeleteClassSequence.puml" alt="DeleteClassSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/delete_class module/CS2103T tutorial/T09` command to delete a module `CS2103T`, along with
+a unique tutorial `T09`
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `DeleteClassCommandParser` and calls `DeleteClassCommandParser#parse()`, with `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+
+Step 3. The `AddClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the tutorial of the module to delete.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for module and tutorial.
+Additionally, module and tutorial must match with one of the values already present in the system to get achieve a successful delete.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `DeleteClassCommandParser` creates an `DeleteClassCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `DeleteClassCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the class is deleted from the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique module code and tutorial class is required when deleting classes from the TAHelper system, as well as user have to specify all fields, module code and tutorial class in order to delete a new class successfully.
+    - Pros: Ensures that the class is only deleted if there is a match in the system. Also ensure that the other tutorial classes of the module is not deleted if no tutorial class is specified. 
+    - Cons: Users may inadvertently provide incorrect or non-existent module codes or tutorial class identifiers, leading to errors in the system. This could result in frustration and a poor user experience.
+
+* **Alternative 2:** Allow user the option to delete the entire module without specifying the tutorial class.
+    - Pros: Users can delete modules without needing to specify the tutorial class, allowing for greater ease in the workflow. This allows users who are no longer teaching the module to remove all the information with one command.
+    - Cons: Users may accidentally delete the entire module if they forgot to specify the tutorial class identifier and this may lead to great data damage. A separate command to delete module would be better. 
+
+### \[Implemented\] Delete module
+
+The implementation of adding a class is facilitated by the `DeleteModuleCommand` and `DeletModuleCommandParser`. `DeleteModuleCommandParser` implements the `Parser` interface and it's operations. `DeleteModuleCommand` extends the
+`Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/delete_module module/CS2103T`
+
+<puml src="diagrams/DeleteModuleSequence.puml" alt="DeleteModuleSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/delete_module module/CS2103T` command to delete a module `CS2103T`.
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `DeleteModuleCommandParser` and calls `DeleteModuleCommandParser#parse()`, with `module/CS2103T` as the argument for the function.
+
+Step 3. The `DeleteClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the module to delete.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for module.
+Additionally, module must match with one of the values already present in the system to get achieve a successful delete.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `DeleteModuleCommandParser` creates an `DeleteModuleCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `DeleteModuleCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate module code, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the module is deleted from the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique module code is required when deleting modules from the TAHelper system.
+    - Pros: Ensures that the class is only deleted if there is a match in the system.
+    - Cons: Users may accidentally use this command instead of `/delete_class`. This will result in huge data loss. 
+
+### \[Implemented\] List class
+
+The implementation of adding a class is facilitated by the `ListClassCommand` and `ListClassCommandParser`. `ListClassCommandParser` implements the `Parser` interface and it's operations. `ListClassCommand` extends the
+`Command` class. 
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/List_class`
+
+<puml src="diagrams/ListClassSequence.puml" alt="ListClassSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/list_class` command to list all the class available.
+
+The `execute` initiates the execution of the command by directly accessing the model. It begins by ensuring that the model contains data, specifically a list of modules. If the list is empty, it returns a message indicating there are no modules.
+
+Step 2. It then iterates through each module, appending its string representation followed by a colon. Within each module iteration, it iterates through its tutorial classes, appending their string representations separated by commas.
+
+Step 3. The result string is then trimmed and `CommandResult`.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Lists all modules and their tutorial classes in the result display panel. 
+    - Pros: Ensures that all classes are displayed correctly.
+    - Cons: Users may want to view tutorial classes of certain modules only but are unable to do so.
+
+### \[Implemented\] Add team
+
+The implementation of adding a class is facilitated by the `AddTeamCommand` and `AddTeamCommandParser`. `AddTeamCommandParser` implements the `Parser` interface and it's operations. `AddTeamCommand` extends the
+`Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/add_team module/CS2103 tutorial/T09 name/Team 1 size/5`
+
+<puml src="diagrams/AddTeamSequence.puml" alt="AddTeamSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/add_team module/CS2103 tutorial/T09 name/Team 1 size/5` command to add a team `Team 1` of size `5` to the tutorial class `T09` of module `CS2103T`
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `AddTeamCommandParser` and calls `AddTeamCommandParser#parse()`, with `name/Team 1`, `size/5`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+
+Step 3. The `AddClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the team to add.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for name, size, module and tutorial.
+Additionally, name, module and tutorial must be unique compared to the values already present in the system to get achieve a successful add.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `AddTeamCommandParser` creates an `AddTeamCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `AddTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the team is added to the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique team name, module code and tutorial class is required when adding classes into the TAHelper system, as well as user have to specify all fields, team name, module code and tutorial class in order to add a new team successfully.
+    - Pros: Ensures that all teams are unique and not repeated. This helps facilitate other commands such as allocate student to teams to find a match in team easily without duplicates.
+    - Cons: Users may inadvertently provide incorrect or non-existent module codes or tutorial class identifiers, leading to errors in the system. This could result in frustration and a poor user experience.
+
+* **Alternative 2:** Allow user to not specify team size when adding teams
+    - Pros: Users can add teams without needing to specify the team size immediately, allowing for greater flexibility in the workflow. They can add the team first and then specify the team size later, as needed. The input process is also streamlined, reducing the burden on users. This simplicity can lead to faster data entry and a more intuitive user experience.
+    - Cons: Users may inadvertently add too many students to the team if they do not specify the team size identifier accurately or if they forget to add it later. This could result in errors within the system.
+
+### \[Implemented\] Delete team
+
+The implementation of adding a class is facilitated by the `DeleteTeamCommand` and `DeleteTeamCommandParser`. `DeleteTeamCommandParser` implements the `Parser` interface and it's operations. `DeleteTeamCommand` extends the
+`Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/delete_team module/CS2103T tutorial/T09 name/Team 1`
+
+<puml src="diagrams/DeleteTeamSequence.puml" alt="DeleteTeamSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/delete_team module/CS2103T tutorial/T09 name/Team 1` command to delete a team `Team 1` in tutorial `T09` of module `CS2103T`.
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `DeleteTeamCommandParser` and calls `DeleteTeamCommandParser#parse()`, with `name/Team 1`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+
+Step 3. The `DeleteTeamCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the tutorial of the module to delete.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for module and tutorial.
+Additionally, module and tutorial must match with one of the values already present in the system to get achieve a successful delete.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `DeleteTeamCommandParser` creates an `DeleteTeamCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `DeleteTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the team is deleted from the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique team name, module code and tutorial class is required when deleting teams from the TAHelper system, as well as user have to specify all fields, team name, module code and tutorial class in order to delete a team successfully.
+    - Pros: Ensures that the team is only deleted if there is a match in the system. Also ensure that the other teams of the tutorial class is not deleted if no team is specified.
+    - Cons: Users may inadvertently provide incorrect or non-existent team or module codes or tutorial class identifiers, leading to errors in the system. This could result in frustration and a poor user experience.
+
+### \[Implemented\] Allocate student to team
+
+The implemented add mechanism is facilitated by the abstract `AllocateStudentToTeamCommand` along with its specific commands `AllocateStudentToTeamByEmailCommand`, `AllocateStudentToTeamByIdCommand` and `AllocateStudentToTeamByIndexCommand`, as well as the parser `AllocateStudentToTeamCommandParser`.
+
+`AllocateStudentToTeamCommandParser` implements the `Parser` interface and its operations.
+
+`AllocateStudentToTeamCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AllocateStudentToTeamCommand` based on its specific functionality:
+
+- `AllocateStudentToTeamByEmailCommand` — Allocate student based on specified email to a team.
+- `AllocateStudentToTeamByIdCommand` — Allocate student based on specified student id to a team.
+- `AllocateStudentToTeamByIndexCommand` — Allocate student based on specified index (viewable from the UI) to a team.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/allocate_team id/A01234567X module/CS2103T tutorial/T09 team/Team 1`
+
+<puml src="diagrams/AllocateStudentToTeamSequence.puml" alt="AllocateStudentToTeamSequence" />
+
+Step 1. The user executes `/allocate_team id/A01234567X module/CS2103T tutorial/T09 team/Team 1` command to add the particular student with id `A01234567X` to team `Team 1` in the tutorial class `T09` of module `CS2103T`.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `AllocateStudentToTeamCommandParser` and calls `AllocateStudentToTeamCommandParser#parse()`, with `id/A01234567X`, `team/Team 1`, `module/CS2103T` and `tutorial/T09` as the arguments.
+
+Step 3. The `AllocateStudentToTeamCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id). Additionally, the `TutorialTeam`, `ModuleCode` and `TutorialClass` is determined.
+
+<box type="info" seamless>
+
+**Important Note:** The team, tutorial class and module code must be specified. To determine the target student, only one prefix should used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
+
+</box>
+
+Step 4. Based on the prefix used, `AllocateStudentToTeamCommandParser` creates the specific `AllocateStudentToTeamCommand` accordingly. Each command contains a specific predicate to find the student.
+
+Step 5. `LogicManager` calls `AllocateStudentToTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the target module and tutorial class. Then, the method retrieves the student to add using the defined predicate. Throughout the process, error handling (e.g checking for invalid student/module/tutorial/team) is utilised to mitigate potential discrepancies and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is added to the tutorial class.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Seperate each specific command into a different class, while overlapping code is abstracted to an abstract class.
+  - Pros: Specific commands are instantiated and thus can be easily traced and is more readable. Any reusable code is defined in the abstract class which can then be reused by the subclasses.
+  - Cons: May have duplicate code to a certain extent.
+
+* **Alternative 2:** Lump into one generic command that handles each parameter accordingly.
+  - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
+  - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
 
 ---
 
