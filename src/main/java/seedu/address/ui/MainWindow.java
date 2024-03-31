@@ -17,6 +17,7 @@ import seedu.address.logic.commands.AddClassCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.DeleteClassCommand;
 import seedu.address.logic.commands.ListClassesCommand;
+import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.commands.SortStudentCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -151,6 +152,10 @@ public class MainWindow extends UiPart<Stage> {
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
     }
 
+    private void displayAllPersonListPanel() {
+        personListPanel = new PersonListPanel(logic.getAddressBook().getPersonList());
+        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+    }
 
     /**
      * Sets the default size based on {@code guiSettings}.
@@ -215,6 +220,13 @@ public class MainWindow extends UiPart<Stage> {
         String commandWord = commandText.split(" ")[0];
         return commandWord.equals(SortStudentCommand.COMMAND_WORD);
     }
+    /**
+     * Returns true if the command requires list view.
+     */
+    public static boolean allStudentView(String commandText) {
+        String commandWord = commandText.split(" ")[0];
+        return commandWord.equals(ListStudentsCommand.COMMAND_WORD);
+    }
 
     public PersonListPanel getPersonListPanel() {
         return personListPanel;
@@ -240,6 +252,9 @@ public class MainWindow extends UiPart<Stage> {
             }
             if (useSortedView(commandText)) {
                 switchToSortedPersonListPanel();
+            }
+            if (allStudentView(commandText)) {
+                displayAllPersonListPanel();
             }
             return commandResult;
         } catch (CommandException | ParseException e) {

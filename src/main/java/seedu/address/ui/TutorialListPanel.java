@@ -11,6 +11,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.Model;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 
@@ -25,6 +26,7 @@ public class TutorialListPanel extends UiPart<Region> implements SelectedArea {
 
     private PersonListPanel personListPanel;
     private Consumer<TutorialClass> tutorialCardClickHandler;
+    private Model model;
 
 
 
@@ -70,7 +72,7 @@ public class TutorialListPanel extends UiPart<Region> implements SelectedArea {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new TutorialClassCard(tutorialClass, personListPanel).getRoot());
+                setGraphic(new TutorialClassCard(tutorialClass, personListPanel, model).getRoot());
                 setOnMouseClicked(event -> tutorialCardClickHandler.accept(tutorialClass));
             }
         }

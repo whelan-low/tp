@@ -14,6 +14,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import seedu.address.model.Model;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
 
@@ -26,6 +27,7 @@ public class TutorialClassCard extends UiPart<Region> {
 
     public final TutorialClass tutorialClass;
     public final PersonListPanel personListPanel;
+    public final Model model;
     @FXML
     protected ComboBox<TutorialTeam> teamComboBox;
     @FXML
@@ -38,8 +40,9 @@ public class TutorialClassCard extends UiPart<Region> {
     /**
      * Creates a {@code TutorialClassCard} with the given {@code TutorialClass}.
      */
-    public TutorialClassCard(TutorialClass tutorialClass, PersonListPanel personListPanel) {
+    public TutorialClassCard(TutorialClass tutorialClass, PersonListPanel personListPanel, Model model) {
         super(FXML);
+        this.model = model;
         this.tutorialClass = tutorialClass;
         this.personListPanel = personListPanel;
         tutorialClassLabel.setText(tutorialClass.toString());
@@ -66,6 +69,7 @@ public class TutorialClassCard extends UiPart<Region> {
             personListPanel.displayPersonsForTeam(selectedTeam); // Update PersonListPanel
         }
     }
+
     /**
      * Update the team ComboBox with the given list of teams.
      * @param teams List of teams to be displayed in the ComboBox
