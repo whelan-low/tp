@@ -67,7 +67,7 @@ public class TutorialTeam {
 
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students.
-     * @param tutorialClass to be added
+     * @param tutorialTeam to be added
      * @param students      in the tutorial class
      */
     public TutorialTeam(String tutorialTeam, ArrayList<Person> students) {
@@ -81,7 +81,7 @@ public class TutorialTeam {
     /**
      * A constructor for TutorialTeam. Creates a tutorial team with students and
      * team size.
-     * @param tutorialClass to be added
+     * @param tutorialTeam to be added
      * @param students      in the tutorial class
      * @param teamSize      of the tutorial team
      */
@@ -174,6 +174,24 @@ public class TutorialTeam {
      */
     public boolean hasStudent(Person student) {
         return students.contains(student);
+    }
+
+    /**
+     * Checks if a student exist, check by their studentId.
+     * @return true if a person is in the list of students
+     */
+    public boolean hasStudentVerified(Person student, TutorialTeam tutorialTeam) {
+        ArrayList<Person> teamList = tutorialTeam.getStudents();
+        if (teamList.size() == 0 || teamList == null) {
+            return false;
+        }
+        for (Person eachStudent : teamList) {
+            if (eachStudent.getStudentId().value.equals(student.getStudentId().value)) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     @Override

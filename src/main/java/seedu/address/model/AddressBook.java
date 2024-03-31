@@ -14,6 +14,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.messages.ModuleMessages;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
@@ -29,6 +30,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     private ObservableList<Person> sortedPersons;
     private final ArrayList<ModuleCode> modules;
     private final ArrayList<TutorialClass> tutorialClasses;
+    private final ArrayList<TutorialTeam> tutorialTeams;
+    private final UniquePersonList studentsInTeam;
 
     /*
      * The 'unusual' code block below is a non-static initialization block,
@@ -44,6 +47,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons = new UniquePersonList();
         modules = new ArrayList<>();
         tutorialClasses = new ArrayList<>();
+        tutorialTeams = new ArrayList<>();
+        studentsInTeam = new UniquePersonList();
     }
 
     public AddressBook() {
@@ -82,6 +87,17 @@ public class AddressBook implements ReadOnlyAddressBook {
         this.tutorialClasses.addAll(tutorialClasses);
     }
 
+    public void setTutorialTeams(List<TutorialTeam> tutorialTeams) {
+        requireNonNull(tutorialTeams);
+        this.tutorialTeams.clear();
+        this.tutorialTeams.addAll(tutorialTeams);
+    }
+
+    public void setStudentsInTeam(List<Person> students) {
+        requireNonNull(students);
+        this.studentsInTeam.setPersons(students);
+    }
+
     /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
@@ -90,7 +106,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         setPersons(newData.getPersonList());
         setModules(newData.getModuleList());
         setClass(newData.getTutorialList());
-
+        setTutorialTeams(newData.getTutorialTeamList());
+        setStudentsInTeam(newData.getStudentsInTeamList());
     }
 
     //// person-level operations
@@ -229,6 +246,89 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Checks if a student is in the {@code tutorialClass} of that {@code moduleCode}
+     * @param student to check if student exist in tutorialClass.
+     * @param tutorialClass to check if the student is in
+     * @return a boolean indicating if the student is in that {@code tutorialClass}
+     */
+    public boolean isStudentInTutorialClass(Person student, TutorialClass tutorialClass) {
+        List<Person> students = tutorialClass.getStudents();
+        return students.stream().anyMatch(student::isSamePerson);
+    }
+
+    /**
+     * Allocates the {@code studentId} to the {@code tutorialTeam}
+     * @param tutorialTeam to allocate the student into.
+     */
+    public void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam) {
+        requireNonNull(student);
+        requireNonNull(tutorialTeam);
+        tutorialTeam.addStudent(student);
+    }
+
+    /**
+     * Returns true if the {@code tutorialTeam} size has exceeded its limit.
+     * @param tutorialTeam size to check.
+     * @return a boolean that indicates whether the team size will be exceeded by adding another person.
+     */
+    public boolean hasTeamSizeExceeded(TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialTeam);
+        int maxTeamSize = tutorialTeam.getTeamSize();
+        int currTeamSize = tutorialTeam.getStudents().size();
+        return (maxTeamSize <= currTeamSize);
+    };
+
+    /**
+     * Returns true if the {@code student} is already in a team of {@code tutorialClass}.
+     * @param tutorialClass of the teams.
+     * @param student to search for.
+     */
+    public boolean isStudentInAnyTeam(Person student, TutorialClass tutorialClass) {
+        boolean isStudentExist = false;
+        for (TutorialTeam tutorialTeam : tutorialClass.getTeams()) {
+            isStudentExist = tutorialTeam.hasStudentVerified(student, tutorialTeam);
+            if (isStudentExist) {
+                break;
+            }
+        }
+        return isStudentExist;
+    };
+
+    /**
+     * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}
+     * @param tutorialClass of the tutorialTeam.
+     * @param tutorialTeam to check if it exist.
+     */
+    public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialClass);
+        requireNonNull(tutorialTeam);
+        ArrayList<TutorialTeam> listOfTeams = tutorialClass.getTeams();
+        ObservableList<TutorialTeam> teams = FXCollections.observableList(listOfTeams);
+        return teams.stream().anyMatch(tutorialClass::hasTeam);
+    }
+
+    public TutorialTeam getTutorialTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialClasses);
+        requireNonNull(tutorialTeam);
+        TutorialTeam tutTeam = tutorialClass.getTeams().stream()
+                .filter(team -> team.getTeamName().equals(tutorialTeam.getTeamName()))
+                .findFirst()
+                .orElse(null);
+        return tutTeam;
+    }
+
+    /**
+     * adds a team into the tutorial class
+     * @param tutorialClass to add the tutorialTeam to.
+     * @param tutorialTeam to be added into the tutorialClass.
+     */
+    public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
+        requireNonNull(tutorialClass);
+        requireNonNull(tutorialTeam);
+        tutorialClass.addTeam(tutorialTeam);
+    }
+
+    /**
      * Replaces the given person {@code target} in the list with
      * {@code editedPerson}.
      * {@code target} must exist in the address book.
@@ -266,8 +366,28 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
+    public UniquePersonList getUniquePersonList() {
+        return this.persons;
+    }
+
+    @Override
     public ObservableList<Person> getPersonList() {
         return persons.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public ObservableList<TutorialTeam> getTutorialTeamList() {
+        return FXCollections.observableList(tutorialTeams);
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTeamList() {
+        return studentsInTeam.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public ObservableList<Person> getStudentsInTutorialClass(TutorialClass tutorialClass) {
+        return FXCollections.observableList(tutorialClass.getStudents());
     }
 
     @Override

@@ -241,21 +241,171 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Aspect: How undo & redo executes:**
 
+- **Alternative 1 (current choice):** Saves the entire address book.
+  - Pros: Easy to implement.
+  - Cons: May have performance issues in terms of memory usage.
 
-* **Alternative 1 (current choice):** Saves the entire address book.
-    * Pros: Easy to implement.
-    * Cons: May have performance issues in terms of memory usage.
-
-- **Alternative 2:** Individual command knows how to undo/redo by
+* **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-    * Cons: We must ensure that the implementation of each individual command are correct.
+  - Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  - Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
 
 ### \[Proposed\] Data archiving
 
 _{Explain here how the data archiving feature will be implemented}_
+
+----
+### \[Implemented\] Add student to TAHelper with unique ID or Email
+
+The implemented add mechanism is facilitated by the abstract `AddStudentCommand` along with its specific commands `AddStudentCommand`, as well as the parser `AddStudentCommandParser`.
+
+`AddStudentCommandParser` implements the `Parser` interface and its relevant operations.
+
+`AddStudentCommand` extends the `Command` class and contains auxillary operations that supports the mechanism.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/add_student name/john email/john@example.com id/A1234567L tags/`
+
+<puml src="diagrams/AddStudentSequence.puml" alt="AddStudentSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/add_student name/john email/john@example.com id/A1234567L tags/` command to add a student with name `john`, along with
+a unique email `john@example.com` and unique id `A1234567L`
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `AddStudentCommandParser` and calls `AddStudentCommandParser#parse()`, with `name/john`, `email/john@example.com`, `id/A1234567L` as the arguments for the function.
+
+Step 3. The `AddStudentCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the name, email and id of the student to add.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for name, email and id.
+Additionally, email and id must be unique compared to the values already present in the system to get achieve a sucessful add.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `AddStudentCommandParser` creates an `AddStudentCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `AddStudentCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Throughout the process, error handling (e.g checking for duplicate email or id, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is added to the TAHelper system.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** A unique email and id is required when adding students into the TAHelper system, as well as user have to specify all fields, name, email and id in order to add a new student successfully.
+  - Pros: Ensures that all students can be identified in 2 ways, email and id. This helps facilitate other commands such as search and add student to classes as checking the email or id for those commands checks the whole system to find a match, rather than a subset of the system.
+  - Cons: An individual, at least in the context of NUS, can be uniquely identified by either their email E....@u.nus.edu, or by their Student ID. Therefore, specifying both may not be required and may cause extra work.
+
+* **Alternative 2:** Allow user to specify more information about themselves such as year of study, course of study, just to name a few. This way we can support even more commands that searches say based on course of study, year of study etc.
+  - Pros: Search, add, delete, sort commands all can become more specfic, and the commands can make use of more information to achieve its desired outcome as well, instead of solely relying on email or id, which although present in the system, may not be readily available or easily remembered by the users themselves.
+  - Cons: The addition of these fields to the system could lead to increase complexity of the codebase and increased coupling between components in the codebase. This will make the codebase harder to debug and maintain. Also, these field possibly being optional may lead to an increase in the number of null values and thus null checks in the system, which can make the codes in the codebase harder to reason about and refactor in the future.
+
+### \[Implemented\] Add student to tutorial class
+
+The implemented add mechanism is facilitated by the abstract `AddStudentToClassCommand` along with its specific commands `AddStudentToClassByEmailCommand`, `AddStudentToClassByIdCommand` and `AddStudentToClassByIndexCommand`, as well as the parser `AddStudentToClassCommandParser`.
+
+`AddStudentToClassCommandParser` implements the `Parser` interface and its operations.
+
+`AddStudentToClassCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AddStudentToClassCommand` based on its specific functionality:
+
+- `AddStudentToClassByEmailCommand` — Add student based on specified email to a tutorial class.
+- `AddStudentToClassByIdCommand` — Add student based on specified student id to a tutorial class.
+- `AddStudentToClassByIndexCommand` — Add student based on specified index (viewable from the UI) to a tutorial class
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/add_student_to_class id/A01234567X module/CS2103T tutorial/T09`
+
+<puml src="diagrams/AddStudentToClassSequence.puml" alt="AddStudentToClassSequence" />
+
+Step 1. The user executes `/add_student_to_class id/A01234567X module/CS2103T tutorial/T09` command to add the particular student with id `A01234567X` to the module `CS2103T` and tutorial class `T09`.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `AddStudentToClassCommandParser` and calls `AddStudentToClassCommandParser#parse()`, with `id/A01234567X`, `module/CS2103T` and `tutorial/T09` as the arguments.
+
+Step 3. The `AddStudentToClassCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id). Additionally, the `ModuleCode` and `TutorialClass` is determined.
+
+<box type="info" seamless>
+
+**Important Note:** The tutorial class and module code must be specified. To determine the target student, only one prefix should used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
+
+</box>
+
+Step 4. Based on the prefix used, `AddStudentToClassCommandParser` creates the specific `AddStudentToClassCommand` accordingly. Each command contains a specific predicate to find the student.
+
+Step 5. `LogicManager` calls `AddStudentToClassCommand#execute()`, passing `Model` as an argument. This method retrieves the target module and tutorial class. Then, the method retrieves the student to add using the defined predicate. Throughout the process, error handling (e.g checking for invalid student/module/tutorial) is utilised to mitigate potential discrepancies and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the student is added to the tutorial class.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Seperate each specific command into a different class, while overlapping code is abstracted to an abstract class.
+  - Pros: Specific commands are instantiated and thus can be easily traced and is more readable. Any reusable code is defined in the abstract class which can then be reused by the subclasses.
+  - Cons: May have duplicate code to a certain extent.
+
+* **Alternative 2:** Lump into one generic command that handles each parameter accordingly.
+  - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
+  - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
+
+### \[Implemented\] Searching for students
+
+The implemented search mechanism is facilitated by `SearchStudentCommand` and `SearchStudentCommandParser`.
+`SearchStudentCommandParser` implements the `Parser` interface and it's operations. `SearchStudentCommand` extends the
+`Command` class with the ability to update `Model`'s filtered person list using `Predicate`. It supports the following
+`Predicate`:
+
+- `NameContainsKeywordPredicate` — Search students based on name.
+- `EmailContainsKeywordPredicate` — Search students based on email.
+- `StudentIdContainsKeywordPredicate` — Search students based on student id.
+
+Given below is an example usage scenario and how the search mechanism behaves at each step.
+
+Example: `/search_student name/Bob`
+
+<puml src="diagrams/SearchStudentSequence.puml" alt="SearchStudentSequence" />
+
+Step 1. The user executes `/search_student name/Bob` command to find students with the keyword `Bob` in their name.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the
+arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `SearchStudentCommandParser` and calling
+`SearchStudentCommandParser#parse()`, with `name/Bob` as the argument.
+
+Step 3. The `SearchStudentCommandParser` parses the arguments to determine which prefix the user is searching in.
+
+<box type="info" seamless>
+
+**Note:** Only one prefix can be used per command. If there are multiple prefixes, the method will throw an exception.
+
+</box>
+
+Step 4. `SearchStudentCommandParser` creates `NameContainsKeywordPredicate` and `SearchStudentCommand`, passing the predicate
+as an argument into the command.
+
+Step 5. `LogicManager` calls `SearchStudentCommand#execute()`, passing `Model` as an argument. This method calls
+`Model#updateFilteredPersonList()` with the given predicate, updating the filtered list in `Model` with students whose
+name contains `Bob`.
+
+Step 6. Finally, a `CommandResult` is created and the new filtered is displayed to the user.
+
+### Design considerations:
+
+- **Alternative 1 (current choice):** Only one prefix allowed per command.
+  - Pros: Easy to implement.
+  - Cons: Does not allow users to fine tune searches based on multiple fields.
+- **Alternative 2:** Allow for multiple prefixes.
+  - Pros: Users can filter searches to a higher degree
+  - Cons: Handling combinations of different fields could be complex
 
 ---
 
@@ -287,15 +437,15 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                                                                  | So that I can…​                                                        |
-|----------|---------|-------------------------------------------------------------------------------|------------------------------------------------------------------------|
-| `* * *`  | TA      | add new students to a class                                                   | maintain an up-to-date list of enrolled students.                      |
-| `* * *`  | TA      | add partial info of students                                                  | still add students even if I don’t have all their information.         |
-| `* * *`  | TA      | delete a student from my class if they drop the module/class                  | keep my class list accurate and up-to-date.                            |
+| Priority | As a …​ | I want to …​                                                                   | So that I can…​                                                         |
+| -------- | ------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `* * *`  | TA      | add new students to a class                                                    | maintain an up-to-date list of enrolled students.                       |
+| `* * *`  | TA      | add partial info of students                                                   | still add students even if I don’t have all their information.          |
+| `* * *`  | TA      | delete a student from my class if they drop the module/class                   | keep my class list accurate and up-to-date.                             |
 | `* * `   | TA      | search for my students based on their NUS ID, emails, names or tutorial groups | locate details of students without having to go through the entire list |
-| `* * *`  | TA      | view all students and their particulars                                       | have a comprehensive overview of the enrolled students in my class.    |
-| `* *`    | TA      | add/remove different modules I am teaching                                    | manage my teaching assignments efficiently.                            |
-| `* * *`  | TA      | view all the tutorial classes and their information                           | visibility into the schedule and details of all tutorial classes.      |
+| `* * *`  | TA      | view all students and their particulars                                        | have a comprehensive overview of the enrolled students in my class.     |
+| `* *`    | TA      | add/remove different modules I am teaching                                     | manage my teaching assignments efficiently.                             |
+| `* * *`  | TA      | view all the tutorial classes and their information                            | visibility into the schedule and details of all tutorial classes.       |
 
 _{More to be added}_
 
@@ -310,7 +460,7 @@ _{More to be added}_
 1. User specifies the student to be added.
 2. System adds the student to the list of students.
 3. System indicates successful addition of new student.
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -336,7 +486,7 @@ Use case ends.
 
 1. User specifies the student to be deleted.
 2. System deletes the student from the list of students and tutorial group (if any).
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -350,7 +500,7 @@ Use case ends.
     - Use case ends.
 - 1c. Invalid input command.
   - 1c1: Returns an error indicating command not recognised and provides the correct command format.
-<br>
+    <br>
 
 #### Use case 3: Search for students
 
@@ -358,7 +508,7 @@ Use case ends.
 
 1. User specifies the student to be searched for.
 2. System generates a list of matching entries according to specified parameters.
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -370,7 +520,7 @@ Use case ends.
   - Use case ends.
 - 2a. Partial match for specified parameter.
   - 2a1. System will display all matching results for the specified value.
-<br>
+    <br>
 
 #### Use case 4: View all students
 
@@ -378,7 +528,7 @@ Use case ends.
 
 1. User wants to view all students' information.
 2. System displays all students information (name, email, student id and tutorial class).
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -389,7 +539,7 @@ Use case ends.
   - 1b1. System will ignore those arguments and execute the command as usual.
 - 2a. No existing students in the list.
   - 2a1. System will return a message indicating that there are no students in the list.
-  <br>
+    <br>
 
 #### Use case 5: Add new tutorial class
 
@@ -397,7 +547,7 @@ Use case ends.
 
 1. User specifies the class to be added.
 2. System adds the tutorial class.
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -410,7 +560,7 @@ Use case ends.
 - 1c. The specified tutorial class already exists.
   - 1c1: Returns an error indicating that the tutorial class already exists
   - Use case ends.
-<br>
+    <br>
 
 #### Use case 6: Delete tutorial class
 
@@ -418,25 +568,28 @@ Use case ends.
 
 1. User specifies the class to be deleted.
 2. System deletes the tutorial class.
-Use case ends.
+   Use case ends.
 
 **Extensions:**
+
 - 1a. Invalid input command.
   - 1a1. Return an error indicating command not recognised and provides the correct command format.
   - Use case ends.
 - 1b. The tutorial class specified does not exist.
   - 1b1. Returns an error indicating invalid tutorial class and shows the list of tutorial classes available.
   - Use case ends.
-<br>
+    <br>
 
 #### Use case 7: View all classes
 
 **MSS**
+
 1. User wants to view all classes.
 2. System shows a list of all available classes.
-Use case ends.
+   Use case ends.
 
 **Extensions**
+
 - 1a. Invalid input command.
   - 1a1. Return an error indicating command not recognised and provides the correct command format.
   - Use case ends.
@@ -444,8 +597,7 @@ Use case ends.
   - 1b1. System will ignore those arguments and execute the comamnd as usual.
 - 2a. There are no existing classes.
   - 2a1. System will return a message indicating that there are no existing classes in the list.
-<br>
-
+    <br>
 
 ### Non-Functional Requirements
 
@@ -458,17 +610,16 @@ Use case ends.
 7.  Should be usable by a person who is TA-ing for the first time.
 8.  Should provide comprehensive error messages and guidelines to recover from errors due to user input.
 9.  Should provide a comprehensive and well-designed user documentation to guide users on how to use TAHelper.
-10.  Should provide a comprehensive and well-designed developer documentation to guide developer on how to improve and develop TAHelper further.
-
+10. Should provide a comprehensive and well-designed developer documentation to guide developer on how to improve and develop TAHelper further.
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
-* **TA (Teaching Assistant)**: An individual who is responsible for teaching a tutorial class of University students.
-* **TAHelper**: A contact management application to help TAs keep track of students in classes they teach
-* **GUI**: Graphical User Interface
-* **MSS**: Main Success Scenario
+- **Mainstream OS**: Windows, Linux, Unix, MacOS
+- **Private contact detail**: A contact detail that is not meant to be shared with others
+- **TA (Teaching Assistant)**: An individual who is responsible for teaching a tutorial class of University students.
+- **TAHelper**: A contact management application to help TAs keep track of students in classes they teach
+- **GUI**: Graphical User Interface
+- **MSS**: Main Success Scenario
 
 ---
 
@@ -487,16 +638,16 @@ testers are expected to do more _exploratory_ testing.
 
 1. Initial launch
 
-    1. Download the jar file and copy into an empty folder
+   1. Download the jar file and copy into an empty folder
 
-    1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
-    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+   1. Re-launch the app by double-clicking the jar file.<br>
+      Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
 
@@ -504,16 +655,16 @@ testers are expected to do more _exploratory_ testing.
 
 1. Deleting a person while all persons are being shown
 
-    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-    1. Test case: `delete 1`<br>
-       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   1. Test case: `delete 1`<br>
+      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-    1. Test case: `delete 0`<br>
-       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `delete 0`<br>
+      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-       Expected: Similar to previous.
+   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+      Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
 
@@ -521,6 +672,6 @@ testers are expected to do more _exploratory_ testing.
 
 1. Dealing with missing/corrupted data files
 
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
