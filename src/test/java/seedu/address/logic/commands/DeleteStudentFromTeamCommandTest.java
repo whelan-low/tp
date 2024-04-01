@@ -11,6 +11,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_NEW;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TUTORIAL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -128,6 +129,33 @@ public class DeleteStudentFromTeamCommandTest {
     }
 
     @Test
+    public void execute_deleteStudentFromClassById_success() {
+        newTeam.addStudent(validPerson);
+        assertEquals(1, newTeam.getStudents().size());
+        // Attempt to delete the student
+        assertCommandSuccess(new DeleteStudentFromTeamByIdCommand(validPerson.getStudentId(),
+                        newModule, tutorialClass, newTeam),
+                model,
+                String.format(TeamMessages.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS, Messages.format(validPerson),
+                        newModule, tutorialClass, newTeam),
+                model);
+        assertEquals(0, newTeam.getStudents().size());
+    }
+
+    @Test
+    public void execute_deleteStudentFromClassByEmail_success() {
+        newTeam.addStudent(validPerson);
+        assertEquals(1, newTeam.getStudents().size());
+        // Attempt to delete the student
+        assertCommandSuccess(new DeleteStudentFromTeamByEmailCommand(validPerson.getEmail(),
+                        newModule, tutorialClass, newTeam),
+                model,
+                String.format(TeamMessages.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS, Messages.format(validPerson),
+                        newModule, tutorialClass, newTeam), model);
+        assertEquals(0, newTeam.getStudents().size());
+    }
+
+    @Test
     public void equals() {
         tutorialClass.addStudent(validPerson);
         tutorialClass.addStudent(validOtherPerson);
@@ -185,5 +213,4 @@ public class DeleteStudentFromTeamCommandTest {
         // null --> returns false
         assertFalse(deleteOtherStudentFromTeamByIndexCommand.equals(null));
     }
-
 }
