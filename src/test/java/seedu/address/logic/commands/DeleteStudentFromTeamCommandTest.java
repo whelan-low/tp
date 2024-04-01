@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_MODULE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID_BOB;
@@ -17,9 +19,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByEmailCommand;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIdCommand;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIndexCommand;
+import seedu.address.logic.messages.PersonMessages;
 import seedu.address.logic.messages.TeamMessages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -58,18 +62,48 @@ public class DeleteStudentFromTeamCommandTest {
     }
 
     @Test
+    public void invalidAllocationToTeam_indexNotInSystem_failure() {
+        Index index = Index.fromOneBased(1000);
+        DeleteStudentFromTeamByIndexCommand deleteStudentFromTeamByIndexCommand = new
+                DeleteStudentFromTeamByIndexCommand(index,
+                newModule, tutorialClass, newTeam);
+        assertCommandFailure(deleteStudentFromTeamByIndexCommand, model,
+                String.format(PersonMessages.MESSAGE_PERSON_INDEX_NOT_FOUND,
+                        index.getOneBased(), tutorialClass));
+    }
+
+    @Test
+    public void execute_studentDoesNotExist_fail() {
+        DeleteStudentFromTeamByEmailCommand deleteStudentFromTeamByEmailCommand =
+                new DeleteStudentFromTeamByEmailCommand(validPerson.getEmail(),
+                        newModule, tutorialClass, newTeam);
+
+        DeleteStudentFromTeamByIdCommand deleteStudentFromTeamByIdCommand =
+                new DeleteStudentFromTeamByIdCommand(validPerson.getStudentId(),
+                        newModule, tutorialClass, newTeam);
+
+
+        assertCommandFailure(deleteStudentFromTeamByIdCommand, model,
+                String.format(TeamMessages.MESSAGE_STUDENT_NOT_FOUND_IN_TEAM, Messages.format(validPerson),
+                        tutorialClass));
+
+        assertCommandFailure(deleteStudentFromTeamByEmailCommand, model,
+                String.format(TeamMessages.MESSAGE_STUDENT_NOT_FOUND_IN_TEAM, Messages.format(validPerson),
+                        tutorialClass));
+    }
+    @Test
     public void invalidDeletionFromTeam_tutorialTeamNotExist_failure() {
         TutorialTeam team = new TutorialTeam(VALID_TEAM_NAME_NEW);
 
         DeleteStudentFromTeamByIdCommand deleteStudentFromTeamByIdCommand = new
                 DeleteStudentFromTeamByIdCommand(validPerson.getStudentId(), newModule, tutorialClass,
                 team);
-        DeleteStudentFromTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
+        DeleteStudentFromTeamByEmailCommand deleteStudentFromTeamByEmailCommand = new
                 DeleteStudentFromTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass,
                 team);
         assertCommandFailure(deleteStudentFromTeamByIdCommand, model,
                 String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
-        assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
+        assertCommandFailure(deleteStudentFromTeamByEmailCommand, model,
                 String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
     }
 
@@ -92,4 +126,64 @@ public class DeleteStudentFromTeamCommandTest {
                 allocateStudentToTeamByIndexCommand.toString());
 
     }
+
+    @Test
+    public void equals() {
+        tutorialClass.addStudent(validPerson);
+        tutorialClass.addStudent(validOtherPerson);
+        // creation of 2 delete command based on 2 different student ID adding to the same team under
+        // the same module and tutorial class.
+        DeleteStudentFromTeamByIdCommand deleteStudentFromTeamByIdCommand =
+                new DeleteStudentFromTeamByIdCommand(validPerson.getStudentId(), newModule, tutorialClass, newTeam);
+        DeleteStudentFromTeamByIdCommand deleteOtherStudentFromTeamByIdCommand =
+                new DeleteStudentFromTeamByIdCommand(validOtherPerson.getStudentId(),
+                        newModule, tutorialClass, newTeam);
+
+        // same object --> returns true
+        assertTrue(deleteStudentFromTeamByIdCommand.equals(deleteStudentFromTeamByIdCommand));
+
+        // different type --> returns false
+        assertFalse(deleteStudentFromTeamByIdCommand.equals("hello world"));
+
+        // null --> returns false
+        assertFalse(deleteStudentFromTeamByIdCommand.equals(null));
+
+        // allocation of a different person --> returns false
+        assertFalse(deleteStudentFromTeamByIdCommand.equals(deleteOtherStudentFromTeamByIdCommand));
+
+        // creation of 2 delete command based on 2 different student emails adding to the same team under
+        // the same module and tutorial class.
+        DeleteStudentFromTeamByEmailCommand deleteStudentFromTeamByEmailCommand =
+                new DeleteStudentFromTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass, newTeam);
+        DeleteStudentFromTeamByEmailCommand deleteOtherStudentFromTeamByEmailCommand =
+                new DeleteStudentFromTeamByEmailCommand(validOtherPerson.getEmail(),
+                        newModule, tutorialClass, newTeam);
+
+        // same object --> returns true
+        assertTrue(deleteStudentFromTeamByEmailCommand.equals(deleteStudentFromTeamByEmailCommand));
+
+        // different type --> returns false
+        assertFalse(deleteStudentFromTeamByEmailCommand.equals("hello world"));
+
+        // null --> returns false
+        assertFalse(deleteStudentFromTeamByEmailCommand.equals(null));
+
+        // allocation of a different person --> returns false
+        assertFalse(deleteStudentFromTeamByEmailCommand.equals(deleteOtherStudentFromTeamByEmailCommand));
+
+
+        DeleteStudentFromTeamByIndexCommand deleteOtherStudentFromTeamByIndexCommand =
+                new DeleteStudentFromTeamByIndexCommand(Index.fromZeroBased(1),
+                        newModule, tutorialClass, newTeam);
+
+        // same object
+        assertTrue(deleteOtherStudentFromTeamByIndexCommand.equals(deleteOtherStudentFromTeamByIndexCommand));
+
+        // different type --> returns false
+        assertFalse(deleteOtherStudentFromTeamByIndexCommand.equals("hello world"));
+
+        // null --> returns false
+        assertFalse(deleteOtherStudentFromTeamByIndexCommand.equals(null));
+    }
+
 }

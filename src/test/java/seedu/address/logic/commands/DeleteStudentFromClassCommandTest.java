@@ -86,19 +86,19 @@ public class DeleteStudentFromClassCommandTest {
         model.addPerson(person);
         tutorialClass.addStudent(otherPerson);
 
-        DeleteStudentFromClassByEmailCommand addStudentToClassByEmailCommand =
+        DeleteStudentFromClassByEmailCommand deleteStudentFromClassByEmailCommand =
                 new DeleteStudentFromClassByEmailCommand(person.getEmail(),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
 
-        DeleteStudentFromClassByIdCommand addStudentToClassByIdCommand =
+        DeleteStudentFromClassByIdCommand deleteStudentFromClassByIdCommand =
                 new DeleteStudentFromClassByIdCommand(person.getStudentId(),
                 new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY));
 
-        assertCommandFailure(addStudentToClassByIdCommand, model,
+        assertCommandFailure(deleteStudentFromClassByIdCommand, model,
                 String.format(TutorialClassMessages.MESSAGE_STUDENT_NOT_FOUND_IN_CLASS, Messages.format(person),
                         tutorialClass));
 
-        assertCommandFailure(addStudentToClassByEmailCommand, model,
+        assertCommandFailure(deleteStudentFromClassByEmailCommand, model,
                 String.format(TutorialClassMessages.MESSAGE_STUDENT_NOT_FOUND_IN_CLASS, Messages.format(person),
                         tutorialClass));
     }
@@ -164,4 +164,6 @@ public class DeleteStudentFromClassCommandTest {
         // different person -> returns false
         assertFalse(deleteStudentFromClassByIdFirstCommand.equals(deleteStudentFromClassByIdSecondCommand));
     }
+
+
 }

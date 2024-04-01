@@ -27,7 +27,7 @@ public abstract class DeleteStudentFromTeamCommand extends Command {
             + "Parameters:" + "IDENTIFIER " + PREFIX_MODULECODE + "MODULE_CODE (must be a String) "
             + PREFIX_TUTORIALCLASS + "TUTORIAL_CLASS (must be a String)\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_EMAIL + "test@gmail.com " + PREFIX_MODULECODE + " CS2103T "
-            + PREFIX_TUTORIALCLASS + "T09" + PREFIX_TEAMNAME + "Team 4";
+            + PREFIX_TUTORIALCLASS + "T09" + " " + PREFIX_TEAMNAME + "Team 4";
 
     protected final ModuleCode module;
     protected final TutorialClass tutorialClass;
