@@ -154,6 +154,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void deleteStudentFromTeam(Person student, TutorialTeam tutorialTeam) {
+        requireAllNonNull(student, tutorialTeam);
+        addressBook.deleteStudentFromTeam(student, tutorialTeam);
+    }
+
+    @Override
     public boolean hasTeamInTutorial(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
         requireAllNonNull(tutorialClass, tutorialTeam);
         return addressBook.hasTeamInTutorial(tutorialClass, tutorialTeam);

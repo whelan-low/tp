@@ -127,9 +127,18 @@ public interface Model {
 
     /**
      * Allocates the {@code student} to the {@code tutorialTeam}
+     * @param student to be allocated
      * @param tutorialTeam to allocate the student into.
      */
     void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam);
+
+    /**
+     * Deletes the {@code student} from the {@code tutorialTeam}
+     * @param student to be deleted
+     * @param tutorialTeam to delete the student from.
+     */
+    void deleteStudentFromTeam(Person student, TutorialTeam tutorialTeam);
+
 
     /**
      * Returns true if a team with the same identity as {@code tutorialTeam} exists in the {@code tutorialClass}

@@ -267,6 +267,17 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Deletes the {@code studentId} from the {@code tutorialTeam}
+     * @param student to be deleted.
+     * @param tutorialTeam to delete the student from.
+     */
+    public void deleteStudentFromTeam(Person student, TutorialTeam tutorialTeam) {
+        requireNonNull(student);
+        requireNonNull(tutorialTeam);
+        tutorialTeam.deleteStudent(student);
+    }
+
+    /**
      * Returns true if the {@code tutorialTeam} size has exceeded its limit.
      * @param tutorialTeam size to check.
      * @return a boolean that indicates whether the team size will be exceeded by adding another person.
