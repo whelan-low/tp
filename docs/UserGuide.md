@@ -33,16 +33,20 @@ details in a centralised storage. Our target audience is specifically only TAs o
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`list_student`** and pressing Enter will display a list of students.<br>
+1. Type the command in the command box and press Enter to execute it. e.g. typing **`/list_student`** and pressing Enter will display a list of students.<br>
    Some example commands you can try:
 
-   - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A module/CS2103T class/T09` : Adds a new student contact with all the details that have been specified to the relevant module and tutorial class.
+Commands on students:
 
-   - `/delete_student id/A0259209B | /delete_student email/johndoe@gmail.com` : Deletes a student contact with email `johndoe@gmail.com` or id `A0259209B`.
+   - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with all the details that have been specified to the relevant module and tutorial class.
 
-   - `/search_student id/A0123456A` : Searches for a student with id `A0123456A`.
+   - `/delete_student id/A0259209B or /delete_student email/johndoe@gmail.com` : Deletes a student contact with email `johndoe@gmail.com` or id `A0259209B`.
+
+   - `/search_student id/A0123456A or /search_student email/johndoe@gmail.com` : Searches for a student with id `A0123456A` or email `johndoe@gmail.com`.
 
    - `/list_student` : View the list of all students available.
+
+Commands on modules:
 
    - `/add_class module/CS2103T class/T09` : Adds a new tutorial class `T09` under the module `2103T`.
 
