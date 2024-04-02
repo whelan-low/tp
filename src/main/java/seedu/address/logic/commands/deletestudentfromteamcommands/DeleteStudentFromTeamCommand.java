@@ -22,6 +22,7 @@ import seedu.address.model.module.TutorialTeam;
  */
 public abstract class DeleteStudentFromTeamCommand extends Command {
     public static final String COMMAND_WORD = "/delete_student_from_team";
+    public static final String MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS = "Deleted %s from %s %s, Team %s";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Deletes a student from an existing class\n"
             + "Parameters:" + "IDENTIFIER " + PREFIX_MODULECODE + "MODULE_CODE (must be a String) "

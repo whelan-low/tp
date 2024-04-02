@@ -24,6 +24,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByEmailCommand;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIdCommand;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIndexCommand;
+import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamCommand;
 import seedu.address.logic.messages.PersonMessages;
 import seedu.address.logic.messages.TeamMessages;
 import seedu.address.model.Model;
@@ -136,8 +137,8 @@ public class DeleteStudentFromTeamCommandTest {
         assertCommandSuccess(new DeleteStudentFromTeamByIdCommand(validPerson.getStudentId(),
                         newModule, tutorialClass, newTeam),
                 model,
-                String.format(TeamMessages.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS, Messages.format(validPerson),
-                        newModule, tutorialClass, newTeam),
+                String.format(DeleteStudentFromTeamCommand.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS,
+                        Messages.format(validPerson), newModule, tutorialClass, newTeam),
                 model);
         assertEquals(0, newTeam.getStudents().size());
     }
@@ -150,8 +151,8 @@ public class DeleteStudentFromTeamCommandTest {
         assertCommandSuccess(new DeleteStudentFromTeamByEmailCommand(validPerson.getEmail(),
                         newModule, tutorialClass, newTeam),
                 model,
-                String.format(TeamMessages.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS, Messages.format(validPerson),
-                        newModule, tutorialClass, newTeam), model);
+                String.format(DeleteStudentFromTeamCommand.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS,
+                        Messages.format(validPerson), newModule, tutorialClass, newTeam), model);
         assertEquals(0, newTeam.getStudents().size());
     }
 

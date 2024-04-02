@@ -66,7 +66,7 @@ public class DeleteStudentFromTeamByIndexCommand extends DeleteStudentFromTeamCo
         } else {
             model.deleteStudentFromTeam(personToDelete, team);
             return new CommandResult(
-                    String.format(TeamMessages.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS,
+                    String.format(MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS,
                             Messages.format(personToDelete), module, tutorialClass, team));
         }
     }
