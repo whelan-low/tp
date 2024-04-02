@@ -31,11 +31,11 @@ public class SortStudentCommandParserTest {
         SortStudentCommand command = new SortStudentCommand(SortStudentParameter.NAME);
         assertParseSuccess(parser, " " + PREFIX_SORT_BY + "name", command);
 
-        // valid name
+        // valid id
         command = new SortStudentCommand(SortStudentParameter.STUDENTID);
         assertParseSuccess(parser, " " + PREFIX_SORT_BY + "id", command);
 
-        // valid name
+        // valid email
         command = new SortStudentCommand(SortStudentParameter.EMAIL);
         assertParseSuccess(parser, " " + PREFIX_SORT_BY + "email", command);
 
@@ -43,7 +43,7 @@ public class SortStudentCommandParserTest {
         command = new SortStudentCommand(SortStudentParameter.NAME);
         assertParseSuccess(parser, " " + PREFIX_SORT_BY + "NaMe", command);
 
-        // extended preamble
+        // extended preamble with white spaces
         command = new SortStudentCommand(SortStudentParameter.STUDENTID);
         assertParseSuccess(parser, "      " + PREFIX_SORT_BY + "id      ", command);
     }

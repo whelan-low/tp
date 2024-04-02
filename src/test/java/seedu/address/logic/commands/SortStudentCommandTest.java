@@ -79,7 +79,7 @@ public class SortStudentCommandTest {
 
         // sort by email
         comparator = Comparator.comparing(p -> p.getEmail().toString());
-        command = new SortStudentCommand(SortStudentParameter.STUDENTID);
+        command = new SortStudentCommand(SortStudentParameter.EMAIL);
 
         expectedModel.getSortedPersonList(comparator);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -88,30 +88,12 @@ public class SortStudentCommandTest {
     @Test
     public void execute_sortByName_correctSorting() {
 
-        // add persons in non sorted order
-        model = new ModelManager();
-        model.addPerson(BENSON);
-        model.addPerson(DANIEL);
-        model.addPerson(ALICE);
-        model.addPerson(GEORGE);
+        // setup new model for testing correctness of sort
+        Person[] unsortedArray = new Person[] {BENSON, DANIEL, ALICE, GEORGE};
+        Person[] sortedArray = new Person[] {ALICE, BENSON, DANIEL, GEORGE};
 
-        // add persons in sorted order
-        expectedModel = new ModelManager();
-        expectedModel.addPerson(ALICE);
-        expectedModel.addPerson(BENSON);
-        expectedModel.addPerson(DANIEL);
-        expectedModel.addPerson(GEORGE);
-
-        try {
-            // sort by name
-            SortStudentCommand command = new SortStudentCommand(SortStudentParameter.NAME);
-            command.execute(model);
-            ObservableList<Person> expectedPersonList = expectedModel.getAddressBook().getPersonList();
-            ObservableList<Person> actualPersonList = model.getAddressBook().getSortedPersonList();
-            assertEquals(expectedPersonList, actualPersonList);
-        } catch (CommandException e) {
-            fail();
-        }
+        correctSortingTestHelper(new ModelManager(), new ModelManager(), unsortedArray, sortedArray,
+                SortStudentParameter.NAME);
     }
 
     @Test
@@ -124,32 +106,11 @@ public class SortStudentCommandTest {
         Person fourthEmail = new PersonBuilder().withEmail("b@anotheremail.com").withStudentId("A1234567G").build();
         Person fifthEmail = new PersonBuilder().withEmail("b@example.com").withStudentId("A1234567L").build();
 
-        // add persons in non sorted order
-        model = new ModelManager();
-        model.addPerson(fifthEmail);
-        model.addPerson(secondEmail);
-        model.addPerson(fourthEmail);
-        model.addPerson(firstEmail);
-        model.addPerson(thirdEmail);
+        Person[] unsortedArray = new Person[] {fifthEmail, secondEmail, fourthEmail, firstEmail, thirdEmail};
+        Person[] sortedArray = new Person[] {firstEmail, secondEmail, thirdEmail, fourthEmail, fifthEmail};
 
-        // add persons in sorted order
-        expectedModel = new ModelManager();
-        expectedModel.addPerson(firstEmail);
-        expectedModel.addPerson(secondEmail);
-        expectedModel.addPerson(thirdEmail);
-        expectedModel.addPerson(fourthEmail);
-        expectedModel.addPerson(fifthEmail);
-
-        try {
-            // sort by email
-            SortStudentCommand command = new SortStudentCommand(SortStudentParameter.EMAIL);
-            command.execute(model);
-            ObservableList<Person> expectedPersonList = expectedModel.getAddressBook().getPersonList();
-            ObservableList<Person> actualPersonList = model.getAddressBook().getSortedPersonList();
-            assertEquals(expectedPersonList, actualPersonList);
-        } catch (CommandException e) {
-            fail();
-        }
+        correctSortingTestHelper(new ModelManager(), new ModelManager(), unsortedArray, sortedArray,
+                SortStudentParameter.EMAIL);
     }
 
     @Test
@@ -162,25 +123,35 @@ public class SortStudentCommandTest {
         Person fourthId = new PersonBuilder().withStudentId("A1234567B").withEmail("g@example.com").build();
         Person fifthId = new PersonBuilder().withStudentId("A2976237K").withEmail("f@example.com").build();
 
+        Person[] unsortedArray = new Person[] {fourthId, fifthId, thirdId, firstId, secondId};
+        Person[] sortedArray = new Person[] {firstId, secondId, thirdId, fourthId, fifthId};
+
+        correctSortingTestHelper(new ModelManager(), new ModelManager(), unsortedArray, sortedArray,
+                SortStudentParameter.STUDENTID);
+    }
+
+    /**
+     * Helper function used to test the correctness of sorting
+     * @param model used to contain Persons in unsorted order.
+     * @param expectedModel used to contain Persons in sorted order.
+     * @param unsortedArray of Persons in unsorted order.
+     * @param sortedArray of Persons in sorted order.
+     * @param param used to sort by.
+     */
+    private void correctSortingTestHelper(Model model, Model expectedModel, Person[] unsortedArray,
+                                          Person[] sortedArray, SortStudentParameter param) {
         // add persons in non sorted order
-        model = new ModelManager();
-        model.addPerson(firstId);
-        model.addPerson(secondId);
-        model.addPerson(thirdId);
-        model.addPerson(fourthId);
-        model.addPerson(fifthId);
+        for (Person person : unsortedArray) {
+            model.addPerson(person);
+        }
 
         // add persons in sorted order
-        expectedModel = new ModelManager();
-        expectedModel.addPerson(firstId);
-        expectedModel.addPerson(secondId);
-        expectedModel.addPerson(thirdId);
-        expectedModel.addPerson(fourthId);
-        expectedModel.addPerson(fifthId);
+        for (Person person : sortedArray) {
+            expectedModel.addPerson(person);
+        }
 
         try {
-            // sort by id
-            SortStudentCommand command = new SortStudentCommand(SortStudentParameter.STUDENTID);
+            SortStudentCommand command = new SortStudentCommand(param);
             command.execute(model);
             ObservableList<Person> expectedPersonList = expectedModel.getAddressBook().getPersonList();
             ObservableList<Person> actualPersonList = model.getAddressBook().getSortedPersonList();

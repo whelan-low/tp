@@ -19,11 +19,9 @@ public class SortStudentCommand extends Command {
 
     public static final String COMMAND_WORD = "/sort_student";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Sorts students based on specified parameter.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Sorts students based on name, id or email.\n"
             + "Parameters: "
-            + "[" + PREFIX_SORT_BY + "name" + "] "
-            + "[" + PREFIX_SORT_BY + "id" + "] "
-            + "[" + PREFIX_SORT_BY + "email" + "]\n"
+            + PREFIX_SORT_BY + "PARAMETER\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_SORT_BY + "name";
 
