@@ -8,9 +8,10 @@
 
 TAHelper is a **desktop app for managing contacts, optimized for use via a Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAHelper can get your students' contact management tasks done faster than traditional GUI apps.
 
+- For some uncommon or unfamiliar terms used in this User Guide, ![click here](link to glossary) for the definition and explanation of some.
+
 <!-- * Table of Contents -->
 <page-nav-print />
-
 ---
 
 ## Target Audience
@@ -26,12 +27,15 @@ details in a centralised storage. Our target audience is specifically only TAs o
 1. Ensuring the correct version of Java installed:
     - Ensure you have Java `11` or above installed in your Computer.
 
+
 2. Download TAHelper from [here](https://github.com/AY2324S2-CS2103T-T09-4/tp/releases)
     - Download the latest `tahelper.jar`.
+
 
 3. Set up your application environment
     - Copy the file `tahelper.jar` to the folder you want to use as the _home folder_ for your TAHelper.
     - Tip: name that folder `TAHelper` to facilitate organisation and easy access.
+
 
 4. Using the Terminal to run the application
     - Windows OS:
@@ -44,6 +48,7 @@ details in a centralised storage. Our target audience is specifically only TAs o
       - It should look something like this:
       - 
 
+
 5. Launching TAHelper
     - `cd` into the folder you put the jar file in
     - Type `java -jar tahelper.jar` command and hit Enter to run TAHelper.<br>
@@ -53,6 +58,7 @@ details in a centralised storage. Our target audience is specifically only TAs o
     - A GUI similar to the below should appear in a few seconds.<br>
     - ![Ui](images/Ui.png) (to update!!).
 
+
 6. Here are some commands to try out to get a feel of a TAHelper! type them in the Command box
     - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with the name, email and ID specified.
       - A new student entry should appear on the UI with the details reflected clearly.
@@ -60,6 +66,10 @@ details in a centralised storage. Our target audience is specifically only TAs o
     - `/delete_student id/A0123456A or /delete_student email/johndoe@gmail.com`: Deletes the student that you have add with the previous command.
       - The student entry with the ID `A0123456A` or email `johndoe@gmail.com` will be deleted.
       - This deletion will be reflected on User Interface of TAHelper as well.
+
+    - For more Commands that will improve your experience, ![click here]
+
+
 
 Commands on students:
 
@@ -260,7 +270,6 @@ Examples:
 - With team size: `/add_team module/CS2103T class/T10 name/Team 1 size/3`
 
 ---
-
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
@@ -271,6 +280,18 @@ Examples:
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+
+---
+
+### Glossary
+
+| Term                               | Definition and/or Explanation                                                                                                                                                                                  |
+|------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **OS**                             | Refers to Operating System. Modern Operating System include Windows, Macs and Linux.                                                                                                                           |
+| **TA (Teaching Assistant)**        | An individual who is responsible for teaching a tutorial class of University students.                                                                                                                         |
+| **TAHelper**                       | A contact management application to help TAs keep track of students in classes they teach.                                                                                                                     |
+| **Graphical User Interface (GUI)** | is a type of interface that allows users to interact with electronic devices through graphical icons and visual indicators,<br> as opposed to text-based interfaces, typed command labels, or text navigation. |
+| **Command Line Interface (CLI)**   | is a text-based user interface used to interact with software, through the use of key words command such as 'cd'.                                                                                              |
 
 ---
 
