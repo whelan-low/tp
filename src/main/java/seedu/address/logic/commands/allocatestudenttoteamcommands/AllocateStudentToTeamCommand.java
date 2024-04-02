@@ -60,15 +60,16 @@ public abstract class AllocateStudentToTeamCommand extends Command {
         }
 
         if (!tutClass.hasTeamInTutorial(tutClass, tutorialTeam)) {
-            throw new CommandException(String.format(MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
+            throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
         }
 
         if (tutClass.isStudentInAnyTeam(student, tutClass)) {
-            throw new CommandException(String.format(MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutClass));
+            throw new CommandException(String.format(TeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutClass));
         }
 
         if (tutorialTeam.hasTeamSizeExceeded(tutorialTeam)) {
-            throw new CommandException(String.format(MESSAGE_TEAM_SIZE_EXCEEDED, tutorialTeam.getTeamSize()));
+            throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED,
+                    tutorialTeam.getTeamSize()));
         }
     }
 

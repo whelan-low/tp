@@ -44,7 +44,7 @@ public class DeleteStudentFromTeamByIndexCommand extends DeleteStudentFromTeamCo
         TutorialClass tutorialClass = moduleAndTutorialClass.getTutorialClass();
         ModuleCode module = moduleAndTutorialClass.getModule();
 
-        TutorialTeam team = model.getTutorialTeam(tutorialClass, tutorialTeam);
+        TutorialTeam team = tutorialClass.getTutorialTeam(tutorialClass, tutorialTeam);
 
         Person personToDelete;
 

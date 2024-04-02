@@ -307,10 +307,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         tutorialTeam.deleteStudent(student);
     }
 
-     * adds a team into the tutorial class
-     * @param tutorialClass to add the tutorialTeam to.
-     * @param tutorialTeam to be added into the tutorialClass.
-     */
+    /**
+    * Adds a team into the tutorial class
+    *
+    * @param tutorialClass to add the tutorialTeam to.
+    * @param tutorialTeam to be added into the tutorialClass.
+    */
     public void addTeam(TutorialClass tutorialClass, TutorialTeam tutorialTeam) {
         requireNonNull(tutorialClass);
         requireNonNull(tutorialTeam);
