@@ -120,29 +120,29 @@ Commands on modules:
 
 ### Adding new students : `add_student`
 
-Adds a new student contact with all the details that have been specified by the user to the relevant module and tutorial class
+Adds a new student contact with all the details that have been specified by the user.
 
-Format: `/add_student name/NAME email/EMAIL id/STUDENT_ID module/MODULE_CODE tutorial/TUTORIAL_CLASS`
+Format: `/add_student name/NAME email/EMAIL id/STUDENT_ID`
 
 - The following parameters to add a student contact are supported:
 
-  1. Name
+  1. Name   
   2. Email
   3. Student ID
-  4. Module Code
-  5. Tutorial class
 
+- All fields must be specified
 - Leading/trailing spaces are removed
 - The parameter is case-insensitive
 - If none of the parameters or an invalid parameter is specified, the command will return an error message indicating that a valid parameter must be provided.
-- For V1.2, we will only be adding students to their respective tutorial group. Instead, what happens is that we will add all the students to the respective module headers.
 
 Expected output:
 Upon a successful add, the command will return a confirmation messaging stating that the specified student contact has been added.
 
-Examples:
+Example:
 
-- `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A module/CS2103T tutorial/T09`
+- `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`
+
+Explanation: This adds a student with name `Dohn Joe`, email `johndoe@gmail.com` and ID `A0123456A` into the TAHelper system.
 
 ### Deleting students : `delete_student`
 
@@ -190,6 +190,49 @@ Format: `/list_student`
 
 Expected output:
 The command will display the list of all students along with their student information. If there are no existing students, the command will return a message indicating that there are no students currently.
+
+
+### Allocating students to tutorial teams : `allocate_team`
+
+Allocates a student to an existing tutorial team within a tutorial class.
+
+List of acceptable formats:<br>
+    1. `/allocate_team id/ID module/MODULE tutorial/TUTORIAL team/TEAMNAME`<br>
+    2. `/allocate_team email/EMAIL module/MODULE tutorial/TUTORIAL team/TEAMNAME`<br>
+    3. `/allocate_team index/INDEX module/MODULE tutorial/TUTORIAL team/TEAMNAME`<br>
+
+- All fields from any acceptable formats have to be specified.
+- Leading/trailing spaces are removed.
+- A student cannot be added to the same tutorial team, under the same module and tutorial class, more than once.
+- The index specified is with respect to the index of the student in the tutorial class.
+
+Pre-conditions:
+1. The student you want to add has to already exist in the TAHelper system.
+2. The tutorial class has to be associated and exist in the module specified.
+3. The student you want to add has to already exist in the tutorial class specified.
+4. The team you want to allocate the student into has to already exist within the specified tutorial class.
+
+Important note:
+- Specifying more than one way to allocate student such as `/allocate_team id/ID email/EMAIL module/MODULE tutorial/TUTORIAL team/TEAMNAME` is not advised.<br>
+This is because TAHelper will prioritise looking for the student that matches the ID specified rather than the email specified. This prioritisation is a feature of the system.
+
+Expected output:
+Upon a successful allocation, the command will return a confirmation message stating that the specified student contact has been allocated to the tutorial team.
+
+Examples:
+1. `/allocate_team id/A1234567Z module/CS2101 tutorial/T01 team/team1`<br>
+
+Explanation: This allocates a student with ID matching `A1234567Z` in the tutorial class `T01` to a tutorial team `team1` of the tutorial class `T01` under the module `CS2101`.
+
+2. `/allocate_team email/johndoe@gmail.com module/CS2101 tutorial/T01 team/team2`<br>
+
+Explanation: This allocates a student with email matching `johndoe@gmail.com` in the tutorial class `T01` to a tutorial team `team1` of the tutorial class `T01` under the module `CS2101`.
+
+3. `/allocate_team index/1 module/CS2101 tutorial/T01 team/team1`<br>
+
+Explanation: This allocates a student with index position `1` in the tutorial class `T01` to a tutorial team `team1` of the tutorial class `T01` under the module `CS2101`.
+
+
 
 ### Adding new tutorial class : `add_class`
 
@@ -268,6 +311,30 @@ Examples:
 
 - Without team size:`/add_team module/CS2103T class/T10 name/Team 1`
 - With team size: `/add_team module/CS2103T class/T10 name/Team 1 size/3`
+
+
+### Randomly allocate into teams all students in a tutorial class : `random_teams`
+
+Randomly allocates all students in a tutorial class into different teams in the tutorial class.
+
+Format: `/random_teams module/MODULE tutorial/TUTORIAL teams/NUMBEROFTEAMS`
+
+- All fields from any acceptable formats have to be specified.
+- Leading/trailing spaces are removed.
+
+Important Note:
+- The number of teams cannot be more than the number of students in the tutorial class.
+- The tutorial class have to be associated with the module specified.
+- The number of teams must be a non-negative integer value.
+
+Expected output:
+Upon a successful randomisation, the command will return a confirmation message stating that the students in the specified tutorial class has been randomly distributed into different teams in the tutorial class.
+
+Example:
+- `/random_teams module/CS2101 tutorial/T01 teams/2`
+
+Explanation: This randomly allocates all the students in the tutorial class `T01` of module `CS2101` into 2 teams.
+
 
 ---
 ## FAQ
