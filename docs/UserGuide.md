@@ -23,28 +23,57 @@ details in a centralised storage. Our target audience is specifically only TAs o
 
 ## Quick start
 
-1. Ensure you have Java `11` or above installed in your Computer.
+1. Ensuring the correct version of Java installed:
+    - Ensure you have Java `11` or above installed in your Computer.
 
-1. Download the latest `tahelper.jar` from [here](https://github.com/AY2324S2-CS2103T-T09-4/tp/releases).
+2. Download TAHelper from [here](https://github.com/AY2324S2-CS2103T-T09-4/tp/releases)
+    - Download the latest `tahelper.jar`.
 
-1. Copy the file to the folder you want to use as the _home folder_ for your TAHelper.
+3. Set up your application environment
+    - Copy the file `tahelper.jar` to the folder you want to use as the _home folder_ for your TAHelper.
+    - Tip: name that folder `TAHelper` to facilitate organisation and easy access.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar tahelper.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+4. Using the Terminal to run the application
+    - Windows OS:
+      - Press the windows button and type `cmd` into the search bar.
+      - It should look something like this:
+      - ![cmd](images/cmdguidewin.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`/list_student`** and pressing Enter will display a list of students.<br>
-   Some example commands you can try:
+    - Mac OS:
+      - Search for Terminal in "Utilities" under "Applications".
+      - It should look something like this:
+      - 
+
+5. Launching TAHelper
+    - `cd` into the folder you put the jar file in
+    - Type `java -jar tahelper.jar` command and hit Enter to run TAHelper.<br>
+    - It should look something like this (in this case my jar file is in a folder called tahelper): 
+    - ![cmd](images/cmdguidewin2.png) 
+   
+    - A GUI similar to the below should appear in a few seconds.<br>
+    - ![Ui](images/Ui.png) (to update!!).
+
+6. Here are some commands to try out to get a feel of a TAHelper! type them in the Command box
+    - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with the name, email and ID specified.
+      - A new student entry should appear on the UI with the details reflected clearly.
+
+    - `/delete_student id/A0123456A or /delete_student email/johndoe@gmail.com`: Deletes the student that you have add with the previous command.
+      - The student entry with the ID `A0123456A` or email `johndoe@gmail.com` will be deleted.
+      - This deletion will be reflected on User Interface of TAHelper as well.
 
 Commands on students:
 
-   - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with all the details that have been specified to the relevant module and tutorial class.
+   - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with all the details.
 
    - `/delete_student id/A0259209B or /delete_student email/johndoe@gmail.com` : Deletes a student contact with email `johndoe@gmail.com` or id `A0259209B`.
 
    - `/search_student id/A0123456A or /search_student email/johndoe@gmail.com` : Searches for a student with id `A0123456A` or email `johndoe@gmail.com`.
 
    - `/list_student` : View the list of all students available.
+
+   - `/allocate_teams id/A1234567Z module/CS2101 tutorial/T01 name/team1` : Allocate a student to the specified team `team1` in the tutorial class `T01` of module `CS2101`.
+
+   - `/add_student_to_class id/A1234567Z module/CS2101 tutorial/T01` : Add a student the tutorial class `T01` of module `CS2101`. 
 
 Commands on modules:
 
