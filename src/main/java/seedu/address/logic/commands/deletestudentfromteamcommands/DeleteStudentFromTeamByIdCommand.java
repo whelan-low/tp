@@ -54,7 +54,7 @@ public class DeleteStudentFromTeamByIdCommand extends DeleteStudentFromTeamComma
 
         personToDelete = model.searchPersonByPredicate(predicate);
         if (personToDelete == null) {
-            throw new CommandException(String.format(PersonMessages.MESSAGE_PERSON_EMAIL_NOT_FOUND, studentId));
+            throw new CommandException(String.format(PersonMessages.MESSAGE_PERSON_STUDENT_ID_NOT_FOUND, studentId));
         }
         if (team == null) {
             throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam,
