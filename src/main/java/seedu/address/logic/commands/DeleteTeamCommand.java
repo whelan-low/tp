@@ -112,6 +112,6 @@ public class DeleteTeamCommand extends Command {
 
         DeleteTeamCommand e = (DeleteTeamCommand) other;
         return module.equals(e.module) && tutorialClass.equals(e.tutorialClass)
-            && team.getTeamName().equalsIgnoreCase(e.team.getTeamName());
+            && team.equals(e.team);
     }
 }

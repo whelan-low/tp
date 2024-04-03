@@ -85,6 +85,9 @@ public class ViewTeamCommand extends Command {
                 throw new CommandException(String.format(MESSAGE_TEAM_NOT_FOUND, predicateType, predicateValue));
             }
         } else if (predicateType.equals(PREFIX_INDEX)) {
+            if (!isInteger(predicateValue)) {
+                return new CommandResult("Integer needed for predicate value");
+            }
             teamToView = findTeamByIndex(model, Index.fromZeroBased(Integer.parseInt(predicateValue)), tutorialClass,
                 moduleInList);
             if (teamToView == null || !tutorialInList.hasTeam(teamToView)) {
@@ -93,7 +96,6 @@ public class ViewTeamCommand extends Command {
         } else {
             throw new CommandException("Invalid predicate type specified!");
         }
-
         StringBuilder studentsStringBuilder = new StringBuilder();
         for (Person student : teamToView.getStudents()) {
             studentsStringBuilder.append(student.toStringTwo()).append(", ");
@@ -118,9 +120,6 @@ public class ViewTeamCommand extends Command {
     TutorialTeam findTeamByIndex(Model model, Index index, TutorialClass tutorialClass,
                                  ModuleCode moduleCode) throws CommandException {
         TutorialClass tutorialInList = model.findTutorialClassFromList(tutorialClass, moduleCode);
-        if (tutorialInList == null) {
-            throw new CommandException("No such tutorial class.");
-        }
         Predicate<TutorialTeam> indexPredicate = tutorialTeam -> {
             ObservableList<TutorialTeam> filteredList = FXCollections.observableList(tutorialInList.getTeams());
             int teamIndex = filteredList.indexOf(tutorialTeam);
@@ -146,5 +145,19 @@ public class ViewTeamCommand extends Command {
         ViewTeamCommand command = (ViewTeamCommand) other;
         return moduleCode.equals(command.moduleCode)
             && tutorialClass.equals(command.tutorialClass);
+    }
+    /**
+     * Checks if the given string can be parsed as an integer.
+     *
+     * @param s the string to be checked
+     * @return true if the string can be parsed as an integer, false otherwise
+     */
+    public boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
