@@ -10,7 +10,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID_AMY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SORT_BY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -37,7 +36,6 @@ import seedu.address.logic.commands.ListClassesCommand;
 import seedu.address.logic.commands.ListStudentsCommand;
 import seedu.address.logic.commands.ListStudentsOfClassCommand;
 import seedu.address.logic.commands.SearchStudentCommand;
-import seedu.address.logic.commands.SortStudentCommand;
 import seedu.address.logic.commands.ViewTeamCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByEmailCommand;
 import seedu.address.logic.commands.addstudenttoclasscommands.AddStudentToClassByIdCommand;
@@ -214,14 +212,6 @@ public class AddressBookParserTest {
                 + PREFIX_TUTORIALCLASS + " " + tutorialClass + " "
                 + PREFIX_NAME + " " + teamName);
         assertEquals(new AddTeamCommand(moduleCode, tutorialClass, teamName), command);
-    }
-
-    @Test
-    public void parseCommand_sortStudent() throws Exception {
-        String sortBy = "name"; // Choose any valid sorting parameter for testing
-        SortStudentCommand command = (SortStudentCommand) parser.parseCommand(
-            SortStudentCommand.COMMAND_WORD + " " + PREFIX_SORT_BY + sortBy);
-        assertEquals(new SortStudentCommand(sortBy), command);
     }
 
     @Test
