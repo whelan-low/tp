@@ -130,17 +130,25 @@ public interface Model {
 
     /**
      * Allocates the {@code student} to the {@code tutorialTeam}
+     * @param student to be allocated
      * @param tutorialTeam to allocate the student into.
      */
     void allocateStudentToTeam(Person student, TutorialTeam tutorialTeam);
 
     /**
-     * Randomly allocates the students in {@code tutorial class} into {@code numOfTeams} of different teams.
-     *
-     * @param moduleCode
-     * @param tutorialClass
-     * @param numOfTeams
+     * Deletes the {@code student} from the {@code tutorialTeam}
+     * @param student to be deleted
+     * @param tutorialTeam to delete the student from.
      */
+    void deleteStudentFromTeam(Person student, TutorialTeam tutorialTeam);
+
+    /**
+    * Randomly allocates the students in {@code tutorial class} into {@code numOfTeams} of different teams.
+    *
+    * @param moduleCode
+    * @param tutorialClass
+    * @param numOfTeams
+    */
     void randomTeamAllocation(ModuleCode moduleCode, TutorialClass tutorialClass, int numOfTeams);
 
     /**
