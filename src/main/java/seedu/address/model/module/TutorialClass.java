@@ -135,7 +135,7 @@ public class TutorialClass {
     }
 
     /**
-     * Deletes a specified student from all teams from a tutorial class in a model.
+     * Deletes a specified student from all teams from the tutorial class.
      *
      * @param student to be deleted
      */
