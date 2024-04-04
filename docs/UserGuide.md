@@ -14,7 +14,6 @@ TAHelper is a **desktop app for managing contacts, optimized for use via a Line 
 
 ## Table of contents
 <!-- * Table of Contents -->
-<page-nav-print />
 ---
 
 ## Target Audience
@@ -23,12 +22,16 @@ TAHelper is a **desktop app for managing contacts, optimized for use via a Line 
 which caters to their need to store information in a way that is easy to track and visualise, as well as keep student's
 details in a centralised storage. Our target audience is specifically only TAs of NUS Computer Science Modules.
 
+[Back to table of contents](#table-of-contents)
+
 ## Purpose of User Guide
 - The purpose of the User Guide (UG) for TAHelper is to provide our target users, TAs of NUS Computer Science modules, with a comprehensive resource that
 helps user effectively use and understand our application. In the User Guide, we display clear instructions, a quick start guide, and explanations to help users use TAHelper seamlessly
 and effectively. This help users learn the new system in an extremely short timeframe, while allowing them to understand this application deeply, optimise their workflows and improve their
 student contact management in the classes they teach.
-  
+
+[Back to table of contents](#table-of-contents)
+
 ## Navigating the User Guide
 Welcome to the TAHelper User Guide! Our goal is to assist and provide you the luxury of information, knowledge and utmost
 confidence to make full use of TAHelper's features.
@@ -36,6 +39,8 @@ confidence to make full use of TAHelper's features.
 - Effortless Navigation: [Refer here](#table-of-contents) for the table of contents to aid your navigation.
 - Quick start guide for New Users: If you're a new user, visit our [Quick Start](#quick-start) section to set up and launch the application!
 - Features: Want to leverage the capabilities of TAHelper? Visit our [Features](#features) section to fully utilise the features we offer!
+
+[Back to table of contents](#table-of-contents)
 
 ## Quick start
 
@@ -51,12 +56,12 @@ confidence to make full use of TAHelper's features.
     - Copy the file `tahelper.jar` to the folder you want to use as the _home folder_ for your TAHelper.
     - Tip: name that folder `TAHelper` to facilitate organisation and easy access.
 
-
-4. Using the Terminal to run the application
+5. Using the Terminal to run the application
     - Windows OS:
       - Press the windows button and type `cmd` into the search bar.
+      - Then `cd` into the folder you put the jar file in.
       - It should look something like this:
-      - ![cmd](images/cmdguidewin.png)
+      - ![cmd](images/cmdwinguide.png)
 
     - Mac OS:
       - Search for Terminal in "Utilities" under "Applications".
@@ -64,17 +69,16 @@ confidence to make full use of TAHelper's features.
       - 
 
 
-5. Launching TAHelper
-    - `cd` into the folder you put the jar file in
+6. Launching TAHelper
     - Type `java -jar tahelper.jar` command and hit Enter to run TAHelper.<br>
     - It should look something like this (in this case my jar file is in a folder called tahelper): 
-    - ![cmd](images/cmdguidewin2.png) 
+    - ![cmd](images/cmdwinguide2.png) 
    
     - A GUI similar to the below should appear in a few seconds.<br>
     - ![Ui](images/Ui.png) (to update!!).
 
 
-6. Here are some commands to try out to get a feel of a TAHelper! type them in the Command box
+7. Here are some commands to try out to get a feel of a TAHelper! type them in the Command box
     - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with the name, email and ID specified.
       - A new student entry should appear on the UI with the details reflected clearly.
 
@@ -83,6 +87,8 @@ confidence to make full use of TAHelper's features.
       - This deletion will be reflected on User Interface of TAHelper as well.
 
     - For more Commands that will improve your experience, ![click here]
+
+[Back to table of contents](#table-of-contents)
 
 ## Navigating the GUI
 
@@ -114,8 +120,8 @@ Commands on modules:
 
 1. Refer to the [Features](#features) below for details of each command.
 
----
 
+---
 ## Features
 
 <box type="info" seamless>
@@ -124,7 +130,34 @@ Commands on modules:
 ### Command Format
 Here are the main components of the commands:
 
-Here are symbols used in the commands:
+| Component    | Example                | Description                                                                                                                                       |
+|--------------|:-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| Command Word | /add, /search, /delete | The type of command to be executed by the system.                                                                                                 |
+| Prefix       | name/, email/, id/     | The attributes of the quantity observed.                                                                                                          |
+| Parameters   | NAME, EMAIL, STUDENTID | The value of the attribute that the user have to provide after the prefix.                                                                        |
+| Index        | 1, 3                   | The position of the student in the list it is referencing. Eg. Index 1 of tutorial class `T01` refers to the 1st student in the `T01` class list. | 
+
+Here are symbols used in the commands: (TODO)
+
+| Symbol | Example         | Description                                                                          |
+|--------|:----------------|--------------------------------------------------------------------------------------|
+| `[ ]`  | `[email/EMAIL]` | The parameter `email` is optional and specifying it may not yield additional results |
+| NONE   | `id/STUDENTID`  | The parameter `id` needs to be specified. It is compulsory.                          |
+
+Parameters:
+
+| Field       | Prefix       | Description/Constraints                                                                                                                                                     |
+|-------------|:-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| NAME        | name/        | Alphanumeric characters                                                                                                                                                     |
+| EMAIL       | email/       | need to follow the format `example@mail.com`                                                                                                                                |
+| STUDENTID   | id/          | Follows the format of NUS Student ID that starts with A. Format must be `A`, followed 7 numeric digits, and end off with a alphabetical letter.                             |
+| MODULE      | module/      | Follows the format of NUS CS modules, which starts with either 2 or 3 alphabetical letters, followed by 4 numeric integer between 0-9, and an optional alphabetical letter. |
+| TUTORIAL    | tutorial/    | Follows the format of NUS tutorial class naming, which starts with 1 alphabetical letter and 2 numeric integers from 0-9.                                                   |
+| TEAMNAME    | team/        | Alphanumeric characters                                                                                                                                                     |
+| TAG         | tag/         | tag associated with the student.  Alphanumeric characters                                                                                                                   |
+| SIZE        | size/        | The size of the team. A single numeric integer value that is more than 0.                                                                                                   |
+| DESCRIPTION | description/ | The description of the module.                                                                                                                                              |
+| BY          | by/          | The parameter you want to search by, Alphanumeric characters                                                                                                                |
 
 - Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add name/NAME`, `NAME` is a parameter which can be used as `add name/John Doe`.
@@ -141,6 +174,7 @@ Here are symbols used in the commands:
 - If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
+---
 ### Adding new students : `add_student`
 
 Adds a new student contact with all the details that have been specified by the user.
@@ -167,6 +201,7 @@ Example:
 
 Explanation: This adds a student with name `Dohn Joe`, email `johndoe@gmail.com` and ID `A0123456A` into the TAHelper system.
 
+---
 ### Deleting students : `delete_student`
 
 Delete a student contact based on the parameter specified by the user.
@@ -189,6 +224,7 @@ Examples:
 - Delete by email: `/delete_student email/e0123456@u.nus.edu`
 - Delete by index: `/delete_student index/1`
 
+---
 ### Searching for students : `search`
 
 Search for a student's contact based on specified query.
@@ -205,6 +241,7 @@ Examples:
 - `/search_student id/A012345A` Returns student with corresponding id
 - `/search_student email/@GMAIL` Returns all students who have `@gmail` in their email
 
+---
 ### Listing all students : `list_student`
 
 View the list of all students available
@@ -214,7 +251,7 @@ Format: `/list_student`
 Expected output:
 The command will display the list of all students along with their student information. If there are no existing students, the command will return a message indicating that there are no students currently.
 
-
+---
 ### Allocating students to tutorial teams : `allocate_team`
 
 Allocates a student to an existing tutorial team within a tutorial class.
@@ -256,7 +293,7 @@ Explanation: This allocates a student with email matching `johndoe@gmail.com` in
 Explanation: This allocates a student with index position `1` in the tutorial class `T01` to a tutorial team `team1` of the tutorial class `T01` under the module `CS2101`.
 
 
-
+---
 ### Adding new tutorial class : `add_class`
 
 Adds a tutorial class with the specified module code and name.
@@ -270,6 +307,7 @@ Examples:
 - `/add_class module/CS2103T class/T10`
 - `/add_class module/CS2109S class/T01`
 
+---
 ### Deleting tutorial class : `delete_class`
 
 Deletes a specified tutorial class from the list of classes.
@@ -285,6 +323,7 @@ Examples:
 - `/delete_class module/CS2103T class/T10`
 - `/delete_class module/CS2109S class/T01`
 
+---
 ### Listing all classes: `list_class`
 
 Shows a list of all classes in the address book.
@@ -293,6 +332,7 @@ Format: `list_class`
 
 Expected output: The command will display the list of all classes. If there are no existing classes, the command will return a message indicating that there are no classes currently.
 
+---
 ### Adding student to tutorial class : `add_student_to_class`
 
 Adds a specified student based on the provided parameter to a specified tutorial class.
@@ -314,6 +354,7 @@ Examples:
 - Add student by email: `/add_student_to_class email/test@gmail.com module/CS2103T class/T10`
 - Add student by index: `/add_student_to_class index/1 module/CS2103T class/T10`
 
+---
 ### Adding new tutorial team : `add_team`
 
 Adds a new team with the specified team name to the specified tutorial class.
@@ -335,7 +376,7 @@ Examples:
 - Without team size:`/add_team module/CS2103T class/T10 name/Team 1`
 - With team size: `/add_team module/CS2103T class/T10 name/Team 1 size/3`
 
-
+---
 ### Randomly allocate into teams all students in a tutorial class : `random_teams`
 
 Randomly allocates all students in a tutorial class into different teams in the tutorial class.
@@ -382,13 +423,15 @@ Explanation: This randomly allocates all the students in the tutorial class `T01
 | **TAHelper**                       | A contact management application to help TAs keep track of students in classes they teach.                                                                                                                     |
 | **Graphical User Interface (GUI)** | is a type of interface that allows users to interact with electronic devices through graphical icons and visual indicators,<br> as opposed to text-based interfaces, typed command labels, or text navigation. |
 | **Command Line Interface (CLI)**   | is a text-based user interface used to interact with software, through the use of key words command such as 'cd'.                                                                                              |
+| **CS**                             | Refers to Computer Science.                                                                                                                                                                                    |
+| **NUS**                            | Refers to National University Of Singapore, which is located at Central Singapore.                                                                                                                             |
 
 ---
 
 ## Command summary
 
 | Action                     | Format, Examples                                                                                                                                                                                                       |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Add New Students**       | `add_student name/ <student_name> email/ <student_email> id/ <student_id> module/ <module> tutorial/ <class>` <br> e.g., `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A module/CS2103T tutorial/T09` |
 | **Delete students**        | `delete_student <id/, email/> <id or email>`<br> e.g., `delete_student id/A0259209B` or `/delete_student email/johndoe@gmail.com`                                                                                      |
 | **Search for students**    | `search_student <id/, email/, tc/, name/> <id or email or tutorial or name>`<br> e.g.,`search_student id/A0123456A`                                                                                                    |
