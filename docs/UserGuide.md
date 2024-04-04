@@ -98,7 +98,9 @@ Commands on students:
 
    - `/search_student id/A0123456A or /search_student email/johndoe@gmail.com` : Searches for a student with id `A0123456A` or email `johndoe@gmail.com`.
 
-   - `/list_student` : View the list of all students available.
+   - `/list_students` : View the list of all students available.
+
+   - `/add_class module/CS2103T class/T09` : Adds a new tutorial class `T09` under the module `CS2103T`.
 
    - `/allocate_teams id/A1234567Z module/CS2101 tutorial/T01 name/team1` : Allocate a student to the specified team `team1` in the tutorial class `T01` of module `CS2101`.
 
@@ -108,9 +110,13 @@ Commands on modules:
 
    - `/add_class module/CS2103T class/T09` : Adds a new tutorial class `T09` under the module `2103T`.
 
-   - `/delete_class module/CS2103T class/T09` : Deletes a tutorial class `T09` under the module `2103T`.
+   - `/delete_class module/CS2103T class/T09` : Deletes a tutorial class `T09` under the module `CS2103T`.
 
-   - `/list_class` : List of all tutorial classes available.
+   - `/list_classes` : List of all tutorial classes available.
+
+   - `/class_list_students module/CS2103T class/T09` : List all the students in the tutorial class `T09` under the module `CS2103T`
+   
+   - `/view_teams name/Team 1 module/CS2103T class/T09` or `/view_teams index/1 module/CS2103T class/T09` : View the information of the team with team name `Team 1` or index `1` in tutorial class `T09` under module `CS2103T`
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -205,11 +211,11 @@ Examples:
 - `/search_student id/A012345A` Returns student with corresponding id
 - `/search_student email/@GMAIL` Returns all students who have `@gmail` in their email
 
-### Listing all students : `list_student`
+### Listing all students : `list_students`
 
 View the list of all students available
 
-Format: `/list_student`
+Format: `/list_students`
 
 Expected output:
 The command will display the list of all students along with their student information. If there are no existing students, the command will return a message indicating that there are no students currently.
@@ -285,13 +291,13 @@ Examples:
 - `/delete_class module/CS2103T class/T10`
 - `/delete_class module/CS2109S class/T01`
 
-### Listing all classes: `list_class`
+### Listing all tutorial classes: `list_classes`
 
-Shows a list of all classes in the address book.
+Shows a list of all tutorial classes in the address book.
 
-Format: `list_class`
+Format: `list_classes`
 
-Expected output: The command will display the list of all classes. If there are no existing classes, the command will return a message indicating that there are no classes currently.
+Expected output: The command will display the list of all tutorial classes. If there are no existing classes, the command will return a message indicating that there are no classes currently.
 
 ### Adding student to tutorial class : `add_student_to_class`
 
@@ -335,6 +341,43 @@ Examples:
 - Without team size:`/add_team module/CS2103T class/T10 name/Team 1`
 - With team size: `/add_team module/CS2103T class/T10 name/Team 1 size/3`
 
+### Listing all students of a tutorial class : `class_list_students`
+
+View the list of all students available
+
+Format: `/class_list_student module/MODULE_CODE class/TUTORIAL_CLASS`
+
+- If the module code does not exist, it returns an error.
+- If the tutorial class within that module code does not exist, it returns an error.
+
+Expected output:
+The command will display the list of all students along with their student information. If there are no existing students, the command will return a message indicating that there are no students in that tutorial class.
+
+Example:
+
+- `class_list_students module/CS2103T class/T09`
+- `class_list_students module/CS2101 class/T01`
+
+### View a team in a tutorial class : `view_teams`
+
+View the information about a team in a tutorial class.
+
+Format: `/view_teams [name/TEAM_NAME] [index/INDEX] module/MODULE_CODE class/TUTORIAL_CLASS`
+
+- If the module code does not exist, it returns an error message.
+- If the tutorial class within that module code does not exist, it returns an error message.
+- If no parameters specified, it returns an error.
+- If the team within that tutorial class does not exist, it returns an error.
+
+Expected output:
+The command will display the team with its information. If there is no such existing team, the command will return a error.
+
+Example:
+
+- View team by team name: `/view_teams name/Team 1 module/CS2103T class/T09`
+- View team by index: `/view_teams index/1 module/CS2103T class/T09`
+
+---
 
 ### Randomly allocate into teams all students in a tutorial class : `random_teams`
 
@@ -387,12 +430,23 @@ Explanation: This randomly allocates all the students in the tutorial class `T01
 
 ## Command summary
 
-| Action                     | Format, Examples                                                                                                                                                                                                       |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Add New Students**       | `add_student name/ <student_name> email/ <student_email> id/ <student_id> module/ <module> tutorial/ <class>` <br> e.g., `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A module/CS2103T tutorial/T09` |
-| **Delete students**        | `delete_student <id/, email/> <id or email>`<br> e.g., `delete_student id/A0259209B` or `/delete_student email/johndoe@gmail.com`                                                                                      |
-| **Search for students**    | `search_student <id/, email/, tc/, name/> <id or email or tutorial or name>`<br> e.g.,`search_student id/A0123456A`                                                                                                    |
-| **View all students**      | `list_student`                                                                                                                                                                                                         |
-| **Add new tutorial class** | `add_class <module_code> <tutorial_class>` <br> e.g., `add_class module/CS2103T tutorial/T09`                                                                                                                          |
-| **Delete tutorial class**  | `delete_class <module_code> <tutorial_class>` <br> e.g., `delete_class module/CS2103T tutorial/T09`                                                                                                                    |
-| **View all classes**       | `list_class`                                                                                                                                                                                                           |
+| Action                                  | Format, Examples                                                                                                                                                                                                                         |
+|-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add New Students**                    | `/add_student name/ <student_name> id/ <student_id> email/ <student_email> tag/<tag>` <br> e.g., `/add_student name/Dohn Joe id/A0123456A email/johndoe@gmail.com id/A0123456A`                                                          |
+| **Delete students**                     | `/delete_student <id/, email/> <id or email>`<br> e.g., `delete_student id/A0259209B` or `/delete_student email/johndoe@gmail.com`                                                                                                       |
+| **Search for students**                 | `/search_student <id/, email/, tc/, name/> <id or email or tutorial or name>`<br> e.g.,`/search_student id/A0123456A`                                                                                                                    |
+| **Sort students**                       | `/sort_students by/<name or email or id> `<br> e.g.,`search_student by/id` or `/search_student by/name`                                                                                                                                  |
+| **View all students**                   | `/list_students`                                                                                                                                                                                                                         |
+| **Add new tutorial class**              | `/add_class module/<module_code> tutorial/<tutorial_class>` <br> e.g., `/add_class module/CS2103T tutorial/T09`                                                                                                                          |
+| **Delete tutorial class**               | `/delete_class module/<module_code> tutorial/<tutorial_class>` <br> e.g., `/delete_class module/CS2103T tutorial/T09`                                                                                                                    |
+| **View all classes**                    | `/list_classes`                                                                                                                                                                                                                          |
+| **Add New Student to tutorial class**   | `/add_student_to_class <index/, email/ , id/> <index or email or id> module/ <module> tutorial/ <class>` <br> e.g., `/add_student_to_class index/1 module/CS2103T tutorial/T09`                                                          |
+| **Delete students from tutorial class** | `/delete_student_from_class email/<email> module/ <module> tutorial/ <class>` or `delete_student_from_class id/<id> module/ <module> tutorial/ <class>` <br> e.g., `/delete_student_from_class id/A1234561Z module/CS2103T tutorial/T09` |
+| **List students of a tutorial class**   | `/class_list_student module/ <module> tutorial/ <class>` <br> e.g., `class_list_students module/CS2103T tutorial/T09`                                                                                                                    |
+| **Delete module**                       | `/delete_module module/<module_code>` <br> e.g., `delete_class module/CS2103T`                                                                                                                                                           |
+| **Add new team**                        | `/add_team module/<moduleCode> tutorial/<tutorialClass> name/<team_name> size/<team_size>` <br> e.g., `/add_team module/CS2103T tutorial/T09 name/Team 1 size/5`                                                                         |
+| **Delete team**                         | `/delete_team module/<moduleCode> tutorial/<tutorialClass> name/<team_name>` <br> e.g., `/delete_team module/CS2103 tutorial/T09 name/Team 4`                                                                                            |
+| **View team**                           | `/view_teams <index/, name/> <index or name> module/<moduleCode> tutorial/<tutorialClass>` <br> e.g., `/view_teams name/Team 1 module/CS2103T tutorial/T09`                                                                              |
+| **Randomly allocate team**              | `/random_teams module/<module> tutorial/<tutorialClass> teams/<number_of_teams>` <br> e.g., `/random_teams module/CS2103 tutorial/T09 teams/4`                                                                                           |
+| **Allocate students to team**           | `/allocate_team <id/, email/, index/> <student_id or email or index> module/<moduleCode> tutorial/<tutorial_class> name/<team_name>` <br> e.g., `/allocate_team id/A1234567K module/CS2103 tutorial/T09 name/4`                          |
+| **Delete students from team**           | `/delete_from_team id/<student_id> module/<moduleCode> tutorial/<tutorialClass> name/<team_name>` <br> e.g., `/delete_from_team id/A1234567K module/CS2103 tutorial/T09 name/4`                                                          |
