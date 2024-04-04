@@ -10,6 +10,7 @@ import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.messages.TeamMessages;
 import seedu.address.model.Model;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
@@ -65,18 +66,18 @@ public class AllocateStudentToTeamByStuIdCommand extends AllocateStudentToTeamCo
         TutorialClass tutClass = model.findTutorialClassFromList(tutorialClass, module);
 
         Person student = model.getUniquePersonList().getPerson(studentId);
-        TutorialTeam tutTeam = model.getTutorialTeam(tutClass, tutorialTeam);
+        TutorialTeam tutTeam = tutClass.getTutorialTeam(tutClass, tutorialTeam);
 
         if (student == null) {
             throw new CommandException(MESSAGE_STUDENT_DOES_NOT_EXIST);
         }
 
         if (tutTeam == null) {
-            throw new CommandException(String.format(MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
+            throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
         }
 
         // throws commandException if any condition fails
-        checkAllocateCondition(model, student, tutClass, tutTeam);
+        checkAllocateCondition(student, tutClass, tutTeam);
         model.allocateStudentToTeam(student, tutTeam);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, tutTeam));

@@ -11,6 +11,7 @@ import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.messages.TutorialClassMessages;
 import seedu.address.model.Model;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
@@ -35,9 +36,6 @@ public class AllocateStudentToTeamByIndexCommand extends AllocateStudentToTeamCo
             + PREFIX_MODULECODE + "CS2101 "
             + PREFIX_TUTORIALCLASS + "T01 "
             + PREFIX_TEAMNAME + "Team 1 ";
-
-    public static final String MESSAGE_PERSON_INDEX_NOT_FOUND =
-            "Student at index %d not found inside tutorial class %s";
     private final Index index;
     private final ModuleCode moduleCode;
     private final TutorialClass tutorialClass;
@@ -71,17 +69,17 @@ public class AllocateStudentToTeamByIndexCommand extends AllocateStudentToTeamCo
             studentToAllocate = model.getStudentsInTutorialClass(tutClass).get(index.getZeroBased());
         } catch (IndexOutOfBoundsException err) {
             throw new CommandException(
-                    String.format(MESSAGE_PERSON_INDEX_NOT_FOUND, index.getOneBased(), tutClass));
+                    String.format(TutorialClassMessages.MESSAGE_PERSON_INDEX_NOT_FOUND, index.getOneBased(), tutClass));
         }
 
-        TutorialTeam tutTeam = model.getTutorialTeam(tutClass, tutorialTeam);
+        TutorialTeam tutTeam = tutClass.getTutorialTeam(tutClass, tutorialTeam);
 
         if (tutTeam == null) {
             throw new CommandException(MESSAGE_STUDENT_DOES_NOT_EXIST);
         }
 
         // throws commandException if any condition fails
-        checkAllocateCondition(model, studentToAllocate, tutClass, tutTeam);
+        checkAllocateCondition(studentToAllocate, tutClass, tutTeam);
         model.allocateStudentToTeam(studentToAllocate, tutTeam);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, tutTeam));

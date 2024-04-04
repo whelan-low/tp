@@ -9,6 +9,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.messages.TeamMessages;
 import seedu.address.model.Model;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
@@ -26,7 +27,7 @@ public abstract class AllocateStudentToTeamCommand extends Command {
             + PREFIX_STUDENTID + "STUDENT ID "
             + PREFIX_MODULECODE + "MODULE CODE "
             + PREFIX_TUTORIALCLASS + "TUTORIAL CLASS "
-            + PREFIX_TEAMNAME + "TEAM NAME"
+            + PREFIX_TEAMNAME + "TEAM NAME \n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_STUDENTID + "A1234567L "
             + PREFIX_MODULECODE + "CS2101 "
@@ -36,12 +37,7 @@ public abstract class AllocateStudentToTeamCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Allocate student to team: %s";
     public static final String MESSAGE_STUDENT_NOT_IN_TUTORIAL = "Student needs to be in that tutorial group first.";
     public static final String MESSAGE_STUDENT_DOES_NOT_EXIST = "Student does not exist in system";
-    public static final String MESSAGE_TEAM_DOES_NOT_EXIST = "Team %s does not exist in tutorial class %s";
     public static final String MESSAGE_CLASS_DOES_NOT_EXIST = "Tutorial class %s does not exist in module %s";
-
-    public static final String MESSAGE_DUPLICATE_PERSON_IN_TEAM = "This person already exists in a team"
-            + " in the tutorial class %s!";
-    public static final String MESSAGE_TEAM_SIZE_EXCEEDED = "Max team size of %d reached";
 
     public AllocateStudentToTeamCommand() {}
 
@@ -52,28 +48,28 @@ public abstract class AllocateStudentToTeamCommand extends Command {
 
     /**
      * Check the condition needed to allocate the student to a tutorial team.
-     * @param model
      * @param student
      * @param tutClass
      * @param tutorialTeam
      * @throws CommandException
      */
-    public void checkAllocateCondition(Model model, Person student, TutorialClass tutClass, TutorialTeam tutorialTeam)
+    public void checkAllocateCondition(Person student, TutorialClass tutClass, TutorialTeam tutorialTeam)
             throws CommandException {
-        if (!model.isStudentInTutorialClass(student, tutClass)) {
+        if (!tutClass.isStudentInTutorialClass(student, tutClass)) {
             throw new CommandException(MESSAGE_STUDENT_NOT_IN_TUTORIAL);
         }
 
-        if (!model.hasTeamInTutorial(tutClass, tutorialTeam)) {
-            throw new CommandException(String.format(MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
+        if (!tutClass.hasTeamInTutorial(tutClass, tutorialTeam)) {
+            throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam, tutClass));
         }
 
-        if (model.isStudentInAnyTeam(student, tutClass)) {
-            throw new CommandException(String.format(MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutClass));
+        if (tutClass.isStudentInAnyTeam(student, tutClass)) {
+            throw new CommandException(String.format(TeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutClass));
         }
 
-        if (model.hasTeamSizeExceeded(tutorialTeam)) {
-            throw new CommandException(String.format(MESSAGE_TEAM_SIZE_EXCEEDED, tutorialTeam.getTeamSize()));
+        if (tutorialTeam.hasTeamSizeExceeded(tutorialTeam)) {
+            throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED,
+                    tutorialTeam.getTeamSize()));
         }
     }
 
