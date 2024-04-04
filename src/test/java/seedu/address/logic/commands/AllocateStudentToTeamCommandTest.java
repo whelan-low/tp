@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
@@ -29,48 +30,39 @@ import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStuden
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand;
 import seedu.address.logic.messages.TeamMessages;
 import seedu.address.logic.messages.TutorialClassMessages;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.UserPrefs;
+import seedu.address.model.*;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
-import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.*;
 
 
 public class AllocateStudentToTeamCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-    private TutorialClass tutorialClass;
-    private Person validPerson;
-    private Person validOtherPerson;
     private ModuleCode newModule;
     private TutorialTeam newTeam;
     private TutorialTeam tutTeam;
 
     @BeforeEach
     public void setUp() {
-        validPerson = new PersonBuilder(AMY).build();
-        validOtherPerson = new PersonBuilder(ALICE)
-                .withStudentId(VALID_STUDENT_ID_BOB).withEmail(VALID_EMAIL_BOB).build();
-        newModule = new ModuleCode(VALID_MODULE_AMY);
+        // create a new test module and add it to model
+        newModule = new ModuleBuilder().build();
         model.addModule(newModule);
-        model.addPerson(validPerson);
-        model.addPerson(validOtherPerson);
-        TutorialClass newTutorialClass = new TutorialClass(VALID_TUTORIAL_AMY);
-        newModule.addTutorialClass(newTutorialClass);
-        tutorialClass = newTutorialClass;
-        newTeam = new TutorialTeam(VALID_TEAM_NAME, 1);
-        tutTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, 3);
-        tutorialClass.addTeam(tutTeam);
-        tutorialClass.addTeam(newTeam);
+        int newTeamSizeTest = 1;
+        int tutTeamSizeTest = 3;
+        newTeam = new TutorialTeam(VALID_TEAM_NAME, newTeamSizeTest);
+        tutTeam = new TutorialTeam(VALID_TEAM_NAME_BOB, tutTeamSizeTest);
+        newModule.getTutorialClasses().get(0).addTeam(tutTeam);
+        newModule.getTutorialClasses().get(0).addTeam(newTeam);
     }
 
     @Test
     public void invalidAllocationToTeam_indexNotInSystem_failure() {
-        Index index = Index.fromOneBased(1000);
+        Index index = Index.fromOneBased(10);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         AllocateStudentToTeamByIndexCommand allocateStudentToTeamByIndexCommand = new
                 AllocateStudentToTeamByIndexCommand(index,
                 newModule, tutorialClass, newTeam);
@@ -81,13 +73,16 @@ public class AllocateStudentToTeamCommandTest {
 
     @Test
     public void invalidAllocationToTeam_teamSizeExceeded_failure() {
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        Person otherValidPerson = model.getAddressBook().getPersonList().get(1);
         tutorialClass.addStudent(validPerson);
+        tutorialClass.addStudent(otherValidPerson);
         newTeam.addStudent(validPerson);
-        tutorialClass.addStudent(validOtherPerson);
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
-                AllocateStudentToTeamByStuIdCommand(validOtherPerson.getStudentId(), newModule, tutorialClass, newTeam);
+                AllocateStudentToTeamByStuIdCommand(otherValidPerson.getStudentId(), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
-                AllocateStudentToTeamByEmailCommand(validOtherPerson.getEmail(), newModule, tutorialClass, newTeam);
+                AllocateStudentToTeamByEmailCommand(otherValidPerson.getEmail(), newModule, tutorialClass, newTeam);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
                 String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
@@ -95,7 +90,8 @@ public class AllocateStudentToTeamCommandTest {
     }
 
     @Test
-    public void invalidAllocationToTeam_studentNull_failure() {
+    public void invalidAllocationToTeam_studentDoesNotExist_failure() {
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
                 AllocateStudentToTeamByStuIdCommand(new StudentId(VALID_STUDENT_ID), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
@@ -109,6 +105,8 @@ public class AllocateStudentToTeamCommandTest {
     @Test
     public void invalidAllocationToTeam_tutorialTeamNotExist_failure() {
         TutorialTeam team = new TutorialTeam(VALID_TEAM_NAME_NEW);
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
 
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
                 AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass,
@@ -124,8 +122,12 @@ public class AllocateStudentToTeamCommandTest {
 
     @Test
     public void invalidAllocationToTeam_studentAlreadyInTeam_failure() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
         newTeam.addStudent(validPerson);
+
+        // try to allocate again but duplicate entry to team.
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
                 AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass,
                 tutTeam);
@@ -141,37 +143,58 @@ public class AllocateStudentToTeamCommandTest {
 
 
     @Test
-    public void validAllocationToTeam_byEmailOrStudentId_success() {
+    public void validAllocationToTeam_byEmail_success() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
-        tutorialClass.addStudent(validOtherPerson);
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
                 AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(),
                 newModule, tutorialClass, tutTeam);
-        AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
-                AllocateStudentToTeamByEmailCommand(validOtherPerson.getEmail(),
-                newModule, tutorialClass, tutTeam);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.addModule(newModule);
+
         assertCommandSuccess(allocateStudentToTeamByStuIdCommand, model,
-                String.format(AllocateStudentToTeamByIndexCommand.MESSAGE_SUCCESS, tutTeam), model);
+                String.format(AllocateStudentToTeamByIndexCommand.MESSAGE_SUCCESS, tutTeam), expectedModel);
+    }
+
+    @Test
+    public void validAllocationToTeam_byStudentId_success() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
+        tutorialClass.addStudent(validPerson);
+        AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
+                AllocateStudentToTeamByEmailCommand(validPerson.getEmail(),
+                newModule, tutorialClass, tutTeam);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.addModule(newModule);
         assertCommandSuccess(allocateStudentToTeamByEmailCommand, model,
-                String.format(AllocateStudentToTeamByEmailCommand.MESSAGE_SUCCESS, tutTeam), model);
+                String.format(AllocateStudentToTeamByEmailCommand.MESSAGE_SUCCESS, tutTeam), expectedModel);
     }
 
 
     @Test
     public void validAllocationToTeam_indexInSystem_success() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
-        tutorialClass.addStudent(validOtherPerson);
-        Index index = Index.fromZeroBased(1);
+        Index index = Index.fromZeroBased(0);
         AllocateStudentToTeamByIndexCommand allocateStudentToTeamByIndexCommand = new
                 AllocateStudentToTeamByIndexCommand(index,
                 newModule, tutorialClass, newTeam);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.addModule(newModule);
         assertCommandSuccess(allocateStudentToTeamByIndexCommand, model,
-                String.format(AllocateStudentToTeamByIndexCommand.MESSAGE_SUCCESS, newTeam), model);
+                String.format(AllocateStudentToTeamByIndexCommand.MESSAGE_SUCCESS, newTeam), expectedModel);
     }
 
 
     @Test
     public void invalidAllocationToTeam_studentNotInTutorialClass_failure() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
                 AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
@@ -184,11 +207,13 @@ public class AllocateStudentToTeamCommandTest {
 
     @Test
     public void toString_test() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand =
                 new AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByEmailCommand allocateOtherStudentToTeamByEmailCommand =
-                new AllocateStudentToTeamByEmailCommand(validOtherPerson.getEmail(),
+                new AllocateStudentToTeamByEmailCommand(validPerson.getEmail(),
                         newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByIndexCommand allocateStudentToTeamByIndexCommand =
                 new AllocateStudentToTeamByIndexCommand(Index.fromZeroBased(0),
@@ -199,11 +224,16 @@ public class AllocateStudentToTeamCommandTest {
                 allocateStudentToTeamByStuIdCommand.toString());
         assertEquals(allocateStudentToTeamByIndexCommand.toString(),
                 allocateStudentToTeamByIndexCommand.toString());
-
+        assertNotEquals(allocateStudentToTeamByIndexCommand.toString(), allocateStudentToTeamByStuIdCommand.toString());
+        assertNotEquals(allocateStudentToTeamByIndexCommand.toString(),
+                allocateOtherStudentToTeamByEmailCommand.toString());
     }
 
     @Test
     public void equals() {
+        Person validPerson = model.getAddressBook().getPersonList().get(0);
+        Person validOtherPerson = model.getAddressBook().getPersonList().get(1);
+        TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
         tutorialClass.addStudent(validOtherPerson);
         // creation of 2 allocation command based on 2 different student ID adding to the same team under

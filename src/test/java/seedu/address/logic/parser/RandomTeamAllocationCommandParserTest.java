@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.RandomTeamAllocationCommand;
+import seedu.address.logic.commands.allocatestudenttoteamcommands.*;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
@@ -36,14 +37,12 @@ public class RandomTeamAllocationCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        ModuleCode expectedModuleCode = new ModuleBuilder().withModuleCode(VALID_MODULE_AMY)
-                .withTutorialClasses(VALID_TUTORIAL_AMY).build();
         int expectedNumOfTeams = VALID_NUM_OF_TEAMS;
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + MODULE_DESC_AMY + TUTORIAL_DESC_AMY
-                + VALID_NUM_OF_TEAMS_DESC, new RandomTeamAllocationCommand(expectedModuleCode.getModule(),
-                expectedModuleCode.getTutorialClasses().get(0), expectedNumOfTeams));
+                + VALID_NUM_OF_TEAMS_DESC, new RandomTeamAllocationCommand(new ModuleCode(VALID_MODULE_AMY),
+                new TutorialClass(VALID_TUTORIAL_AMY), expectedNumOfTeams));
     }
 
     @Test
@@ -56,14 +55,6 @@ public class RandomTeamAllocationCommandParserTest {
 
         // multiple tutorial class
         assertParseFailure(parser, TUTORIAL_DESC_BOB + validExpectedAllocatorString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TUTORIALCLASS));
-
-        // invalid moduleCode
-        assertParseFailure(parser, INVALID_MODULE_DESC + validExpectedAllocatorString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_MODULECODE));
-
-        // invalid tutorialClass
-        assertParseFailure(parser, INVALID_TUTORIAL_DESC + validExpectedAllocatorString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TUTORIALCLASS));
     }
 
@@ -98,5 +89,13 @@ public class RandomTeamAllocationCommandParserTest {
         // invalid numOfTeams
         assertParseFailure(parser, MODULE_DESC_BOB + TUTORIAL_DESC_BOB + INVALID_NUM_OF_TEAMS_DESC,
                 TutorialTeam.MESSAGE_NUMBER_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_invalidArgs_throwsParseException() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                AllocateStudentToTeamCommand.MESSAGE_USAGE);
+        String invalidUserInput = "a";
+        assertParseFailure(parser, invalidUserInput, expectedMessage);
     }
 }
