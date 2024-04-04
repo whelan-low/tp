@@ -200,7 +200,7 @@ public class AddStudentCommandTest {
                                                   ModuleCode moduleCode) {
             return null;
         }
-        @Override    
+        @Override
         public void deleteStudentFromTeam(Person person, TutorialTeam tutorialTeam) {
             throw new AssertionError("This method should not be called.");
         }
