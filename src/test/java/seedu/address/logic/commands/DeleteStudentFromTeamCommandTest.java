@@ -25,7 +25,6 @@ import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentF
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIdCommand;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIndexCommand;
 import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamCommand;
-import seedu.address.logic.messages.PersonMessages;
 import seedu.address.logic.messages.TeamMessages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -64,14 +63,14 @@ public class DeleteStudentFromTeamCommandTest {
     }
 
     @Test
-    public void invalidAllocationToTeam_indexNotInSystem_failure() {
+    public void invalidDeletionFromTeam_indexNotInSystem_failure() {
         Index index = Index.fromOneBased(1000);
         DeleteStudentFromTeamByIndexCommand deleteStudentFromTeamByIndexCommand = new
                 DeleteStudentFromTeamByIndexCommand(index,
                 newModule, tutorialClass, newTeam);
         assertCommandFailure(deleteStudentFromTeamByIndexCommand, model,
-                String.format(PersonMessages.MESSAGE_PERSON_INDEX_NOT_FOUND,
-                        index.getOneBased(), tutorialClass));
+                String.format(TeamMessages.MESSAGE_PERSON_INDEX_NOT_FOUND,
+                        index.getOneBased(), newTeam));
     }
 
     @Test
@@ -131,8 +130,10 @@ public class DeleteStudentFromTeamCommandTest {
 
     @Test
     public void execute_deleteStudentFromClassById_success() {
+        int expectedTeamSizeBeforeDelete = 1;
+        int expectedTeamSizeAfterDelete = 0;
         newTeam.addStudent(validPerson);
-        assertEquals(1, newTeam.getStudents().size());
+        assertEquals(expectedTeamSizeBeforeDelete, newTeam.getStudents().size());
         // Attempt to delete the student
         assertCommandSuccess(new DeleteStudentFromTeamByIdCommand(validPerson.getStudentId(),
                         newModule, tutorialClass, newTeam),
@@ -140,20 +141,22 @@ public class DeleteStudentFromTeamCommandTest {
                 String.format(DeleteStudentFromTeamCommand.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS,
                         Messages.format(validPerson), newModule, tutorialClass, newTeam),
                 model);
-        assertEquals(0, newTeam.getStudents().size());
+        assertEquals(expectedTeamSizeAfterDelete, newTeam.getStudents().size());
     }
 
     @Test
     public void execute_deleteStudentFromClassByEmail_success() {
+        int expectedTeamSizeBeforeDelete = 1;
+        int expectedTeamSizeAfterDelete = 0;
         newTeam.addStudent(validPerson);
-        assertEquals(1, newTeam.getStudents().size());
+        assertEquals(expectedTeamSizeBeforeDelete, newTeam.getStudents().size());
         // Attempt to delete the student
         assertCommandSuccess(new DeleteStudentFromTeamByEmailCommand(validPerson.getEmail(),
                         newModule, tutorialClass, newTeam),
                 model,
                 String.format(DeleteStudentFromTeamCommand.MESSAGE_DELETE_STUDENT_FROM_TEAM_SUCCESS,
                         Messages.format(validPerson), newModule, tutorialClass, newTeam), model);
-        assertEquals(0, newTeam.getStudents().size());
+        assertEquals(expectedTeamSizeAfterDelete, newTeam.getStudents().size());
     }
 
     @Test
@@ -201,8 +204,14 @@ public class DeleteStudentFromTeamCommandTest {
         assertFalse(deleteStudentFromTeamByEmailCommand.equals(deleteOtherStudentFromTeamByEmailCommand));
 
 
+        Index testIndex = Index.fromOneBased(1);
         DeleteStudentFromTeamByIndexCommand deleteOtherStudentFromTeamByIndexCommand =
-                new DeleteStudentFromTeamByIndexCommand(Index.fromZeroBased(1),
+                new DeleteStudentFromTeamByIndexCommand(testIndex,
+                        newModule, tutorialClass, newTeam);
+
+        Index anotherTestIndex = Index.fromOneBased(2);
+        DeleteStudentFromTeamByIndexCommand deleteAnotherStudentFromTeamByIndexCommand =
+                new DeleteStudentFromTeamByIndexCommand(anotherTestIndex,
                         newModule, tutorialClass, newTeam);
 
         // same object
@@ -213,5 +222,8 @@ public class DeleteStudentFromTeamCommandTest {
 
         // null --> returns false
         assertFalse(deleteOtherStudentFromTeamByIndexCommand.equals(null));
+
+        //different index --> returns false
+        assertFalse(deleteOtherStudentFromTeamByIndexCommand.equals(deleteAnotherStudentFromTeamByIndexCommand));
     }
 }

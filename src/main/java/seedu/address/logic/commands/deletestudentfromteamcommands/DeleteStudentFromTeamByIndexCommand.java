@@ -6,7 +6,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.messages.PersonMessages;
 import seedu.address.logic.messages.TeamMessages;
 import seedu.address.model.Model;
 import seedu.address.model.module.ModuleCode;
@@ -40,7 +39,8 @@ public class DeleteStudentFromTeamByIndexCommand extends DeleteStudentFromTeamCo
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ModuleTutorialPair moduleAndTutorialClass = getModuleAndTutorialClass(model);
+        ModuleTutorialPair moduleAndTutorialClass = ModuleTutorialPair.getModuleAndTutorialClass(model,
+                getModule(), getTutorialClass());
         TutorialClass tutorialClass = moduleAndTutorialClass.getTutorialClass();
         ModuleCode module = moduleAndTutorialClass.getModule();
 
@@ -49,10 +49,10 @@ public class DeleteStudentFromTeamByIndexCommand extends DeleteStudentFromTeamCo
         Person personToDelete;
 
         try {
-            personToDelete = model.getFilteredPersonList().get(targetIndex.getZeroBased());
+            personToDelete = team.getStudents().get(targetIndex.getZeroBased());
         } catch (IndexOutOfBoundsException e) {
             throw new CommandException(
-                    String.format(PersonMessages.MESSAGE_PERSON_INDEX_NOT_FOUND, targetIndex.getOneBased()));
+                    String.format(TeamMessages.MESSAGE_PERSON_INDEX_NOT_FOUND, targetIndex.getOneBased(), team));
         }
 
         if (team == null) {

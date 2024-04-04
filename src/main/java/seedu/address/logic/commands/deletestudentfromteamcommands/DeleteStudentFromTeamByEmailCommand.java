@@ -43,21 +43,21 @@ public class DeleteStudentFromTeamByEmailCommand extends DeleteStudentFromTeamCo
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        ModuleTutorialPair moduleAndTutorialClass = getModuleAndTutorialClass(model);
+        ModuleTutorialPair moduleAndTutorialClass = ModuleTutorialPair.getModuleAndTutorialClass(model,
+                getModule(), getTutorialClass());
         TutorialClass tutorialClass = moduleAndTutorialClass.getTutorialClass();
         ModuleCode module = moduleAndTutorialClass.getModule();
 
         TutorialTeam team = tutorialClass.getTutorialTeam(tutorialClass, tutorialTeam);
-
-        Person personToDelete;
-
-        personToDelete = model.searchPersonByPredicate(predicate);
-        if (personToDelete == null) {
-            throw new CommandException(String.format(PersonMessages.MESSAGE_PERSON_EMAIL_NOT_FOUND, email));
-        }
         if (team == null) {
             throw new CommandException(String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, tutorialTeam,
                     tutorialClass));
+        }
+
+        Person personToDelete;
+        personToDelete = model.searchPersonByPredicate(predicate);
+        if (personToDelete == null) {
+            throw new CommandException(String.format(PersonMessages.MESSAGE_PERSON_EMAIL_NOT_FOUND, email));
         }
         if (!(team.hasStudent(personToDelete))) {
             throw new CommandException(
