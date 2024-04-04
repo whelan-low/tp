@@ -8,19 +8,34 @@
 
 TAHelper is a **desktop app for managing contacts, optimized for use via a Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAHelper can get your students' contact management tasks done faster than traditional GUI apps.
 
-- For some uncommon or unfamiliar terms used in this User Guide, ![click here](link to glossary) for the definition and explanation of some.
+- For some uncommon or unfamiliar terms used in this User Guide, [click here](#glossary) for the definition and explanation of some.
 
+## Why choose TAHelper?
+
+## Table of contents
 <!-- * Table of Contents -->
 <page-nav-print />
 ---
 
 ## Target Audience
 
-TAHelper is specifically designed to assist and help Teaching Assistants (TA) of NUS Computer Science Modules,
+- TAHelper is specifically designed to assist and help Teaching Assistants (TA) of NUS Computer Science Modules,
 which caters to their need to store information in a way that is easy to track and visualise, as well as keep student's
 details in a centralised storage. Our target audience is specifically only TAs of NUS Computer Science Modules.
 
 ## Purpose of User Guide
+- The purpose of the User Guide (UG) for TAHelper is to provide our target users, TAs of NUS Computer Science modules, with a comprehensive resource that
+helps user effectively use and understand our application. In the User Guide, we display clear instructions, a quick start guide, and explanations to help users use TAHelper seamlessly
+and effectively. This help users learn the new system in an extremely short timeframe, while allowing them to understand this application deeply, optimise their workflows and improve their
+student contact management in the classes they teach.
+  
+## Navigating the User Guide
+Welcome to the TAHelper User Guide! Our goal is to assist and provide you the luxury of information, knowledge and utmost
+confidence to make full use of TAHelper's features.
+
+- Effortless Navigation: [Refer here](#table-of-contents) for the table of contents to aid your navigation.
+- Quick start guide for New Users: If you're a new user, visit our [Quick Start](#quick-start) section to set up and launch the application!
+- Features: Want to leverage the capabilities of TAHelper? Visit our [Features](#features) section to fully utilise the features we offer!
 
 ## Quick start
 
@@ -69,6 +84,10 @@ details in a centralised storage. Our target audience is specifically only TAs o
 
     - For more Commands that will improve your experience, ![click here]
 
+## Navigating the GUI
+
+GUI Components
+
 
 
 Commands on students:
@@ -102,6 +121,10 @@ Commands on modules:
 <box type="info" seamless>
 
 **Notes about the command format:**<br>
+### Command Format
+Here are the main components of the commands:
+
+Here are symbols used in the commands:
 
 - Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add name/NAME`, `NAME` is a parameter which can be used as `add name/John Doe`.
