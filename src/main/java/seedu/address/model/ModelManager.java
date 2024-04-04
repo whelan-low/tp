@@ -160,6 +160,17 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void deleteStudentFromTeam(Person student, TutorialTeam tutorialTeam) {
+        requireAllNonNull(student, tutorialTeam);
+        addressBook.deleteStudentFromTeam(student, tutorialTeam);
+    }
+
+    /**
+     * Generates a given number of teams for the tutorial class
+     * @param moduleCode of the module to add teams to
+     * @param tutorialClass of the module to add teams to
+     * @param numOfTeams to be added
+     */
     public void randomTeamAllocation(ModuleCode moduleCode, TutorialClass tutorialClass, int numOfTeams) {
         requireAllNonNull(moduleCode, tutorialClass, numOfTeams);
         addressBook.randomTeamAllocation(moduleCode, tutorialClass, numOfTeams);
