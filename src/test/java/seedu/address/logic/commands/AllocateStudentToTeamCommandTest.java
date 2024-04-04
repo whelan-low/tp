@@ -18,11 +18,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByEmailCommand;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByIndexCommand;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByStuIdCommand;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand;
-import seedu.address.logic.messages.TeamMessages;
+import seedu.address.logic.messages.PersonMessages;
 import seedu.address.logic.messages.TutorialClassMessages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -35,7 +36,6 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
 import seedu.address.testutil.ModuleBuilder;
-
 
 public class AllocateStudentToTeamCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
@@ -64,7 +64,7 @@ public class AllocateStudentToTeamCommandTest {
                 AllocateStudentToTeamByIndexCommand(index,
                 newModule, tutorialClass, newTeam);
         assertCommandFailure(allocateStudentToTeamByIndexCommand, model,
-                String.format(TutorialClassMessages.MESSAGE_PERSON_INDEX_NOT_FOUND,
+                String.format(TutorialClassMessages.MESSAGE_PERSON_INDEX_NOT_FOUND_IN_CLASS,
                         index.getOneBased(), tutorialClass));
     }
 
@@ -81,9 +81,9 @@ public class AllocateStudentToTeamCommandTest {
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
                 AllocateStudentToTeamByEmailCommand(otherValidPerson.getEmail(), newModule, tutorialClass, newTeam);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
+                String.format(TutorialTeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
+                String.format(TutorialTeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
     }
 
     @Test
@@ -94,9 +94,9 @@ public class AllocateStudentToTeamCommandTest {
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
                 AllocateStudentToTeamByEmailCommand(new Email(VALID_EMAIL), newModule, tutorialClass, newTeam);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(MESSAGE_STUDENT_DOES_NOT_EXIST));
+                String.format(PersonMessages.MESSAGE_PERSON_STUDENT_ID_NOT_FOUND, VALID_STUDENT_ID));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(MESSAGE_STUDENT_DOES_NOT_EXIST));
+                String.format(PersonMessages.MESSAGE_PERSON_EMAIL_NOT_FOUND, VALID_EMAIL));
     }
 
     @Test
@@ -105,16 +105,16 @@ public class AllocateStudentToTeamCommandTest {
         Person validPerson = model.getAddressBook().getPersonList().get(0);
         TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
 
-        AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand = new
-                AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass,
-                team);
-        AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
-                AllocateStudentToTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass,
-                team);
+        AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand =
+                new AllocateStudentToTeamByStuIdCommand(
+                        validPerson.getStudentId(), newModule, tutorialClass, team);
+        AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand =
+                new AllocateStudentToTeamByEmailCommand(
+                        validPerson.getEmail(), newModule, tutorialClass, team);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
+                String.format(TutorialTeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
+                String.format(TutorialTeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
     }
 
     @Test
@@ -132,12 +132,12 @@ public class AllocateStudentToTeamCommandTest {
                 AllocateStudentToTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass,
                 tutTeam);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(TeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutorialClass));
+                String.format(TutorialTeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM,
+                        Messages.format(validPerson), tutorialClass));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(TeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutorialClass));
+                String.format(TutorialTeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM,
+                        Messages.format(validPerson), tutorialClass));
     }
-
-
 
     @Test
     public void validAllocationToTeam_byEmail_success() {
@@ -170,7 +170,6 @@ public class AllocateStudentToTeamCommandTest {
                 String.format(AllocateStudentToTeamByEmailCommand.MESSAGE_SUCCESS, tutTeam), expectedModel);
     }
 
-
     @Test
     public void validAllocationToTeam_indexInSystem_success() {
         Person validPerson = model.getAddressBook().getPersonList().get(0);
@@ -186,7 +185,6 @@ public class AllocateStudentToTeamCommandTest {
         assertCommandSuccess(allocateStudentToTeamByIndexCommand, model,
                 String.format(AllocateStudentToTeamByIndexCommand.MESSAGE_SUCCESS, newTeam), expectedModel);
     }
-
 
     @Test
     public void invalidAllocationToTeam_studentNotInTutorialClass_failure() {
@@ -208,13 +206,14 @@ public class AllocateStudentToTeamCommandTest {
         TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand =
-                new AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByStuIdCommand(
+                        validPerson.getStudentId(), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByEmailCommand allocateOtherStudentToTeamByEmailCommand =
                 new AllocateStudentToTeamByEmailCommand(validPerson.getEmail(),
                         newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByIndexCommand allocateStudentToTeamByIndexCommand =
-                new AllocateStudentToTeamByIndexCommand(Index.fromZeroBased(0),
-                        newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByIndexCommand(
+                        Index.fromZeroBased(0), newModule, tutorialClass, newTeam);
         assertEquals(allocateOtherStudentToTeamByEmailCommand.toString(),
                 allocateOtherStudentToTeamByEmailCommand.toString());
         assertEquals(allocateStudentToTeamByStuIdCommand.toString(),
@@ -233,13 +232,15 @@ public class AllocateStudentToTeamCommandTest {
         TutorialClass tutorialClass = newModule.getTutorialClasses().get(0);
         tutorialClass.addStudent(validPerson);
         tutorialClass.addStudent(validOtherPerson);
-        // creation of 2 allocation command based on 2 different student ID adding to the same team under
+        // creation of 2 allocation command based on 2 different student ID adding to
+        // the same team under
         // the same module and tutorial class.
         AllocateStudentToTeamByStuIdCommand allocateStudentToTeamByStuIdCommand =
-                new AllocateStudentToTeamByStuIdCommand(validPerson.getStudentId(), newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByStuIdCommand(
+                        validPerson.getStudentId(), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByStuIdCommand allocateOtherStudentToTeamByStuIdCommand =
-                new AllocateStudentToTeamByStuIdCommand(validOtherPerson.getStudentId(),
-                        newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByStuIdCommand(
+                        validOtherPerson.getStudentId(), newModule, tutorialClass, newTeam);
 
         // same object --> returns true
         assertTrue(allocateStudentToTeamByStuIdCommand.equals(allocateStudentToTeamByStuIdCommand));
@@ -253,13 +254,15 @@ public class AllocateStudentToTeamCommandTest {
         // allocation of a different person --> returns false
         assertFalse(allocateStudentToTeamByStuIdCommand.equals(allocateOtherStudentToTeamByStuIdCommand));
 
-        // creation of 2 allocation command based on 2 different student emails adding to the same team under
+        // creation of 2 allocation command based on 2 different student emails adding
+        // to the same team under
         // the same module and tutorial class.
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand =
-                new AllocateStudentToTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByEmailCommand(
+                        validPerson.getEmail(), newModule, tutorialClass, newTeam);
         AllocateStudentToTeamByEmailCommand allocateOtherStudentToTeamByEmailCommand =
-                new AllocateStudentToTeamByEmailCommand(validOtherPerson.getEmail(),
-                        newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByEmailCommand(
+                        validOtherPerson.getEmail(), newModule, tutorialClass, newTeam);
 
         // same object --> returns true
         assertTrue(allocateStudentToTeamByEmailCommand.equals(allocateStudentToTeamByEmailCommand));
@@ -273,10 +276,9 @@ public class AllocateStudentToTeamCommandTest {
         // allocation of a different person --> returns false
         assertFalse(allocateStudentToTeamByEmailCommand.equals(allocateOtherStudentToTeamByEmailCommand));
 
-
         AllocateStudentToTeamByIndexCommand allocateOtherStudentToTeamByIndexCommand =
-                new AllocateStudentToTeamByIndexCommand(Index.fromZeroBased(1),
-                        newModule, tutorialClass, newTeam);
+                new AllocateStudentToTeamByIndexCommand(
+                        Index.fromZeroBased(1), newModule, tutorialClass, newTeam);
 
         // same object
         assertTrue(allocateOtherStudentToTeamByIndexCommand.equals(allocateOtherStudentToTeamByIndexCommand));
