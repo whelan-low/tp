@@ -9,44 +9,32 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_TUTORIAL_DESC
 import static seedu.address.logic.commands.CommandTestUtil.MODULE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
 import static seedu.address.logic.commands.CommandTestUtil.TEAM_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.TEAM_NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TUTORIAL_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.TUTORIAL_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_MODULE_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TUTORIAL_AMY;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAMNAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.address.model.module.ModuleCodeTest.VALID_MODULE_CODE;
-import static seedu.address.model.module.ModuleCodeTest.VALID_TUTORIAL_1;
 import static seedu.address.testutil.Assert.assertThrows;
-import static seedu.address.testutil.TypicalPersons.AMY;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByEmailCommand;
-import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByStuIdCommand;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand;
-import seedu.address.logic.parser.exceptions.*;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
-import seedu.address.model.person.*;
-import seedu.address.testutil.*;
+import seedu.address.model.person.Email;
 
 public class AllocateStudentToTeamCommandParserTest {
     private AllocateStudentToTeamCommandParser parser = new AllocateStudentToTeamCommandParser();
 
     @Test
     public void parse_allFieldPresent_success() {
-        assertParseSuccess(parser,  PREAMBLE_WHITESPACE + EMAIL_DESC_AMY +  MODULE_DESC_AMY + TUTORIAL_DESC_AMY
+        assertParseSuccess(parser, PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + MODULE_DESC_AMY + TUTORIAL_DESC_AMY
                 + TEAM_DESC_AMY,
                 new AllocateStudentToTeamByEmailCommand(new Email(VALID_EMAIL_AMY), new ModuleCode(VALID_MODULE_AMY),
                         new TutorialClass(VALID_TUTORIAL_AMY), new TutorialTeam(VALID_TEAM_NAME_AMY)));
@@ -64,7 +52,7 @@ public class AllocateStudentToTeamCommandParserTest {
     public void parse_emailMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 AllocateStudentToTeamCommand.MESSAGE_USAGE);
-        assertParseFailure(parser,  PREAMBLE_WHITESPACE + MODULE_DESC_AMY + TUTORIAL_DESC_AMY
+        assertParseFailure(parser, PREAMBLE_WHITESPACE + MODULE_DESC_AMY + TUTORIAL_DESC_AMY
                         + TEAM_DESC_AMY, expectedMessage);
     }
 
@@ -72,7 +60,7 @@ public class AllocateStudentToTeamCommandParserTest {
     public void parse_moduleMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 AllocateStudentToTeamCommand.MESSAGE_USAGE);
-        assertParseFailure(parser,  PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + TUTORIAL_DESC_AMY
+        assertParseFailure(parser, PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + TUTORIAL_DESC_AMY
                         + TEAM_DESC_AMY, expectedMessage);
     }
 
@@ -80,30 +68,30 @@ public class AllocateStudentToTeamCommandParserTest {
     public void parse_tutorialMissing_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 AllocateStudentToTeamCommand.MESSAGE_USAGE);
-        assertParseFailure(parser,  PREAMBLE_WHITESPACE + EMAIL_DESC_AMY +  MODULE_DESC_AMY
+        assertParseFailure(parser, PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + MODULE_DESC_AMY
                         + TEAM_DESC_AMY, expectedMessage);
     }
 
     @Test
     public void parse_invalidInput_failure() {
         // invalid email
-        String invalidEmailInput = PREAMBLE_WHITESPACE + INVALID_EMAIL_DESC +  MODULE_DESC_AMY + TUTORIAL_DESC_AMY
+        String invalidEmailInput = PREAMBLE_WHITESPACE + INVALID_EMAIL_DESC + MODULE_DESC_AMY + TUTORIAL_DESC_AMY
                 + TEAM_DESC_AMY;
         assertThrows(ParseException.class, () -> parser.parse(invalidEmailInput));
 
         // invalid module
-        String invalidModuleInput = PREAMBLE_WHITESPACE + EMAIL_DESC_AMY +  INVALID_MODULE_DESC + TUTORIAL_DESC_AMY
+        String invalidModuleInput = PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + INVALID_MODULE_DESC + TUTORIAL_DESC_AMY
                 + TEAM_DESC_AMY;
         assertThrows(ParseException.class, () -> parser.parse(invalidModuleInput));
 
         // invalid tutorial
-        String invalidTutorialInput = PREAMBLE_WHITESPACE + EMAIL_DESC_AMY +  MODULE_DESC_AMY +
-                INVALID_TUTORIAL_DESC + TEAM_DESC_AMY;
+        String invalidTutorialInput = PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + MODULE_DESC_AMY
+                + INVALID_TUTORIAL_DESC + TEAM_DESC_AMY;
         assertThrows(ParseException.class, () -> parser.parse(invalidTutorialInput));
 
         // invalid team
-        String invalidTeamInput = PREAMBLE_WHITESPACE + EMAIL_DESC_AMY +  MODULE_DESC_AMY +
-                TUTORIAL_DESC_AMY + INVALID_TEAM_DESC_AMY;
+        String invalidTeamInput = PREAMBLE_WHITESPACE + EMAIL_DESC_AMY + MODULE_DESC_AMY
+                + TUTORIAL_DESC_AMY + INVALID_TEAM_DESC_AMY;
         assertThrows(ParseException.class, () -> parser.parse(invalidTeamInput));
     }
 
@@ -111,8 +99,8 @@ public class AllocateStudentToTeamCommandParserTest {
     public void parse_prefixRepeat_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 AllocateStudentToTeamCommand.MESSAGE_USAGE);
-        assertParseFailure(parser,  PREAMBLE_WHITESPACE +
-                PREFIX_MODULECODE + EMAIL_DESC_AMY + MODULE_DESC_AMY + TUTORIAL_DESC_AMY + TEAM_DESC_AMY,
+        assertParseFailure(parser, PREAMBLE_WHITESPACE + PREFIX_MODULECODE
+                        + EMAIL_DESC_AMY + MODULE_DESC_AMY + TUTORIAL_DESC_AMY + TEAM_DESC_AMY,
                 expectedMessage);
     }
 }

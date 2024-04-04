@@ -26,11 +26,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.RandomTeamAllocationCommand;
-import seedu.address.logic.commands.allocatestudenttoteamcommands.*;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
-import seedu.address.testutil.ModuleBuilder;
 
 public class RandomTeamAllocationCommandParserTest {
     private RandomTeamAllocationCommandParser parser = new RandomTeamAllocationCommandParser();
@@ -41,8 +39,8 @@ public class RandomTeamAllocationCommandParserTest {
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + MODULE_DESC_AMY + TUTORIAL_DESC_AMY
-                + VALID_NUM_OF_TEAMS_DESC, new RandomTeamAllocationCommand(new ModuleCode(VALID_MODULE_AMY),
-                new TutorialClass(VALID_TUTORIAL_AMY), expectedNumOfTeams));
+                + VALID_NUM_OF_TEAMS_DESC, new RandomTeamAllocationCommand(
+                        new ModuleCode(VALID_MODULE_AMY), new TutorialClass(VALID_TUTORIAL_AMY), expectedNumOfTeams));
     }
 
     @Test
@@ -94,7 +92,7 @@ public class RandomTeamAllocationCommandParserTest {
     @Test
     public void parse_invalidArgs_throwsParseException() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                AllocateStudentToTeamCommand.MESSAGE_USAGE);
+                RandomTeamAllocationCommand.MESSAGE_USAGE);
         String invalidUserInput = "a";
         assertParseFailure(parser, invalidUserInput, expectedMessage);
     }

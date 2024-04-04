@@ -5,19 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_MODULE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENT_ID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_NEW;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TUTORIAL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand.MESSAGE_STUDENT_DOES_NOT_EXIST;
-import static seedu.address.testutil.TypicalPersons.ALICE;
-import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,14 +24,17 @@ import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStuden
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand;
 import seedu.address.logic.messages.TeamMessages;
 import seedu.address.logic.messages.TutorialClassMessages;
-import seedu.address.model.*;
+import seedu.address.model.AddressBook;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
 import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.StudentId;
-import seedu.address.testutil.*;
+import seedu.address.testutil.ModuleBuilder;
 
 
 public class AllocateStudentToTeamCommandTest {
