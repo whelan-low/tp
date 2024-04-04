@@ -124,11 +124,26 @@ public class TutorialClass {
 
     /**
      * Removes a student from the tutorial class if it exists.
+     * Also removes the student from any tutorial class in this tutorial
+     *
      * @param student
      * @return true if the student was removed
      */
     public boolean deleteStudent(Person student) {
+        deleteStudentFromTeams(student);
         return students.remove(student);
+    }
+
+    /**
+     * Deletes a specified student from all teams from a tutorial class in a model.
+     *
+     * @param student to be deleted
+     */
+    public void deleteStudentFromTeams(Person student) {
+        ArrayList<TutorialTeam> list = getTeams();
+        for (TutorialTeam team : list) {
+            team.deleteStudent(student);
+        }
     }
 
     /**
