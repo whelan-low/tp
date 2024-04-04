@@ -11,7 +11,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_NEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand.MESSAGE_STUDENT_DOES_NOT_EXIST;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +24,7 @@ import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStuden
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand;
 import seedu.address.logic.messages.PersonMessages;
 import seedu.address.logic.messages.TutorialClassMessages;
+import seedu.address.logic.messages.TutorialTeamMessages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
