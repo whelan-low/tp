@@ -11,6 +11,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_MODULECODE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAMNAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -44,9 +45,13 @@ import seedu.address.logic.commands.deletestudentcommands.DeleteStudentCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassByEmailCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassByIdCommand;
 import seedu.address.logic.commands.deletestudentfromclasscommands.DeleteStudentFromClassCommand;
+import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByEmailCommand;
+import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamByIdCommand;
+import seedu.address.logic.commands.deletestudentfromteamcommands.DeleteStudentFromTeamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.module.ModuleCode;
 import seedu.address.model.module.TutorialClass;
+import seedu.address.model.module.TutorialTeam;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.NameContainsKeywordPredicate;
 import seedu.address.model.person.Person;
@@ -198,6 +203,36 @@ public class AddressBookParserTest {
 
         assertEquals(new DeleteStudentFromClassByIdCommand(new StudentId(VALID_STUDENT_ID_AMY),
                 new ModuleCode(moduleCode), new TutorialClass(tutorialClass)), deleteByIdCommand);
+    }
+
+    @Test
+    public void parseCommand_deleteStudentFromTeam() throws Exception {
+        final String moduleCode = "CS2103T";
+        final String tutorialClass = "T09";
+        final String tutorialTeam = "Team 4";
+        final String email = VALID_EMAIL_AMY;
+        final String id = VALID_STUDENT_ID_AMY;
+        final Index index = INDEX_FIRST_PERSON;
+
+        DeleteStudentFromTeamCommand deleteByEmailCommand = (DeleteStudentFromTeamCommand) parser.parseCommand(
+                DeleteStudentFromTeamCommand.COMMAND_WORD + " "
+                        + PREFIX_EMAIL + email + " " + PREFIX_MODULECODE
+                        + moduleCode + " " + PREFIX_TUTORIALCLASS + tutorialClass
+                        + " " + PREFIX_TEAMNAME + tutorialTeam);
+
+        DeleteStudentFromTeamCommand deleteByIdCommand = (DeleteStudentFromTeamCommand) parser.parseCommand(
+                DeleteStudentFromTeamCommand.COMMAND_WORD + " "
+                        + PREFIX_STUDENTID + id + " " + PREFIX_MODULECODE
+                        + moduleCode + " " + PREFIX_TUTORIALCLASS + tutorialClass
+                        + " " + PREFIX_TEAMNAME + tutorialTeam);
+
+        assertEquals(new DeleteStudentFromTeamByEmailCommand(new Email(VALID_EMAIL_AMY),
+                new ModuleCode(moduleCode), new TutorialClass(tutorialClass),
+                new TutorialTeam(tutorialTeam)), deleteByEmailCommand);
+
+        assertEquals(new DeleteStudentFromTeamByIdCommand(new StudentId(VALID_STUDENT_ID_AMY),
+                new ModuleCode(moduleCode), new TutorialClass(tutorialClass),
+                new TutorialTeam(tutorialTeam)), deleteByIdCommand);
     }
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
