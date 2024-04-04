@@ -137,7 +137,7 @@ Here are the main components of the commands:
 | Parameters   | NAME, EMAIL, STUDENTID | The value of the attribute that the user have to provide after the prefix.                                                                        |
 | Index        | 1, 3                   | The position of the student in the list it is referencing. Eg. Index 1 of tutorial class `T01` refers to the 1st student in the `T01` class list. | 
 
-Here are symbols used in the commands: (TODO)
+Here are symbols used in the commands:
 
 | Symbol | Example         | Description                                                                          |
 |--------|:----------------|--------------------------------------------------------------------------------------|
