@@ -56,7 +56,7 @@ confidence to make full use of TAHelper's features.
     - Copy the file `tahelper.jar` to the folder you want to use as the _home folder_ for your TAHelper.
     - Tip: name that folder `TAHelper` to facilitate organisation and easy access.
 
-5. Using the Terminal to run the application
+4. Using the Terminal to run the application
     - Windows OS:
       - Press the windows button and type `cmd` into the search bar.
       - Then `cd` into the folder you put the jar file in.
@@ -68,17 +68,17 @@ confidence to make full use of TAHelper's features.
       - It should look something like this:
       - 
 
-
-6. Launching TAHelper
+5. Launching TAHelper
     - Type `java -jar tahelper.jar` command and hit Enter to run TAHelper.<br>
     - It should look something like this (in this case my jar file is in a folder called tahelper): 
     - ![cmd](images/cmdwinguide2.png) 
+
    
     - A GUI similar to the below should appear in a few seconds.<br>
     - ![Ui](images/Ui.png) (to update!!).
 
 
-7. Here are some commands to try out to get a feel of a TAHelper! type them in the Command box
+6. Here are some commands to try out to get a feel of a TAHelper! type them in the Command box
     - `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`: Adds a new student contact with the name, email and ID specified.
       - A new student entry should appear on the UI with the details reflected clearly.
 
@@ -158,6 +158,8 @@ Parameters:
 | SIZE        | size/        | The size of the team. A single numeric integer value that is more than 0.                                                                                                   |
 | DESCRIPTION | description/ | The description of the module.                                                                                                                                              |
 | BY          | by/          | The parameter you want to search by, Alphanumeric characters                                                                                                                |
+
+Here are symbols used in the commands:
 
 - Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add name/NAME`, `NAME` is a parameter which can be used as `add name/John Doe`.
@@ -252,6 +254,7 @@ Expected output:
 The command will display the list of all students along with their student information. If there are no existing students, the command will return a message indicating that there are no students currently.
 
 ---
+
 ### Allocating students to tutorial teams : `allocate_team`
 
 Allocates a student to an existing tutorial team within a tutorial class.
