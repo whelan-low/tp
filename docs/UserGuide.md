@@ -104,7 +104,11 @@ Commands on students:
 
    - `/search_student id/A0123456A or /search_student email/johndoe@gmail.com` : Searches for a student with id `A0123456A` or email `johndoe@gmail.com`.
 
+   - `/edit_student index/1 name/John` : Edits the first student's name to `John`
+
    - `/list_students` : View the list of all students available.
+
+   - `/sort_students by/id or by/name` : Sorts the list of students in lexicographical order by id or name.
 
    - `/add_class module/CS2103T class/T09` : Adds a new tutorial class `T09` under the module `CS2103T`.
 
@@ -164,6 +168,7 @@ Parameters:
 | SIZE        | size/        | The size of the team. A single numeric integer value that is more than 0.                                                                                                   |
 | DESCRIPTION | description/ | The description of the module.                                                                                                                                              |
 | BY          | by/          | The parameter you want to search by, Alphanumeric characters                                                                                                                |
+| INDEX       | index/       | The index of the associated student                                                                                                                                         |
 
 Here are symbols used in the commands:
 
@@ -233,21 +238,42 @@ Examples:
 - Delete by index: `/delete_student index/1`
 
 ---
-### Searching for students : `search`
+### Searching for students : `search_student`
 
 Search for a student's contact based on specified query.
 
-Format: `/search_student [id/STUDENT_ID] [email/EMAIL] [class/TUTORIAL_CLASS] [name/NAME]`
+Format: `/search_student [id/STUDENT_ID] [email/EMAIL] [name/NAME]`
 
 - At least one of the optional attributes must be provided.
 - The search query is case-insensitive. e.g. `ian` will match `Ian`
 - The search query will match information corresponding to the optional attribute. e.g. `id/` will only search for IDs
 - Partial matches will also be displayed e.g. `@gmail` will return **ALL** emails containing `@gmail`
 
-Examples:
+Expected output:
+The command will display the list of all students that match the corresponding prefix.  If there are no existing students, the command will return a message indicating that there are no students listed.
 
+Examples:
 - `/search_student id/A012345A` Returns student with corresponding id
 - `/search_student email/@GMAIL` Returns all students who have `@gmail` in their email
+
+---
+### Edit student contact: `edit_student`
+
+Edit a student contact by index number in the displayed student list.
+
+Format: `/edit_student index/INDEX [id/STUDENT_ID] [email/EMAIL] [name/NAME]`
+
+- Index has to be a positive integer.
+- At least one of the optional parameters must be provided.
+- Multiple parameters can be provided (not duplicates). Command will edit all parameters specified.
+- If the edited student id or email already exists in the list, the command will return an error message.
+
+Expected output:
+Upon successful editing, the command will return a confirmation message stating that the student contact has been edited along with the edited student contact.
+
+Examples:
+- `/edit_student index/1 name/Aaron` will edit the student's name at index 1
+- `/edit_student index/5 id/A1234567B email/new_email@gmail.com` will edit the student's id and email at index 5
 
 ---
 ### Listing all students : `list_students`
@@ -257,10 +283,27 @@ View the list of all students available
 Format: `/list_students`
 
 Expected output:
-The command will display the list of all students along with their student information. If there are no existing students, the command will return a message indicating that there are no students currently.
+The command will display the list of all students along with their student information. If there are no matching students, a message will display indicating no students listed.
 
 ---
+### Sort all students: `sort_students`
 
+Sorts the list of students by specified parameter
+
+Format: `/sort_students by/BY`
+
+- Available parameters include: `name`, `id`, `email`
+- Only one parameter can be used per command call
+- Students' contacts are sorted in lexicographical order.
+
+Expected output:
+The command will display the list of all students, sorted by the specified parameter, in lexicographical order.
+
+Examples:
+- `/sort_student by/name`
+- `/sort_student by/email`
+
+---
 ### Allocating students to tutorial teams : `allocate_team`
 
 Allocates a student to an existing tutorial team within a tutorial class.
@@ -537,6 +580,7 @@ must be in the team before command execution.Explanation: This deletes the stude
 | **TAHelper**                       | A contact management application to help TAs keep track of students in classes they teach.                                                                                                                     |
 | **Graphical User Interface (GUI)** | is a type of interface that allows users to interact with electronic devices through graphical icons and visual indicators,<br> as opposed to text-based interfaces, typed command labels, or text navigation. |
 | **Command Line Interface (CLI)**   | is a text-based user interface used to interact with software, through the use of key words command such as 'cd'.                                                                                              |
+| **Lexicographical Order**          | is the ordering of strings based on the unicode value of each character in the string.                                                                                                                         |
 | **CS**                             | Refers to Computer Science.                                                                                                                                                                                    |
 | **NUS**                            | Refers to National University Of Singapore, which is located at Central Singapore.                                                                                                                             |
 
@@ -549,6 +593,7 @@ must be in the team before command execution.Explanation: This deletes the stude
 | **Add New Students**                    | `/add_student name/ <student_name> id/ <student_id> email/ <student_email> tag/<tag>` <br> e.g., `/add_student name/Dohn Joe id/A0123456A email/johndoe@gmail.com id/A0123456A`                                                          |
 | **Delete students**                     | `/delete_student <id/, email/> <id or email>`<br> e.g., `delete_student id/A0259209B` or `/delete_student email/johndoe@gmail.com`                                                                                                       |
 | **Search for students**                 | `/search_student <id/, email/, tc/, name/> <id or email or tutorial or name>`<br> e.g.,`/search_student id/A0123456A`                                                                                                                    |
+| **Edit student contact**                | `/edit_student index/<index> <id/, email/, name/, tag/>`<br> e.g.,`/edit_student index/1 name/John`                                                                                                                                      |
 | **Sort students**                       | `/sort_students by/<name or email or id> `<br> e.g.,`search_student by/id` or `/search_student by/name`                                                                                                                                  |
 | **View all students**                   | `/list_students`                                                                                                                                                                                                                         |
 | **Add new tutorial class**              | `/add_class module/<module_code> tutorial/<tutorial_class>` <br> e.g., `/add_class module/CS2103T tutorial/T09`                                                                                                                          |
