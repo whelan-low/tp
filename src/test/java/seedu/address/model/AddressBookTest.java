@@ -111,6 +111,18 @@ public class AddressBookTest {
     }
 
     @Test
+    public void deleteStudentFromTeam_personIsNull_failure() {
+        TutorialTeam tutorialTeam = new TutorialTeam(VALID_TEAM_NAME);
+        assertThrows(NullPointerException.class, () -> addressBook.deleteStudentFromTeam(null, tutorialTeam));
+    }
+
+    @Test
+    public void deleteStudentFromTeam_teamIsNull_failure() {
+        Person person = new PersonBuilder(ALICE).build();
+        assertThrows(NullPointerException.class, () -> addressBook.deleteStudentFromTeam(person, null));
+    }
+
+    @Test
     public void allocateStudentToTeam_tutorialTeamIsNull_failure() {
         Person person = new PersonBuilder(ALICE).build();
         assertThrows(NullPointerException.class, () -> addressBook.allocateStudentToTeam(person, null));

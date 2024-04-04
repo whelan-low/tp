@@ -14,9 +14,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TEAM_NAME_NEW;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TUTORIAL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand.MESSAGE_DUPLICATE_PERSON_IN_TEAM;
 import static seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand.MESSAGE_STUDENT_DOES_NOT_EXIST;
-import static seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand.MESSAGE_TEAM_DOES_NOT_EXIST;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -29,6 +27,8 @@ import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStuden
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByIndexCommand;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamByStuIdCommand;
 import seedu.address.logic.commands.allocatestudenttoteamcommands.AllocateStudentToTeamCommand;
+import seedu.address.logic.messages.TeamMessages;
+import seedu.address.logic.messages.TutorialClassMessages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -75,7 +75,7 @@ public class AllocateStudentToTeamCommandTest {
                 AllocateStudentToTeamByIndexCommand(index,
                 newModule, tutorialClass, newTeam);
         assertCommandFailure(allocateStudentToTeamByIndexCommand, model,
-                String.format(AllocateStudentToTeamByIndexCommand.MESSAGE_PERSON_INDEX_NOT_FOUND,
+                String.format(TutorialClassMessages.MESSAGE_PERSON_INDEX_NOT_FOUND,
                         index.getOneBased(), tutorialClass));
     }
 
@@ -89,9 +89,9 @@ public class AllocateStudentToTeamCommandTest {
         AllocateStudentToTeamByEmailCommand allocateStudentToTeamByEmailCommand = new
                 AllocateStudentToTeamByEmailCommand(validOtherPerson.getEmail(), newModule, tutorialClass, newTeam);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(AllocateStudentToTeamCommand.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
+                String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(AllocateStudentToTeamCommand.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
+                String.format(TeamMessages.MESSAGE_TEAM_SIZE_EXCEEDED, newTeam.getTeamSize()));
     }
 
     @Test
@@ -117,9 +117,9 @@ public class AllocateStudentToTeamCommandTest {
                 AllocateStudentToTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass,
                 team);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
+                String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
+                String.format(TeamMessages.MESSAGE_TEAM_DOES_NOT_EXIST, team, tutorialClass));
     }
 
     @Test
@@ -133,9 +133,9 @@ public class AllocateStudentToTeamCommandTest {
                 AllocateStudentToTeamByEmailCommand(validPerson.getEmail(), newModule, tutorialClass,
                 tutTeam);
         assertCommandFailure(allocateStudentToTeamByStuIdCommand, model,
-                String.format(MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutorialClass));
+                String.format(TeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutorialClass));
         assertCommandFailure(allocateStudentToTeamByEmailCommand, model,
-                String.format(MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutorialClass));
+                String.format(TeamMessages.MESSAGE_DUPLICATE_PERSON_IN_TEAM, tutorialClass));
     }
 
 
