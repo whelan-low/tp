@@ -10,6 +10,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NUM_OF_TEAMS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENTID;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAMNAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TUTORIALCLASS;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -81,9 +82,10 @@ public class CommandTestUtil {
     public static final String VALID_TEAM_NAME_NEW = "Team 3";
     public static final int VALID_TEAM_SIZE = 5;
     public static final String TEAM_NAME_DESC_AMY = " " + PREFIX_NAME + VALID_TEAM_NAME_AMY;
-    public static final String TEAM_SIZE_DESC = " " + PREFIX_SIZE + VALID_TEAM_SIZE;
+    public static final String TEAM_DESC_AMY = " " + PREFIX_TEAMNAME + VALID_TEAM_NAME_AMY;
     public static final String INVALID_TEAM_NAME = "Team 1!";
-    public static final int INVALID_TEAM_SIZE = -1;
+    public static final String INVALID_TEAM_DESC_AMY = " " + PREFIX_TEAMNAME + INVALID_TEAM_NAME;
+    public static final String TEAM_SIZE_DESC = " " + PREFIX_SIZE + VALID_TEAM_SIZE;
 
     // '&' not allowed in names
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&";

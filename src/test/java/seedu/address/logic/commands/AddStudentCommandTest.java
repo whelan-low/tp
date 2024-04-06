@@ -40,7 +40,7 @@ import seedu.address.testutil.PersonBuilder;
 public class AddStudentCommandTest {
 
     @Test
-    public void constructor_nullPerson_throwsNullPointerException() {
+    public void execute_addNullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new AddStudentCommand(null));
     }
 

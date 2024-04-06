@@ -71,9 +71,7 @@ confidence to make full use of TAHelper's features.
 5. Launching TAHelper
     - Type `java -jar tahelper.jar` command and hit Enter to run TAHelper.<br>
     - It should look something like this (in this case my jar file is in a folder called tahelper): 
-    - ![cmd](images/cmdwinguide2.png) 
-
-   
+    - ![cmd](images/cmdwinguide2.png)
     - A GUI similar to the below should appear in a few seconds.<br>
     - ![Ui](images/Ui.png) (to update!!).
 
