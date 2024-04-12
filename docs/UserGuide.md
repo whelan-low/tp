@@ -157,7 +157,7 @@ Commands on modules:
 
    - `/class_list_students module/CS2103T tutorial/T09` : List all the students in the tutorial class `T09` under the module `CS2103T`
    
-   - `/view_teams name/Team 1 module/CS2103T class/T09` or `/view_teams index/1 module/CS2103T class/T09` : View the information of the team with team name `Team 1` or index `1` in tutorial class `T09` under module `CS2103T`
+   - `/view_teams name/Team 1 module/CS2103T tutorial/T09` or `/view_teams index/1 module/CS2103T tutorial/T09` : View the information of the team with team name `Team 1` or index `1` in tutorial class `T09` under module `CS2103T`
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -165,7 +165,7 @@ Commands on modules:
 ---
 ## Features
 
-<box type="info" seamless>
+<box type="info" seamless/>
 
 **Notes about the command format:**<br>
 ### Command Format
@@ -532,7 +532,7 @@ Example:
 
 View the information about a team in a tutorial class.
 
-Format: `/view_teams [name/TEAM_NAME] [index/INDEX] module/MODULE_CODE class/TUTORIAL_CLASS`
+Format: `/view_teams name/TEAM_NAME module/MODULE_CODE tutorial/TUTORIAL_CLASS` or `/view_teams index/INDEX module/MODULE_CODE tutorial/TUTORIAL_CLASS`
 
 - If the module code does not exist, it returns an error message.
 - If the tutorial class within that module code does not exist, it returns an error message.
@@ -544,8 +544,8 @@ The command will display the team with its information. If there is no such exis
 
 Example:
 
-- View team by team name: `/view_teams name/Team 1 module/CS2103T class/T09`
-- View team by index: `/view_teams index/1 module/CS2103T class/T09`
+- View team by team name: `/view_teams name/Team 1 module/CS2103T tutorial/T09`
+- View team by index: `/view_teams index/1 module/CS2103T tutorial/T09`
 
 ---
 ### Randomly allocate into teams all students in a tutorial class : `random_teams`
