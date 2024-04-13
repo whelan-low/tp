@@ -153,7 +153,7 @@ Commands on students:
 
    - `/add_class module/CS2103T class/T09` : Adds a new tutorial class `T09` under the module `CS2103T`.
 
-   - `/allocate_teams id/A1234567Z module/CS2101 tutorial/T01 name/team1` : Allocate a student to the specified team `team1` in the tutorial class `T01` of module `CS2101`.
+   - `/allocate_team id/A1234567Z module/CS2101 tutorial/T01 name/team1` : Allocate a student to the specified team `team1` in the tutorial class `T01` of module `CS2101`.
 
    - `/add_student_to_class id/A1234567Z module/CS2101 tutorial/T01` : Add a student the tutorial class `T01` of module `CS2101`.
 
@@ -689,7 +689,7 @@ must be in the team before command execution.Explanation: This deletes the stude
 
 | Action                                  | Format, Examples                                                                                                                                                                                                                         |
 |-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add New Students**                    | `/add_student name/<student_name> email/<student_email> id/<student_id> [tag/<tag>]` <br> e.g., `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A`                                                                        |
+| **Add New Students**                    | `/add_student name/student_name id/student_id email/student_email [tag/[tag]]` <br> e.g., `/add_student name/Dohn Joe id/A0123456A email/johndoe@gmail.com tags/student`                                                                 |
 | **Delete students**                     | `/delete_student <id/, email/> <id or email>`<br> e.g., `delete_student id/A0259209B` or `/delete_student email/johndoe@gmail.com`                                                                                                       |
 | **Search for students**                 | `/search_student <id/, email/, tc/, name/> <id or email or tutorial or name>`<br> e.g.,`/search_student id/A0123456A`                                                                                                                    |
 | **Edit student contact**                | `/edit_student index/<index> <id/, email/, name/, tag/>`<br> e.g.,`/edit_student index/1 name/John`                                                                                                                                      |
