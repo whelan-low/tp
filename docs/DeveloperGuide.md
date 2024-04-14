@@ -965,12 +965,12 @@ Step 6. Finally, a `CommandResult` is created and the student is deleted from th
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 | Priority | Iteration | As a …​ | I want to …​                                                                   | So that I can…​                                                                     |
-| -------- | --------- | ------- | ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+|----------|-----------|---------|--------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
 | `* * *`  | v1.2      | TA      | add new students to a class                                                    | maintain an up-to-date list of enrolled students.                                   |
 | `* * *`  | v1.2      | TA      | add partial info of students                                                   | still add students even if I don’t have all their information.                      |
 | `* * *`  | v1.2      | TA      | delete a student from my class if they drop the module/class                   | keep my class list accurate and up-to-date.                                         |
 | `*  `    | v1.2      | TA      | search for my students based on their NUS ID, emails, names or tutorial groups | locate details of students without having to go through the entire list             |
-| `* * *`  | v1.2      | TA      | view all students and their particulars                                        | have a comprehensive overview of the enrolled students in my class.                 |
+| `* * *`  | v1.2      | TA      | view all students and their particulars                                        | have a comprehensive overview of the enrolled students that I teach.                |
 | `* * `   | v1.2      | TA      | view all the tutorial classes and their student composition                    | have an overview of the classes that I am teaching.                                 |
 | `* *`    | v1.2      | TA      | add a tutorial class that I am teaching.                                       | track a tutorial class and the students in it.                                      |
 | `* *`    | v1.2      | TA      | remove a tutorial class that I am teaching.                                    | remove any unrelated classes that I do not want to no longer want to keep track of. |
@@ -979,8 +979,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | v1.3      | TA      | sort students based on their name, student ID or email.                        | easily organise and manage student records.                                         |
 | `* * *`  | v1.3      | TA      | create a new team for a tutorial class                                         | segregate students to teams within a tutorial class.                                |
 | `* * *`  | v1.3      | TA      | delete a team from a tutorial class                                            | remove unnecessary teams and organise my classes.                                   |
+| `* * *`  | v1.3      | TA      | list all students in a particular tutorial class                               | see a comprehensive overview of the enrolled students in each class                 |
+| `* * *`  | v1.3      | TA      | delete a student from my class                                                 | amend if they drop the module/class.                                                |
+| `* * *`  | v1.3      | TA      | search for students based on tutorial group                                    | send tasks to students from 1 class                                                 |
+| `* * *`  | v1.3      | TA      | delete module from the system                                                  | remove modules I accidentally keyed in.                                             |
+| `* * *`  | v1.3      | TA      | randomly generate team allocations                                             | fairly group my students into different teams for group tasks.                      |
+| `* * *`  | v1.3      | TA      | view team composition                                                          | see a comprehensive overview of the students in each team                           |
+| `* * *`  | v1.3      | TA      | delete a student from a team                                                   | change the members of the team.                                                     |
+| `* * *`  | v1.3      | TA      | allocate students into teams                                                   | form teams for class projects and assignments.                                      |
 
-_{More to be added}_
 
 ### Use cases
 
