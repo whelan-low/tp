@@ -384,12 +384,12 @@ Adds a tutorial class with the specified module code and name.
 Format: `/add_class module/MODULE tutorial/TUTORIAL [description/DESC] [size/SIZE]`
 
 Note:
-- An optional class size can be specified to apply a size restriction on the class.
+- An optional class size can be specified to apply a size restriction on the class. <br> If no class size is specified, it will create an unbounded class (i.e. infinite max size)
 - Class size must be a positive integer. Any invalid inputs (non-numeric, negative integers) returns an error.
 - If none of the parameters is specified, or if only one is specified, returns an error.
 - If the module already exists in the system, the system will add the tutorial class specified to the existing module.
   Else, the system will create a new module with module code `MODULE_CODE` and add the specified tutorial class under it. 
-  As such. there is no `add_module` command, as this command doubles up to do that too.
+  As such, there is no `add_module` command, as this command doubles up to do that too.
 
 Examples:
 - `/add_class module/CS2103T tutorial/T10` <br>
@@ -458,7 +458,7 @@ Expected output: The command will display the list of all tutorial classes. If t
 
 Adds a specified student based on the provided parameter to a specified tutorial class.
 
-Format: `/add_student_to_class [id/STUDENTID] [index/INDEX] [email/EMAIL] module/MODULE class/TUTORIAL`
+Format: `/add_student_to_class [id/STUDENTID] [index/INDEX] [email/EMAIL] module/MODULE tutorial/TUTORIAL`
 
 - At least one of the optional parameters (id/email/index) must be provided.
 - If the module code does not exist, it returns an error.
@@ -471,9 +471,9 @@ Upon successful allocation of student to the tutorial class, the command will re
 
 Examples:
 
-- Add student by Student ID:`/add_student_to_class id/A01234567X module/CS2103T class/T10`
-- Add student by email: `/add_student_to_class email/test@gmail.com module/CS2103T class/T10`
-- Add student by index: `/add_student_to_class index/1 module/CS2103T class/T10`
+- Add student by Student ID:`/add_student_to_class id/A01234567X module/CS2103T tutorial/T10`
+- Add student by email: `/add_student_to_class email/test@gmail.com module/CS2103T tutorial/T10`
+- Add student by index: `/add_student_to_class index/1 module/CS2103T tutorial/T10`
 
 [Back to table of contents](#table-of-contents)
 
@@ -506,7 +506,7 @@ Explanation: This deletes the student with student id `A0123456A` from tutorial 
 
 Adds a new team with the specified team name to the specified tutorial class.
 
-Format: `/add_team module/MODULE class/TUTORIAL team/TEAM_NAME [size/TEAM_SIZE]`
+Format: `/add_team module/MODULE tutorial/TUTORIAL team/TEAM_NAME [size/TEAM_SIZE]`
 
 - An optional team size can be specified to apply a size restriction on the team.
 - Team size must be a positive integer. Any invalid inputs (non-numeric, negative integers) returns an error.
@@ -521,8 +521,8 @@ Upon successful addition, the command will return a confirmation messaging stati
 
 Examples:
 
-- Without team size:`/add_team module/CS2103T class/T10 team/Team 1`
-- With team size: `/add_team module/CS2103T class/T10 team/Team 1 size/3`
+- Without team size:`/add_team module/CS2103T tutorial/T10 team/Team 1`
+- With team size: `/add_team module/CS2103T tutorial/T10 team/Team 1 size/3`
 
 [Back to table of contents](#table-of-contents)
 
@@ -676,8 +676,8 @@ Important Note:
 Expected output: `Deleted STUDENT_NAME from MODULE TUTORIAL, Team TEAM_NAME`
 
 Example: `/delete_student_from_team id/A0123456A module/CS2103T tutorial/T09 team/4`
-
-must be in the team before command execution.Explanation: This deletes the student with student id `A0123456A` from team `4` of tutorial class `T09` of module `CS2103T`
+must be in the team before command execution.
+<br>Explanation: This deletes the student with student id `A0123456A` from team `4` of tutorial class `T09` of module `CS2103T`
 
 [Back to table of contents](#table-of-contents)
 
