@@ -114,8 +114,8 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 
 How the parsing works:
 
-- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-- All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddStudentCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddStudentCommand`) which the `AddressBookParser` returns back as a `Command` object.
+- All `XYZCommandParser` classes (e.g., `AddStudentCommandParser`, `DeleteClassCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
 
@@ -173,6 +173,7 @@ Given below is an example usage scenario and how the add mechanism behaves at ea
 Example: `/add_student name/john email/john@example.com id/A1234567L tags/`
 
 <puml src="diagrams/AddStudentSequence.puml" alt="AddStudentSequence" />
+<puml src="diagrams/AddStudentActivityDiagram.puml" alt="AddStudentSequence" />
 
 Execution steps:
 Step 1. The user inputs and executes `/add_student name/john email/john@example.com id/A1234567L tags/` command to add a student with name `john`, along with
@@ -1782,6 +1783,29 @@ However, it does not tell users which value, email or student id, clashes with a
 **Proposed enhancement(s)**
 1. We look to implement a more detailed error message that specifies which field, email or id, or both, that violated the unique valid policy of a person object in the system.
 This way, it will improve user experience as users are able to fix the issue with more specific aid/help.
+
+---
+
+### More detailed and descriptive error messages for AllocateStudentToTeamCommand
+
+**Current implementation**
+1. Currently, the error message when the /allocate_team is ran with an invalid command format is "Invalid command format!
+   /allocate_team: Allocates a student a team in the tutorial class". However, this does not indicate to users which part of the command format is incorrect or invalid, potentially making it difficult for users to identify the part of the command where they have input wrongly.
+
+**Proposed enhancement(s)**
+1. We look to implement a more descriptive error message that tells user which part of the AllocateStudentToTeamCommand that cause the command to be invalid. This way users can adapt to the invalid input and correct it quickly, which improves user experience.
+2. We also look to implement a more descriptive error message based on invalid inputs, invalid teams and other miscellaneous inputs.
+
+---
+
+### More detailed and descriptive error messages for RandomTeamAllocationCommand
+
+**Current implementation**
+1. Currently, the error message when the /random_teams is run with a module or tutorial class that does not exist is "Please check if you have entered an existing module and tutorial". However, this does not indicate to users whether module or tutorial does not exist in the system, which may potentially make it more difficult for users to identify whether it is module or class which does not exist.
+
+**Proposed enhancement(s)**
+1. We look to implement a more descriptive error message that tells user exactly whether module or tutorial class does not exist. This way users can adapt to the input values and correct it quickly, which improves user experience.
+2. We also look to implement a more descriptive error message based on invalid inputs, invalid number of teams and other miscellaneous inputs.
 
 ---
 
