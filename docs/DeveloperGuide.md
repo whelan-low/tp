@@ -306,8 +306,8 @@ to update the list with the new information. A `CommandResult` is created, infor
 <box type="info" seamless>
 
 **Important Note:** Currently, edited student information only displays on the list it was edited in. The edited details
-are not propagated to other lists (students in different class/modules). More information can be found in the planned
-enhancements section.
+are not propagated to other lists (students in different class/modules). More information can be found in the [planned
+enhancements](#appendix-planned-enhancements) section.
 
 </box>
 
@@ -1501,7 +1501,7 @@ in the tutorial class to allocate the student into.
   - Use case ends.
     <br>
 
-#### Use case 15: Randomly allocating a list of students in the tutorial class into teams.
+#### Use case 12: Randomly allocating a list of students in the tutorial class into teams.
 
 **Actor**: User
 
@@ -1525,7 +1525,7 @@ in the tutorial class to allocate the student into.
   - Use case ends.
     <br>
 
-#### Use case 16: View all students in a class
+#### Use case 13: View all students in a class
 
 **MSS**
 
@@ -1543,7 +1543,7 @@ in the tutorial class to allocate the student into.
   - 2b1. System will return a message indicating that there are no existing students in the class in the list.
     <br>
 
-#### Use case 17: View team information
+#### Use case 14: View team information
 
 **MSS**
 
@@ -1564,6 +1564,61 @@ in the tutorial class to allocate the student into.
   - Use case ends.
     <br>
 
+#### Use case 15: Sort students
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS:**
+
+1. User specifies to sort the list by a specified parameter.
+2. System shows a sorted list of all students.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. User specifies to sort the list by an invalid parameter.
+  - 1a1. Returns an error indicating parameter is not valid for sorting.
+  - Use case ends.
+- 1b. Invalid input command.
+  - 1b1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+    <br>
+
+#### Use case 16: Edit students
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS**
+
+1. User specifies the student to be edited along with the new information.
+2. System edits the student from the list of students.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. User specifies the same information as the student to be edited
+  - 1a1: Returns an error indicating that the student already exists.
+  - Use case ends.
+- 1b. User specifies to edit student's ID.
+  - 1b1. Student ID already exists in the system.
+    - 1b1.1: Returns an error indicating that the student with the provided ID already exists.
+    - Use case ends.
+- 1c. User specifies to edit student's email.
+  - 1c1. Email already exists in the system.
+    - 1c1.1. Returns an error indicating that the student with the provided email already exists.
+    - Use case ends.
+- 1d. Invalid index.
+  - 1d1. Index does not exist in the system.
+    - 1d1.1: Returns an error indicating that the index is out of bounds.
+    - Use case ends.
+- 1e. Invalid input command.
+  - 1e1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+    <br>
 ---
 
 ### Non-Functional Requirements
@@ -1758,6 +1813,20 @@ and the right column represents the list of students.
 'CS2101 tutorial classes', something that is specific to the module.
 3. Thirdly, similar to point 2, we want to implement even more specific person column label, such as when user enters to view the list of students in a tutorial class, the label shows something like 'T01's class list'.
 This will greatly aid user's readability, and it is an enhancement we want to make.
+
+---
+
+### Propagate students' edited information from EditCommand to other student lists
+
+**Current implementation**
+1. When editing a student's information using `/edit_student`, changes only appear on the list currently being displayed.
+2. In order to sync a student information across modules, tutorial classes and teams, users would need to display the respective
+list in the UI and re-execute the command to make changes.
+3. This can be an inconvenience and could lead to difficulties in keeping track of changes.
+
+**Proposed enhancement(s)**
+1. We look to improving the `/edit_student` command, such that it will propagate any changes made on a single student list to
+all other lists within the app. This allows for syncing of information across the different modules, tutorial classes and teams.
 
 ---
 
