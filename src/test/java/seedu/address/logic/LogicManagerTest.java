@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.STUDENT_ID_DESC_AMY;
 import static seedu.address.logic.messages.PersonMessages.MESSAGE_PERSON_INDEX_NOT_FOUND;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.AMY;
 
@@ -22,6 +23,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.AddStudentCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListStudentsCommand;
+import seedu.address.logic.commands.deletestudentcommands.DeleteStudentCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
@@ -65,7 +67,7 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String invalidIndex = "9";
-        String deleteStudentCommand = "/delete_student index/" + invalidIndex;
+        String deleteStudentCommand = DeleteStudentCommand.COMMAND_WORD + " " + PREFIX_INDEX + invalidIndex;
         assertCommandException(deleteStudentCommand,
                 String.format(MESSAGE_PERSON_INDEX_NOT_FOUND, invalidIndex));
     }
