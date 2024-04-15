@@ -114,8 +114,8 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 
 How the parsing works:
 
-- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-- All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddStudentCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddStudentCommand`) which the `AddressBookParser` returns back as a `Command` object.
+- All `XYZCommandParser` classes (e.g., `AddStudentCommandParser`, `DeleteClassCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
 
@@ -166,13 +166,14 @@ The implemented add mechanism is facilitated by the abstract `AddStudentCommand`
 
 `AddStudentCommandParser` implements the `Parser` interface and its relevant operations.
 
-`AddStudentCommand` extends the `Command` class and contains auxillary operations that supports the mechanism.
+`AddStudentCommand` extends the `Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
 
 Example: `/add_student name/john email/john@example.com id/A1234567L tags/`
 
 <puml src="diagrams/AddStudentSequence.puml" alt="AddStudentSequence" />
+<puml src="diagrams/AddStudentActivityDiagram.puml" alt="AddStudentSequence" />
 
 Execution steps:
 Step 1. The user inputs and executes `/add_student name/john email/john@example.com id/A1234567L tags/` command to add a student with name `john`, along with
@@ -187,7 +188,7 @@ Step 3. The `AddStudentCommandParser` parses the arguments and get the values of
 <box type="info" seamless>
 
 **Important Note:** All fields must be specified. There must be a valid value for name, email and id.
-Additionally, email and id must be unique compared to the values already present in the system to get achieve a sucessful add.
+Additionally, email and id must be unique compared to the values already present in the system to get achieve a successful add.
 Tags here are optional and need not be specified.
 
 </box>
@@ -208,7 +209,7 @@ Step 6. Finally, a `CommandResult` is created and the student is added to the TA
   - Cons: An individual, at least in the context of NUS, can be uniquely identified by either their email E....@u.nus.edu, or by their Student ID. Therefore, specifying both may not be required and may cause extra work.
 
 * **Alternative 2:** Allow user to specify more information about themselves such as year of study, course of study, just to name a few. This way we can support even more commands that searches say based on course of study, year of study etc.
-  - Pros: Search, add, delete, sort commands all can become more specfic, and the commands can make use of more information to achieve its desired outcome as well, instead of solely relying on email or id, which although present in the system, may not be readily available or easily remembered by the users themselves.
+  - Pros: Search, add, delete, sort commands all can become more specific, and the commands can make use of more information to achieve its desired outcome as well, instead of solely relying on email or id, which although present in the system, may not be readily available or easily remembered by the users themselves.
   - Cons: The addition of these fields to the system could lead to increase complexity of the codebase and increased coupling between components in the codebase. This will make the codebase harder to debug and maintain. Also, these field possibly being optional may lead to an increase in the number of null values and thus null checks in the system, which can make the codes in the codebase harder to reason about and refactor in the future.
 
 ### \[Implemented\] Delete student
@@ -217,7 +218,7 @@ The implemented add mechanism is facilitated by the abstract `DeleteStudentComma
 
 `DeleteStudentCommandParser` implements the `Parser` interface and its operations.
 
-`DeleteStudentCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `DeleteStudentCommand` based on its specific functionality:
+`DeleteStudentCommand` extends the `Command` class and contains auxiliary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `DeleteStudentCommand` based on its specific functionality:
 
 - `DeleteStudentByEmailCommand` — Delete student based on specified email.
 - `DeleteStudentByIdCommand` — Delete student based on specified student id.
@@ -306,8 +307,8 @@ to update the list with the new information. A `CommandResult` is created, infor
 <box type="info" seamless>
 
 **Important Note:** Currently, edited student information only displays on the list it was edited in. The edited details
-are not propagated to other lists (students in different class/modules). More information can be found in the planned
-enhancements section.
+are not propagated to other lists (students in different class/modules). More information can be found in the [planned
+enhancements](#appendix-planned-enhancements) section.
 
 </box>
 
@@ -329,14 +330,14 @@ The implemented add mechanism is facilitated by the abstract `AddStudentToClassC
 
 `AddStudentToClassCommandParser` implements the `Parser` interface and its operations.
 
-`AddStudentToClassCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AddStudentToClassCommand` based on its specific functionality:
+`AddStudentToClassCommand` extends the `Command` class and contains auxiliary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AddStudentToClassCommand` based on its specific functionality:
 
 - `AddStudentToClassByEmailCommand` — Add student based on specified email to a tutorial class.
 - `AddStudentToClassByIdCommand` — Add student based on specified student ID to a tutorial class.
 - `AddStudentToClassByIndexCommand` — Add student based on specified index (viewable from the UI) to a tutorial class
 
 Given below is an example usage scenario and how the add mechanism behaves at each step. <br>
-Format: `/add_student_to_class [id/ID] [email/EMAIL] [index/INDEX] module/MODULE tutorial/TUTORIL`
+Format: `/add_student_to_class [id/ID] [email/EMAIL] [index/INDEX] module/MODULE tutorial/TUTORIAL`
 *Only 1 of the 3 optional parameters (id, email, index) must be specified
 Example: `/add_student_to_class id/A0123456X module/CS2103T tutorial/T09`
 
@@ -379,7 +380,7 @@ The implemented add mechanism is facilitated by the abstract `DeleteStudentFromC
 
 `DeleteStudentFromClassCommandParser` implements the `Parser` interface and its operations.
 
-`DeleteStudentFromClassCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `DeleteStudentCommand` based on its specific functionality:
+`DeleteStudentFromClassCommand` extends the `Command` class and contains auxiliary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `DeleteStudentCommand` based on its specific functionality:
 
 - `DeleteStudentFromClassByEmailCommand` — Delete student based on specified email from a tutorial class.
 - `DeleteStudentFromClassByIdCommand` — Delete student based on specified student id from a tutorial class.
@@ -425,13 +426,13 @@ Step 6. Finally, a `CommandResult` is created and the student is deleted from th
 ### \[Implemented\] List students of class
 
 The implementation of adding a class is facilitated by the `ListStudentsOfClassCommand` and `ListStudentsOfClassCommandParser`. `ListStudentsOfClassCommandParser` implements the `Parser` interface and it's operations. `ListStudentsOfClassCommand` extends the
-`Command` class and contains auxillary operations that supports the mechanism.
+`Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
 
 Example: `/class_list_students module/CS2103T tutorial/T09`
 
-<puml src="diagrams/ListStudentsOfClassSequence.puml" alt="ListStudentsOfClassSequence" />
+<puml src="diagrams/ListStudentsOfClass.puml" alt="ListStudentsOfClass" />
 
 Execution steps:
 Step 1. The user inputs and executes `/class_list_students module/CS2103T tutorial/T09` command to list students of the unique tutorial `T09` of a module `CS2103T`.
@@ -578,7 +579,7 @@ Step 6. Finally, a `CommandResult` is created and the sorted list of students is
 ### \[Implemented\] Add class
 
 The implementation of adding a class is facilitated by the `AddClassCommand` and `AddClassCommandParser`. `AddClassCommandParser` implements the `Parser` interface and it's operations. `AddClassCommand` extends the
-`Command` class and contains auxillary operations that supports the mechanism.
+`Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
 
@@ -627,7 +628,7 @@ Step 6. Finally, a `CommandResult` is created and the class is added to the TAHe
 ### \[Implemented\] Delete class
 
 The implementation of adding a class is facilitated by the `DeleteClassCommand` and `DeleteClassCommandParser`. `DeleteClassCommandParser` implements the `Parser` interface and it's operations. `DeleteClassCommand` extends the
-`Command` class and contains auxillary operations that supports the mechanism.
+`Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
 
@@ -679,7 +680,7 @@ Step 6. Finally, a `CommandResult` is created and the class is deleted from the 
 ### \[Implemented\] Delete module
 
 The implementation of adding a class is facilitated by the `DeleteModuleCommand` and `DeletModuleCommandParser`. `DeleteModuleCommandParser` implements the `Parser` interface and it's operations. `DeleteModuleCommand` extends the
-`Command` class and contains auxillary operations that supports the mechanism.
+`Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
 
@@ -750,7 +751,7 @@ Step 3. The result string is then trimmed and `CommandResult`.
 ### \[Implemented\] Add team
 
 The implementation of adding a class is facilitated by the `AddTeamCommand` and `AddTeamCommandParser`. `AddTeamCommandParser` implements the `Parser` interface and it's operations. `AddTeamCommand` extends the
-`Command` class and contains auxillary operations that supports the mechanism.
+`Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step. <br>
 Format: `/add_team module/MODULE tutorial/TUTORIAL team/TEAM_NAME [size/SIZE]`
@@ -799,7 +800,7 @@ Step 6. Finally, a `CommandResult` is created and the team is added to the tutor
 ### \[Implemented\] Delete team
 
 The implementation of adding a class is facilitated by the `DeleteTeamCommand` and `DeleteTeamCommandParser`. `DeleteTeamCommandParser` implements the `Parser` interface and it's operations. `DeleteTeamCommand` extends the
-`Command` class and contains auxillary operations that supports the mechanism.
+`Command` class and contains auxiliary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
 Format: `/delete_team module/MODULE tutorial/TUTORIAL team/TEAM_NAME`
@@ -849,52 +850,99 @@ Step 6. Finally, a `CommandResult` is created and the team is deleted from the T
 
 ### \[Implemented\] Allocate student to team
 
-The implemented add mechanism is facilitated by the abstract `AllocateStudentToTeamCommand` along with its specific commands `AllocateStudentToTeamByEmailCommand`, `AllocateStudentToTeamByIdCommand` and `AllocateStudentToTeamByIndexCommand`, as well as the parser `AllocateStudentToTeamCommandParser`.
+The implemented allocate mechanism is facilitated by the common class `AllocateStudentToTeamCommand` along with its specific commands `AllocateStudentToTeamByEmailCommand`, `AllocateStudentToTeamByIdCommand` and `AllocateStudentToTeamByIndexCommand`, as well as the parser `AllocateStudentToTeamCommandParser`.
 
 `AllocateStudentToTeamCommandParser` implements the `Parser` interface and its operations.
 
-`AllocateStudentToTeamCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AllocateStudentToTeamCommand` based on its specific functionality:
+`AllocateStudentToTeamCommand` extends the `Command` class and contains auxiliary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AllocateStudentToTeamCommand` based on its specific functionality:
 
 - `AllocateStudentToTeamByEmailCommand` — Allocate student based on specified email to a team.
-- `AllocateStudentToTeamByIdCommand` — Allocate student based on specified student id to a team.
+- `AllocateStudentToTeamByIdCommand` — Allocate student based on specified student ID to a team.
 - `AllocateStudentToTeamByIndexCommand` — Allocate student based on specified index (viewable from the UI) to a team.
 
-Given below is an example usage scenario and how the add mechanism behaves at each step.
+Given below is an example usage scenario and how the add mechanism behaves at each step.<br>
 
-Example: `/allocate_team id/A01234567X module/CS2103T tutorial/T09 team/Team 1`
+Format: `/allocate_team [id/ID] [email/EMAIL] [index/INDEX] module/MODULE tutorial/TUTORIAL team/TEAMNAME`
+*Only 1 of the 3 optional parameters (id, email, index) must be specified.
+
+Example: `/allocate_team id/A0123456X module/CS2103T tutorial/T09 team/Team 1`
 
 <puml src="diagrams/AllocateStudentToTeamSequence.puml" alt="AllocateStudentToTeamSequence" />
 
-Step 1. The user executes `/allocate_team id/A01234567X module/CS2103T tutorial/T09 team/Team 1` command to add the particular student with id `A01234567X` to team `Team 1` in the tutorial class `T09` of module `CS2103T`.
+Step 1. The user executes `/allocate_team id/A0123456X module/CS2103T tutorial/T09 team/Team 1` command to add the particular student with ID `A0123456X` to team `Team 1` in the tutorial class `T09` of module `CS2103T`.
 The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
 
-Step 2. The `AddressBookParser` then creates a new `AllocateStudentToTeamCommandParser` and calls `AllocateStudentToTeamCommandParser#parse()`, with `id/A01234567X`, `team/Team 1`, `module/CS2103T` and `tutorial/T09` as the arguments.
+Step 2. The `AddressBookParser` then creates a new `AllocateStudentToTeamCommandParser` and calls `AllocateStudentToTeamCommandParser#parse()`, with `id/A01234567X`, `module/CS2103T`, `tutorial/T09` and `team/Team 1` as the arguments.
 
-Step 3. The `AllocateStudentToTeamCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id). Additionally, the `TutorialTeam`, `ModuleCode` and `TutorialClass` is determined.
+Step 3. The `AllocateStudentToTeamCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id). Additionally, the `TutorialTeam`, `ModuleCode` and `TutorialClass` are determined.
 
 <box type="info" seamless>
 
-**Important Note:** The team, tutorial class and module code must be specified. To determine the target student, only one prefix should used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
+**Important Note:** The team, tutorial class and module code must be specified. To determine the target student, only one prefix should be used per command. If there are multiple prefixes, the target priority is as follows: By Student ID -> By Email -> By Index
 
 </box>
 
-Step 4. Based on the prefix used, `AllocateStudentToTeamCommandParser` creates the specific `AllocateStudentToTeamCommand` accordingly. Each command contains a specific predicate to find the student.
+Step 4. Based on the prefix used, `AllocateStudentToTeamCommandParser` creates the specific `AllocateStudentToTeamCommand` accordingly. Each command contains the information it needs to add the target student into a tutorial team.
 
-Step 5. `LogicManager` calls `AllocateStudentToTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the target module and tutorial class. Then, the method retrieves the student to add using the defined predicate. Throughout the process, error handling (e.g checking for invalid student/module/tutorial/team) is utilised to mitigate potential discrepancies and ensure valid execution.
+Step 5. `LogicManager` calls `AllocateStudentToTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the target module and tutorial class. Then, the method retrieves the student to add using the defined value. Throughout the process, error handling (e.g checking for invalid student/module/tutorial/team) is utilised to mitigate potential discrepancies and ensure valid execution.
 
-Step 6. Finally, a `CommandResult` is created and the student is added to the tutorial class.
+Step 6. Finally, a `CommandResult` is created and the student is added to the tutorial team.
 
 #### Design considerations:
 
 **Aspect: Modularity and extensibility:**
 
-- **Alternative 1 (current choice):** Seperate each specific command into a different class, while overlapping code is abstracted to an abstract class.
-  - Pros: Specific commands are instantiated and thus can be easily traced and is more readable. Any reusable code is defined in the abstract class which can then be reused by the subclasses.
+- **Alternative 1 (current choice):** Separate each specific command into a different class, while overlapping code is abstracted to a common class in which the different classes can extend from.
+  - Pros: Specific commands are instantiated and thus can be easily traced and is more readable. Any reusable code is defined in the common class which can then be reused by the subclasses. Logic of the program is also more well-defined and behaviours related to one form of allocate command can be grouped together.
   - Cons: May have duplicate code to a certain extent.
 
 * **Alternative 2:** Lump into one generic command that handles each parameter accordingly.
-  - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
-  - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
+  - Pros: Reduces duplicate code and slightly cleaner to a certain extent. (i.e only 1 command class is executed).
+  - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with separately (potentially using different logic).
+
+
+### \[Implemented\] Randomly allocate students to teams in tutorial class
+
+The implemented random allocation mechanism is facilitated by the class `RandomTeamAllocationCommand`, as well as the parser `RandomTeamAllocationCommandParser`.
+
+`RandomTeamAllocationCommandParser` implements the `Parser` interface and its operations.
+
+`RandomTeamAllocationCommand` extends the `Command` class and contains auxiliary operations that supports the mechanism, such as retrieving the target tutorial class.
+
+Format: `/random_teams module/MODULE tutorial/TUTORIAL teams/NUMBER_OF_TEAMS`
+
+Example: `/random_teams module/CS2103T tutorial/T09 teams/2`
+
+Step 1. The user executes `/random_teams module/CS2103T tutorial/T09 teams/2` command to randomly allocate the students in tutorial class `T09` of module `CS2103T` into `2` different teams.
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `RandomTeamAllocationCommandParser` and calls `RandomTeamAllocationCommandParser#parse()`, with `module/CS2103T`, `tutorial/T09` and `teams/2` as the arguments.
+
+Step 3. The `RandomTeamAllocationCommandParser` parses the arguments to determine the parameters based on the user input. The `ModuleCode`, `TutorialClass` and `NumberOfTeams` are determined.
+
+<box type="info" seamless></box>
+
+Step 4. Based on the prefix given, `RandomTeamAllocationCommandParser` creates a new `RandomTeamAllocationCommand` accordingly. Each command contains the information it needs to randomly allocate all the students in the tutorial class into different teams.
+
+Step 5. `LogicManager` calls `RandomTeamAllocationCommand#execute()`, passing `Model` as an argument. This method retrieves the target module and tutorial class. Then, the method retrieves the number of teams to split the list of students into. Throughout the process, error handling (e.g checking for invalid module/tutorial/number) is utilised to mitigate potential discrepancies and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the list of students in the tutorial class is randomly allocated into the number of teams specified.
+
+#### Design considerations:
+
+**Aspect: Functionality:**
+
+- **Alternative 1 (current choice):** Randomly allocates the list of students into different teams, and delete all the current existing teams in the tutorial class first before doing the allocation.
+  - Pros:
+    - **Allocation is not hindered by existing teams**: Existing teams being present in the tutorial class will not cause incorrect allocation of students, and ensure all students get allocated properly.
+  - Cons:
+    - **Potential Data Loss**: Teams can be formed for various purposes and may not only have 1 set of teams. Deleting all existing teams before randomly allocating can cause data from the other teams, used for other purpose, to be lost.
+
+- **Alternative 2 :** Does not delete all existing teams in the tutorial class. Instead, each time the random allocation command is run, a new set of teams is created, and stored in the tutorial class.
+    - Pros:
+      - **No assumptions made**: The command does not make any assumptions about the purpose of the existing teams in the tutorial class.
+    - Cons:
+      - **Complexity in implementation**: This implementation may be very complex and difficult to implement. Furthermore, if not done well, it can lead to a lot of bugs.
 
 ### \[Implemented\] View team
 
@@ -1020,7 +1068,7 @@ Step 6. Finally, a `CommandResult` is created and the student is deleted from th
 - prefers typing to mouse interactions
 - is reasonably comfortable using CLI apps
 
-**Value proposition**: manage students'contacts faster than a typical mouse/GUI driven app
+**Value proposition**: manage students' contacts faster than a typical mouse/GUI driven app
 
 ### User stories
 
@@ -1112,7 +1160,41 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 1c1: Returns an error indicating command not recognised and provides the correct command format.
     <br>
 
-#### Use case 3: Search for students
+#### Use case 3: Edit students
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS**
+
+1. User specifies the student to be edited along with the new information.
+2. System edits the student from the list of students.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. User specifies the same information as the student to be edited
+  - 1a1: Returns an error indicating that the student already exists.
+  - Use case ends.
+- 1b. User specifies to edit student's ID.
+  - 1b1. Student ID already exists in the system.
+    - 1b1.1: Returns an error indicating that the student with the provided ID already exists.
+    - Use case ends.
+- 1c. User specifies to edit student's email.
+  - 1c1. Email already exists in the system.
+    - 1c1.1. Returns an error indicating that the student with the provided email already exists.
+    - Use case ends.
+- 1d. Invalid index.
+  - 1d1. Index does not exist in the system.
+    - 1d1.1: Returns an error indicating that the index is out of bounds.
+    - Use case ends.
+- 1e. Invalid input command.
+  - 1e1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+    <br>
+
+#### Use case 4: Search for students
 
 **Actor**: User
 
@@ -1136,7 +1218,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 2a1. System will display all matching results for the specified value.
     <br>
 
-#### Use case 4: View all students
+#### Use case 5: View all students
 
 **Actor**: User
 
@@ -1159,7 +1241,29 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 2a1. System will return a message indicating that there are no students in the list.
     <br>
 
-#### Use case 5: Add new tutorial class
+#### Use case 6: Sort students
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS:**
+
+1. User specifies to sort the list by a specified parameter.
+2. System shows a sorted list of all students.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. User specifies to sort the list by an invalid parameter.
+  - 1a1. Returns an error indicating parameter is not valid for sorting.
+  - Use case ends.
+- 1b. Invalid input command.
+  - 1b1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+    <br>
+
+#### Use case 7: Add new tutorial class
 
 **Actor**: User
 
@@ -1177,14 +1281,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 1a1. Return an error indicating command not recognised and provides the correct command format.
   - Use case ends.
 - 1b. Invalid tutorial class attributes are specified.
-  - 2a1. Returns an error indicating that user has to specify tutorial class in the correct format.
+  - 1b1. Returns an error indicating that user has to specify tutorial class in the correct format.
   - Use case ends.
 - 1c. The specified tutorial class already exists.
   - 1c1: Returns an error indicating that the tutorial class already exists
   - Use case ends.
     <br>
 
-#### Use case 6: Delete tutorial class
+#### Use case 8: Delete tutorial class
 
 **Actor**: User
 
@@ -1206,7 +1310,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - Use case ends.
     <br>
 
-#### Use case 7: View all classes
+#### Use case 9: View all classes
 
 **Actor**: User
 
@@ -1229,7 +1333,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 2a1. System will return a message indicating that there are no existing classes in the list.
     <br>
 
-#### Use case 8: Delete module
+#### Use case 10: Delete module
 
 **MSS:**
 
@@ -1247,12 +1351,46 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - Use case ends.
     <br>
 
-#### Use case 9: Delete student from class
+#### Use case 11: Add student to class
+
+**MSS:**
+
+1. User specifies the student to be added, along with the module code and tutorial class to add the student to.
+2. System adds the student from the list of students to the tutorial class.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. User specifies to add student by student ID.
+  - 1a1. Student ID does not exist in the system.
+    - 1a1.1: Returns an error indicating that the student with the provided ID does not exist.
+    - Use case ends.
+- 1b. User specifies to add student by email.
+  - 1b1. Email does not exist in the system.
+    - 1b1.1. Returns an error indicating that the student with the provided email does not exist.
+    - Use case ends.
+- 1c. User specifies to add student by index.
+  - 1c1. Index does not exist in the tutorial class.
+    - 1c1.1. Returns an error indicating that the student with the provided index does not exist.
+    - Use case ends.
+- 1d. Invalid module specified.
+  - 1d1: Returns an error indicating that the module does not exist.
+  - Use case ends.
+- 1e. Invalid tutorial specified.
+  - 1e1: Returns an error indicating that the tutorial does not exist in the specified module.
+  - Use case ends.
+- 1f. Invalid input command.
+  - 1f1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+<br>
+    
+
+#### Use case 12: Delete student from class
 
 **MSS:**
 
 1. User specifies the student to be deleted and the module code and tutorial class name of the class to be deleted from.
-2. System deletes the student from the list of students and tutorial group (if any).
+2. System deletes the student from the list of students in the tutorial class.
    Use case ends.
 
 **Extensions:**
@@ -1261,37 +1399,103 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 1a1. Student ID does not exist in the system.
     - 1a1.1: Returns an error indicating that the student with the provided ID does not exist.
     - Use case ends.
-  - 1a2. Module code does not exist in the system.
-    - 1a2.1: Returns an error indicating that the module with that module code does not exist.
-    - Use case ends.
-  - 1a3. Tutorial class does not exist in the module specified.
-    - 1a3.1: Returns an error indicating that the tutorial class does not exist in the module specified.
-    - Use case ends.
 - 1b. User specifies to delete student by email.
   - 1b1. Email does not exist in the system.
     - 1b1.1. Returns an error indicating that the student with the provided email does not exist.
-    - Use case ends.
-  - 1b2. Module code does not exist in the system.
-    - 1b2.1: Returns an error indicating that the module with that module code does not exist.
-    - Use case ends.
-  - 1b3. Tutorial class does not exist in the module specified.
-    - 1b3.1: Returns an error indicating that the tutorial class does not exist in the module specified.
     - Use case ends.
 - 1c. User specifies to delete student by index.
   - 1c1. Index does not exist in the tutorial class.
     - 1c1.1. Returns an error indicating that the student with the provided index does not exist.
     - Use case ends.
-  - 1c2. Module code does not exist in the system.
-    - 1c2.1: Returns an error indicating that the module with that module code does not exist.
-    - Use case ends.
-  - 1c3 Tutorial class does not exist in the module specified.
-    - 1c3.1: Returns an error indicating that the tutorial class does not exist in the module specified.
-    - Use case ends.
-- 1d. Invalid input command.
-  - 1d1: Returns an error indicating command not recognised and provides the correct command format.
+- 1d. Invalid module specified.
+  - 1d1: Returns an error indicating that the module does not exist.
+  - Use case ends.
+- 1e. Invalid tutorial specified.
+  - 1e1: Returns an error indicating that the tutorial does not exist in the specified module.
+  - Use case ends.
+- 1f. Invalid input command.
+  - 1f1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+<br>
+
+#### Use case 13: View all students in a class
+
+**MSS**
+
+1. User wants to view all students in a class.
+2. System shows a list of all students in the class.
+
+- 1a. Invalid input command.
+  - 1a1. Return an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+- 1b. Additional arguments are specified after the command.
+  - 1b1. System will ignore those arguments and execute the command as usual.
+- 2a. There is no class matching the specified class.
+  - 2a1. System will return a message indicating that there is no such class in the list.
+- 2b. There are no students in the class.
+  - 2b1. System will return a message indicating that there are no existing students in the class in the list.
     <br>
 
-#### Use case 10: Delete student from team
+#### Use case 14: Add new tutorial team
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS:**
+
+1. User specifies the team to be added, along with the module and tutorial class to add the team to.
+2. System adds the tutorial team to the tutorial class.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. Invalid input command.
+  - 1a1. Return an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+- 1b. Invalid tutorial team attributes are specified.
+  - 2a1. Returns an error indicating that user has to specify tutorial team in the correct format.
+  - Use case ends.
+- 1c. Invalid module specified.
+  - 1c1: Returns an error indicating that the module does not exist.
+  - Use case ends.
+- 1d. Invalid tutorial specified.
+  - 1d1: Returns an error indicating that the tutorial does not exist in the specified module.
+  - Use case ends.
+- 1e. The specified tutorial team (i.e with same name) already exists.
+  - 1e1: Returns an error indicating that the tutorial team already exists in the specified module and tutorial.
+  - Use case ends.
+    <br>
+
+#### Use case 15: Delete tutorial team
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS:**
+
+1. User specifies the team to be deleted, along with the module and tutorial class to delete the team from.
+2. System deletes the tutorial team from the tutorial class.
+   Use case ends.
+
+**Extensions:**
+
+- 1a. Invalid input command.
+  - 1a1. Return an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+- 1b. Invalid module specified.
+  - 1b1: Returns an error indicating that the module does not exist.
+  - Use case ends.
+- 1c. Invalid tutorial specified.
+  - 1c1: Returns an error indicating that the tutorial does not exist in the specified module.
+  - Use case ends.
+- 1d. The tutorial team specified does not exist in the specified module and tutorial.
+  - 1d1. Returns an error indicating tutorial team does not exist.
+  - Use case ends.
+    <br>
+
+#### Use case 16: Delete student from team
 
 **MSS:**
 
@@ -1305,46 +1509,29 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   - 1a1. Student ID does not exist in the system.
     - 1a1.1: Returns an error indicating that the student with the provided ID does not exist.
     - Use case ends.
-  - 1a2. Module code does not exist in the system.
-    - 1a2.1: Returns an error indicating that the module with that module code does not exist.
-    - Use case ends.
-  - 1a3. Tutorial class does not exist in the module specified.
-    - 1a3.1: Returns an error indicating that the tutorial class does not exist in the module specified.
-    - Use case ends.
-  - 1a4. Team does not exist in the tutorial class specified
-    - 1a4.1: Returns an error indicating that the tutorial team does not exist in the tutorial class specified.
-    - Use case ends.
 - 1b. User specifies to delete student by email.
   - 1b1. Email does not exist in the system.
     - 1b1.1. Returns an error indicating that the student with the provided email does not exist.
-    - Use case ends.
-  - 1b2. Module code does not exist in the system.
-    - 1b2.1: Returns an error indicating that the module with that module code does not exist.
-    - Use case ends.
-  - 1b3. Tutorial class does not exist in the module specified.
-    - 1b3.1: Returns an error indicating that the tutorial class does not exist in the module specified.
-    - Use case ends.
-  - 1b4. Team does not exist in the tutorial class specified
-    - 1b4.1: Returns an error indicating that the tutorial team does not exist in the tutorial class specified.
     - Use case ends.
 - 1c. User specifies to delete student by index.
   - 1c1. Index does not exist in the tutorial class.
     - 1c1.1. Returns an error indicating that the student with the provided index does not exist.
     - Use case ends.
-  - 1c2. Module code does not exist in the system.
-    - 1c2.1: Returns an error indicating that the module with that module code does not exist.
-    - Use case ends.
-  - 1c3 Tutorial class does not exist in the module specified.
-    - 1c3.1: Returns an error indicating that the tutorial class does not exist in the module specified.
-    - Use case ends.
-  - 1c4. Team does not exist in the tutorial class specified
-    - 1c4.1: Returns an error indicating that the tutorial team does not exist in the tutorial class specified.
-    - Use case ends.
-- 1d. Invalid input command.
-  - 1d1: Returns an error indicating command not recognised and provides the correct command format.
+- 1d. Invalid module specified.
+  - 1d1: Returns an error indicating that the module does not exist.
+  - Use case ends.
+- 1e. Invalid tutorial specified.
+  - 1e1: Returns an error indicating that the tutorial does not exist in the specified module.
+  - Use case ends.
+- 1f. Invalid team specified.
+  - 1f1: Returns an error indicating that the team does not exist in the specified tutorial.
+  - Use case ends.
+- 1g. Invalid input command.
+  - 1g1: Returns an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
     <br>
 
-#### Use case 11: Allocate Student to tutorial team
+#### Use case 17: Allocate Student to tutorial team
 
 **Actor**: User
 
@@ -1372,7 +1559,7 @@ in the tutorial class to allocate the student into.
   - Use case ends.
     <br>
 
-### Use case 12: Randomly allocating a list of students in the tutorial class into teams.
+#### Use case 18: Randomly allocating a list of students in the tutorial class into teams.
 
 **Actor**: User
 
@@ -1396,25 +1583,8 @@ in the tutorial class to allocate the student into.
   - Use case ends.
     <br>
 
-#### Use case 10: View all students in a class
 
-**MSS**
-
-1. User wants to view all students in a class.
-2. System shows a list of all students in the class.
-
-- 1a. Invalid input command.
-  - 1a1. Return an error indicating command not recognised and provides the correct command format.
-  - Use case ends.
-- 1b. Additional arguments are specified after the command.
-  - 1b1. System will ignore those arguments and execute the command as usual.
-- 2a. There is no class matching the specified class.
-  - 2a1. System will return a message indicating that there is no such class in the list.
-- 2b. There are no students in the class.
-  - 2b1. System will return a message indicating that there are no existing students in the class in the list.
-    <br>
-
-#### Use case 11: View team information
+#### Use case 19: View team information
 
 **MSS**
 
@@ -1547,15 +1717,6 @@ testers are expected to do more _exploratory_ testing.
    6. Test case 4 (Allocating a student that is not in the TAHelper system): `/allocate_team id/A0987654A module/CS2101 tutorial/T02 team/Team1`
       Expected: An error message is played indicating that the student is not in TAHelper system.
 
-1. _{ more test cases …​ }_
-
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_
 
 ## **Appendix: Planned Enhancements**
 ## Planned Enhancements
@@ -1625,6 +1786,29 @@ This way, it will improve user experience as users are able to fix the issue wit
 
 ---
 
+### More detailed and descriptive error messages for AllocateStudentToTeamCommand
+
+**Current implementation**
+1. Currently, the error message when the /allocate_team is ran with an invalid command format is "Invalid command format!
+   /allocate_team: Allocates a student a team in the tutorial class". However, this does not indicate to users which part of the command format is incorrect or invalid, potentially making it difficult for users to identify the part of the command where they have input wrongly.
+
+**Proposed enhancement(s)**
+1. We look to implement a more descriptive error message that tells user which part of the AllocateStudentToTeamCommand that cause the command to be invalid. This way users can adapt to the invalid input and correct it quickly, which improves user experience.
+2. We also look to implement a more descriptive error message based on invalid inputs, invalid teams and other miscellaneous inputs.
+
+---
+
+### More detailed and descriptive error messages for RandomTeamAllocationCommand
+
+**Current implementation**
+1. Currently, the error message when the /random_teams is run with a module or tutorial class that does not exist is "Please check if you have entered an existing module and tutorial". However, this does not indicate to users whether module or tutorial does not exist in the system, which may potentially make it more difficult for users to identify whether it is module or class which does not exist.
+
+**Proposed enhancement(s)**
+1. We look to implement a more descriptive error message that tells user exactly whether module or tutorial class does not exist. This way users can adapt to the input values and correct it quickly, which improves user experience.
+2. We also look to implement a more descriptive error message based on invalid inputs, invalid number of teams and other miscellaneous inputs.
+
+---
+
 ### Add column labels on UI to improve readability.
 
 **Current implementation**
@@ -1638,4 +1822,51 @@ and the right column represents the list of students.
 'CS2101 tutorial classes', something that is specific to the module.
 3. Thirdly, similar to point 2, we want to implement even more specific person column label, such as when user enters to view the list of students in a tutorial class, the label shows something like 'T01's class list'.
 This will greatly aid user's readability, and it is an enhancement we want to make.
+
+---
+
+### Propagate students' edited information from EditCommand to other student lists
+
+**Current implementation**
+1. When editing a student's information using `/edit_student`, changes only appear on the list currently being displayed.
+2. In order to sync a student information across modules, tutorial classes and teams, users would need to display the respective
+list in the UI and re-execute the command to make changes.
+3. This can be an inconvenience and could lead to difficulties in keeping track of changes.
+
+**Proposed enhancement(s)**
+1. We look to improving the `/edit_student` command, such that it will propagate any changes made on a single student list to
+all other lists within the app. This allows for syncing of information across the different modules, tutorial classes and teams.
+
+---
+
+### Improve the Random Allocation of students algorithm.
+
+**Current implementation**
+1. Current implementation only checks if the randomly selected tutorial team to add the student to is full before randomly selecting another one to add the student into.
+This can be a problem if the user wants to split the students into many teams (For example: user inputs 5 teams to split 16 people into.). What we might see is that sometimes, there might be a disproportionate number of people in one group.
+Where some groups might not even have students inside.
+
+**Proposed enhancement(s)**
+1. We will look into improving the random allocation algorithm, where the algorithm will allocate in batches, first batch ensuring that every team will have 1 member, next batch ensuring that they have 2 members, until the last batch where it will allocate the remaining students. 
+2. It will be random too as the people in the first batch will be randomly generated and then removed after being added, and so on.
+---
+### Add custom exceptions
+
+**Current implementation**
+1. When an error occurs, the command will return a generic command exception along with the specified error message. However, this can potentially pose several problems:
+a. **Lack of specificity**: It is difficult to determine the nature and cause of the encountered issue, aside from relying on the error message. This makes it challenging to accurately diagnose, leading to longer troubleshooting times.
+b.**Difficulty in error identification**: Without distinct error types, it becomes difficult to classify and identify different types of errors.
+c.**Limited error handling capabilities**: A generic command exception approach may not adequately support specialised error handling, such as conditional error handling based on error types. Having a wider range of error handling for different types can help with flexibility.
+
+**Proposed enhancement(s)**
+1. We will introduce custom exceptions tailored to specific error scenarios, allowing for more precise identification and error handling.
+2. By doing so, we can potentially add custom error handling depending on the type of error thrown too, making the system more flexible and robust.
+---
+### Seed command for generating sample data
+
+**Current implementation**
+1. Currently, there is no seed command implemented. Developers/end-users are required to manually create sample data for testing or initialisation purposes. This approach can be time-consuming and error-prone
+
+**Proposed enhancement(s)**
+1. We will introduce a seed command to initialise sample data. By executing the seed command, developers/users can populate the database with mock students, modules, tutorials and teams. This automated approach will not only save time but aslo reduce the likelihood of errors. Clear documentation and usage guidelines will accompany the seed command too.
 
