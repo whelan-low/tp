@@ -1540,7 +1540,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. User wants to view information of a particular team in a class.
-2. # System shows the information of the team in the class.
+2. System shows the information of the team in the class.
 
 - 1a. The specified student is not in the system.
   - 1a1. TAHelper returns an error indicating that student is not in the system.
