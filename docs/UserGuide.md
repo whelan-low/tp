@@ -12,7 +12,7 @@ Let TAHelper take control of the trivial student management work so that you can
 ---
 TAHelper is a **desktop app for managing contacts, optimized for use via a Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAHelper can get your students' contact management tasks done faster than traditional GUI apps.
 
-- Start your journey with us [here](#quick-start) today! Learn the basics, and seamless integrate into TAHelper today!
+- Start your journey with us [here](#quick-start) today! Learn the basics, and seamlessly integrate into TAHelper today!
 - For some uncommon or unfamiliar terms used in this User Guide, [click here](#glossary) for the definition and explanation of some.
 
 ## Why choose TAHelper?
