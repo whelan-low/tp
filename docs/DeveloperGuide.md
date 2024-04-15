@@ -194,7 +194,7 @@ Tags here are optional and need not be specified.
 
 Step 4. Based on the prefixes, `AddStudentCommandParser` creates an `AddStudentCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `AddStudentCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
+Step 5. `LogicManager` calls `AddStudentCommand#execute()`, passing `Model` as an argument. This method retrieves the student to add to the TAHelper system.
 Throughout the process, error handling (e.g checking for duplicate email or id, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
 
 Step 6. Finally, a `CommandResult` is created and the student is added to the TAHelper system.
@@ -400,7 +400,7 @@ Step 3. The `DeleteStudentFromClassCommandParser` parses the arguments to determ
 
 <box type="info" seamless>
 
-**Important Note:** The tutorial class and module code must be specified. To determine the target student, only one prefix should used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
+**Important Note:** The tutorial class and module code must be specified. To determine the target student, only one prefix should be used per command. If there are multiple prefixes, the target priority is as follows: By Index -> By Student ID -> By Email
 
 </box>
 
@@ -440,22 +440,22 @@ The `execute` command calls `AddressBookParser#parseCommand()`, which extracts t
 
 Step 2. The `AddressBookParser` then creates a new `ListStudentsOfClassCommandParser` and calls `ListStudentsOfClassCommandParser#parse()`, with `module/CS2103T`, `tutorial/T09` as the arguments for the function.
 
-Step 3. The `ListStudentsOfClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the tutorial of the module to delete.
+Step 3. The `ListStudentsOfClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the students to display to the user.
 
 <box type="info" seamless>
 
 **Important Note:** All fields must be specified. There must be a valid value for module and tutorial.
-Additionally, module and tutorial must match with one of the values already present in the system to get achieve a successful delete.
+Additionally, module and tutorial must match with one of the values already present in the system to get achieve a successful listing.
 Tags here are optional and need not be specified.
 
 </box>
 
 Step 4. Based on the prefixes, `ListStudentsOfClassCommandParser` creates an `ListStudentsOfClassCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `ListStudentsOfClassCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
-Throughout the process, error handling (e.g checking for duplicate email or id, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+Step 5. `LogicManager` calls `ListStudentsOfClassCommand#execute()`, passing `Model` as an argument. This method retrieves the module and tutorial class.
+Throughout the process, error handling (e.g making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
 
-Step 6. Finally, a `CommandResult` is created and the student is added to the TAHelper system.
+Step 6. Finally, a `CommandResult` is created and the students of a particular tutorial class of a module is listed.
 
 #### Design considerations:
 
@@ -606,8 +606,9 @@ Tags here are optional and need not be specified.
 
 Step 4. Based on the prefixes, `AddClassCommandParser` creates an `AddClassCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `AddClassCommand#execute()`, passing `Model` as an argument. This method adds the specified tutorial class into the TAHelper system. If the module does not yet exist, it creates the module and adds it into the TAHelper system first.
-Throughout the process, error handling (e.g checking for duplicate module code and tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+Step 5. `LogicManager` calls `AddClassCommand#execute()`, passing `Model` as an argument. This method retrieves the class to add to the system.
+Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
 
 Step 6. Finally, a `CommandResult` is created and the class is added to the TAHelper system.
 
@@ -654,8 +655,8 @@ Tags here are optional and need not be specified.
 
 Step 4. Based on the prefixes, `DeleteClassCommandParser` creates an `DeleteClassCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `DeleteClassCommand#execute()`, passing `Model` as an argument. This method deletes the tutorial class from the module in the TAHelper system.
-Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+Step 5. `LogicManager` calls `DeleteClassCommand#execute()`, passing `Model` as an argument. This method retrieves the class to delete from the system.
+Throughout the process, error handling (e.g making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
 
 Step 6. Finally, a `CommandResult` is created and the class is deleted from the module in the TAHelper system.
 
@@ -693,7 +694,7 @@ The `execute` command calls `AddressBookParser#parseCommand()`, which extracts t
 
 Step 2. The `AddressBookParser` then creates a new `DeleteModuleCommandParser` and calls `DeleteModuleCommandParser#parse()`, with `module/CS2103T` as the argument for the function.
 
-Step 3. The `DeleteClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the module to delete.
+Step 3. The `DeleteModuleCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the module to delete.
 
 <box type="info" seamless>
 
@@ -705,8 +706,8 @@ Tags here are optional and need not be specified.
 
 Step 4. Based on the prefixes, `DeleteModuleCommandParser` creates an `DeleteModuleCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `DeleteModuleCommand#execute()`, passing `Model` as an argument. This method deletes the module from the TAHelper system.
-Throughout the process, error handling (e.g checking for duplicate module code, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+Step 5. `LogicManager` calls `DeleteModuleCommand#execute()`, passing `Model` as an argument. This method retrieves the module to delete from the TAHelper system.
+Throughout the process, error handling (e.g making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
 
 Step 6. Finally, a `CommandResult` is created and the module is deleted from the TAHelper system.
 
@@ -894,6 +895,55 @@ Step 6. Finally, a `CommandResult` is created and the student is added to the tu
 * **Alternative 2:** Lump into one generic command that handles each parameter accordingly.
   - Pros: Reduces duplicate code and much cleaner (i.e only 1 command class is executed).
   - Cons: The logic handling may be slightly more complex and messy within the class as all parameters have to be dealt with seperately (potentially using different logic).
+
+### \[Implemented\] View team
+
+The implementation of viewing a team is facilitated by the `ViewTeamCommand` and `ViewTeamCommandParser`. `ViewTeamCommandParser` implements the `Parser` interface and it's operations. `ViewTeamCommand` extends the
+`Command` class and displays team information based on the parameter of team passed in. It supports the following `Parameters`:
+
+- `Name` — Search and display team information based on team name.
+- `Index` — Search and display team information based on index of team in the tutorial class.
+
+Given below is an example usage scenario and how the add mechanism behaves at each step.
+
+Example: `/view_teams name/Team 1 module/CS2103T tutorial/T09`
+
+<puml src="diagrams/ViewTeamSequence.puml" alt="ViewTeamSequence" />
+
+Execution steps:
+Step 1. The user inputs and executes `/view_teams name/Team 1 module/CS2103T tutorial/T09` command to view team `Team 1` of the tutorial class `T09` in module `CS2103T`.
+
+The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
+
+Step 2. The `AddressBookParser` then creates a new `ViewTeamCommandParser` and calls `ViewTeamCommandParser#parse()`, with `name/Team 1`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+
+Step 3. The `ViewTeamCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the team to add.
+
+<box type="info" seamless>
+
+**Important Note:** All fields must be specified. There must be a valid value for name, module and tutorial.
+Tags here are optional and need not be specified.
+
+</box>
+
+Step 4. Based on the prefixes, `ViewTeamCommandParser` creates an `ViewTeamCommand` object. Each command contains all the required prefixes and values to used to create the command object.
+
+Step 5. `LogicManager` calls `ViewTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the target team in the tutorial class of the module.
+Throughout the process, error handling (e.g making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+Step 6. Finally, a `CommandResult` is created and the information of the team is displayed.
+
+#### Design considerations:
+
+**Aspect: Modularity and extensibility:**
+
+- **Alternative 1 (current choice):** Only one parameter allowed per command.
+  - Pros: Easy to implement.
+  - Cons: Does not allow users to fine tune searches based on multiple fields.
+  
+- **Alternative 2:** Allow for multiple parameters.
+  - Pros: Users can filter searches to a higher degree
+  - Cons: Handling combinations of different fields could be complex
 
 ---
 
@@ -1304,23 +1354,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. User specifies the student id of the student, the module code, tutorial class, and the tutorial team name
 in the tutorial class to allocate the student into.
 2. User enters the command and along with the details.
-3. System allocates student into tutorial team and displays a message. 
+3. System allocates student into tutorial team and displays a message.
    Use case ends.
 
 **Extensions**
-
-- 1a. The specified student is not in the system.
+- 1a. The specified student is not in the system. 
   - 1a1. TAHelper returns an error indicating that student is not in the system.
-  - Use case ends.
+  - Use case ends. 
 - 1b. The specified student is not in the tutorial class of the specified module.
   - 1b1. TAHelper returns an error indicating that student needs to be in the specified tutorial class of the specified module first.
   - Use case ends.
 - 1c. The specified tutorial team is not in the tutorial class.
   - 1c1: TAHelper returns an error indicating that the team does not exist in the tutorial class.
-  - Use case ends.
+  - Use case ends. 
 - 1d. The tutorial class is not in the system.
   - 1d1: TAHelper returns an error indicating that the tutorial class is not in the specified module.
   - Use case ends.
+    <br>
 
 ### Use case 12: Randomly allocating a list of students in the tutorial class into teams.
 
@@ -1335,7 +1385,6 @@ in the tutorial class to allocate the student into.
    Use case ends.
 
 **Extensions**
-
 - 1a. The specified tutorial class does not exist under the module specified.
   - 1a1. TAHelper returns an error message.
   - Use case ends.
@@ -1345,6 +1394,46 @@ in the tutorial class to allocate the student into.
 - 1c. The specified number of teams is invalid.
   - 1c1. TAHelper returns an error message indicating that the number of teams is invalid.
   - Use case ends.
+    <br>
+
+#### Use case 10: View all students in a class
+
+**MSS**
+
+1. User wants to view all students in a class.
+2. System shows a list of all students in the class.
+
+- 1a. Invalid input command.
+  - 1a1. Return an error indicating command not recognised and provides the correct command format.
+  - Use case ends.
+- 1b. Additional arguments are specified after the command.
+  - 1b1. System will ignore those arguments and execute the command as usual.
+- 2a. There is no class matching the specified class.
+  - 2a1. System will return a message indicating that there is no such class in the list.
+- 2b. There are no students in the class.
+  - 2b1. System will return a message indicating that there are no existing students in the class in the list.
+    <br>
+
+#### Use case 11: View team information
+
+**MSS**
+
+1. User wants to view information of a particular team in a class.
+2. System shows the information of the team in the class.
+=======
+- 1a. The specified student is not in the system.
+  - 1a1. TAHelper returns an error indicating that student is not in the system.
+  - Use case ends.
+- 1b. The specified student is not in the tutorial class of the specified module.
+  - 1b1. TAHelper returns an error indicating that student needs to be in the specified tutorial class of the specified module first.
+  - Use case ends.
+- 1c. The specified tutorial team is not in the tutorial class.
+  - 1c1: TAHelper returns an error indicating that the team does not exist in the tutorial class.
+  - Use case ends.
+- 1d. The tutorial class is not in the system.
+  - 1d1: TAHelper returns an error indicating that the tutorial class is not in the specified module.
+  - Use case ends.
+    <br>
 
 ---
 
