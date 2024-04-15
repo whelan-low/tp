@@ -12,7 +12,7 @@ Let TAHelper take control of the trivial student management work so that you can
 ---
 TAHelper is a **desktop app for managing contacts, optimized for use via a Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAHelper can get your students' contact management tasks done faster than traditional GUI apps.
 
-- Start your journey with us [here](#quick-start) today! Learn the basics, and seamless integrate into TAHelper today!
+- Start your journey with us [here](#quick-start) today! Learn the basics, and seamlessly integrate into TAHelper today!
 - For some uncommon or unfamiliar terms used in this User Guide, [click here](#glossary) for the definition and explanation of some.
 
 ## Why choose TAHelper?
@@ -710,6 +710,24 @@ must be in the team before command execution.
 [Back to table of contents](#table-of-contents)
 
 ---
+### Clearing all entries: `clear`
+
+Clears all entries from the TAHelper application.
+
+Format: `clear`
+
+[Back to table of contents](#table-of-contents)
+
+---
+### Exiting the program: exit
+
+Exit the program.
+
+Format: `/exit`
+
+[Back to table of contents](#table-of-contents)
+
+---
 ## FAQ
 
 **Q**: How can I check the Java version on my computer?<br>
@@ -773,5 +791,7 @@ must be in the team before command execution.
 | **Randomly allocate team**              | `/random_teams module/MODULE tutorial/TUTORIAL teams/NUMBER_OF_TEAMS` <br><br> e.g: `/random_teams module/CS2103 tutorial/T09 teams/4`                                                                                                                                                                                                                                                                   |
 | **Allocate students to team**           | `/allocate_team id/ID module/MODULE tutorial/TUTORIAL team/TEAM_NAME` <br><br> e.g: `/allocate_team id/A1234567K module/CS2103 tutorial/T09 team/Team 4`                                                                                                                                                                                                                                                 |
 | **Delete students from team**           | By ID: `/delete_student_from_team id/STUDENT_ID module/MODULE tutorial/TUTORIAL team/TEAM_NAME` <br> By email: `/delete_student_from_team email/EMAIL module/MODULE tutorial/TUTORIAL team/TEAM_NAME` <br> By index: `/delete_student_from_team index/INDEX module/MODULE tutorial/TUTORIAL team/TEAM_NAME` <br><br> e.g:`/delete_student_from_team id/A1234567K module/CS2103 tutorial/T09 team/Team 4` |
+| **Clear entries**                       | `clear`                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Exit program**                        | `/exit`                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 [Back to table of contents](#table-of-contents)
