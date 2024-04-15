@@ -431,7 +431,7 @@ Given below is an example usage scenario and how the add mechanism behaves at ea
 
 Example: `/class_list_students module/CS2103T tutorial/T09`
 
-<puml src="diagrams/ListStudentsOfClassSequence.puml" alt="ListStudentsOfClassSequence" />
+<puml src="diagrams/ListStudentsOfClass.puml" alt="ListStudentsOfClass" />
 
 Execution steps:
 Step 1. The user inputs and executes `/class_list_students module/CS2103T tutorial/T09` command to list students of the unique tutorial `T09` of a module `CS2103T`.
