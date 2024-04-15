@@ -224,15 +224,16 @@ The implemented add mechanism is facilitated by the abstract `DeleteStudentComma
 - `DeleteStudentByIndexCommand` — Delete student based on specified index (viewable from the UI).
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
-
-Example: `/delete_student id/A01234567X`
+Format: `/delete_student [id/ID] [email/EMAIL] [index/INDEX]`
+*Only 1 of the 3 parameters (id, email, index) must be specified
+Example: `/delete_student id/A0123456X`
 
 <puml src="diagrams/DeleteStudentSequence.puml" alt="DeleteStudentSequence" />
 
-Step 1. The user executes `/delete_student id/A01234567X` command to delete the particular student with id `A01234567X`.
+Step 1. The user executes `/delete_student id/A0123456X` command to delete the particular student with id `A0123456X`.
 The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
 
-Step 2. The `AddressBookParser` then creates a new `DeleteStudentCommandParser` and calls `DeleteStudentCommandParser#parse()`, with `id/A01234567X` as the argument.
+Step 2. The `AddressBookParser` then creates a new `DeleteStudentCommandParser` and calls `DeleteStudentCommandParser#parse()`, with `id/A0123456X` as the argument.
 
 Step 3. The `DeleteStudentCommandParser` parses the arguments to determine what parameter is used to specify the target student (email, index or id).
 
@@ -331,12 +332,13 @@ The implemented add mechanism is facilitated by the abstract `AddStudentToClassC
 `AddStudentToClassCommand` extends the `Command` class and contains auxillary operations that supports the mechanism, such as retrieving the target tutorial class. Each of the following commands further extends `AddStudentToClassCommand` based on its specific functionality:
 
 - `AddStudentToClassByEmailCommand` — Add student based on specified email to a tutorial class.
-- `AddStudentToClassByIdCommand` — Add student based on specified student id to a tutorial class.
+- `AddStudentToClassByIdCommand` — Add student based on specified student ID to a tutorial class.
 - `AddStudentToClassByIndexCommand` — Add student based on specified index (viewable from the UI) to a tutorial class
 
-Given below is an example usage scenario and how the add mechanism behaves at each step.
-
-Example: `/add_student_to_class id/A01234567X module/CS2103T tutorial/T09`
+Given below is an example usage scenario and how the add mechanism behaves at each step. <br>
+Format: `/add_student_to_class [id/ID] [email/EMAIL] [index/INDEX] module/MODULE tutorial/TUTORIL`
+*Only 1 of the 3 optional parameters (id, email, index) must be specified
+Example: `/add_student_to_class id/A0123456X module/CS2103T tutorial/T09`
 
 <puml src="diagrams/AddStudentToClassSequence.puml" alt="AddStudentToClassSequence" />
 
@@ -745,41 +747,43 @@ Step 3. The result string is then trimmed and `CommandResult`.
 The implementation of adding a class is facilitated by the `AddTeamCommand` and `AddTeamCommandParser`. `AddTeamCommandParser` implements the `Parser` interface and it's operations. `AddTeamCommand` extends the
 `Command` class and contains auxillary operations that supports the mechanism.
 
-Given below is an example usage scenario and how the add mechanism behaves at each step.
-
-Example: `/add_team module/CS2103 tutorial/T09 name/Team 1 size/5`
+Given below is an example usage scenario and how the add mechanism behaves at each step. <br>
+Format: `/add_team module/MODULE tutorial/TUTORIAL team/TEAM_NAME [size/SIZE]`
+Example: `/add_team module/CS2103 tutorial/T09 team/Team 1 size/5`
 
 <puml src="diagrams/AddTeamSequence.puml" alt="AddTeamSequence" />
 
 Execution steps:
-Step 1. The user inputs and executes `/add_team module/CS2103 tutorial/T09 name/Team 1 size/5` command to add a team `Team 1` of size `5` to the tutorial class `T09` of module `CS2103T`
+Step 1. The user inputs and executes `/add_team module/CS2103 tutorial/T09 team/Team 1 size/5` command to add a team `Team 1` of size `5` to the tutorial class `T09` of module `CS2103T`
 
 The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
 
-Step 2. The `AddressBookParser` then creates a new `AddTeamCommandParser` and calls `AddTeamCommandParser#parse()`, with `name/Team 1`, `size/5`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+Step 2. The `AddressBookParser` then creates a new `AddTeamCommandParser` and calls `AddTeamCommandParser#parse()`, with `team/Team 1`, `size/5`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
 
-Step 3. The `AddClassCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the team to add.
+Step 3. The `AddTeamCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the team to add.
 
 <box type="info" seamless>
 
-**Important Note:** All fields must be specified. There must be a valid value for name, size, module and tutorial.
-Additionally, name, module and tutorial must be unique compared to the values already present in the system to get achieve a successful add.
-Tags here are optional and need not be specified.
+**Important Note:** Team name, module and tutorial must be specified with valid values. Size is an optional parameter. If size is not specified, the default size of the team is set to `INTEGER.MAX_VALUE`.
 
 </box>
 
 Step 4. Based on the prefixes, `AddTeamCommandParser` creates an `AddTeamCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `AddTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
-Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+Step 5. `LogicManager` calls `AddTeamCommand#execute()`, passing `Model` as an argument. Within the execution process, the method retrieves the module and tutorial from the model. Within the tutorial, the method checks if a team with the same name exists. If such a team already exists, the method will return an error.
 
-Step 6. Finally, a `CommandResult` is created and the team is added to the TAHelper system.
+**Important Note:** Two teams are considered equal if and only if they have the same team name and belong to the same tutorial class, irregardless of size.
+
+Throughout the process, error handling (e.g checking for valid module and tutorial class, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+
+
+Step 6. Finally, a `CommandResult` is created and the team is added to the tutorial class specified.
 
 #### Design considerations:
 
-**Aspect: Modularity and extensibility:**
+**Aspect: Robustness:**
 
-- **Alternative 1 (current choice):** A unique team name, module code and tutorial class is required when adding classes into the TAHelper system, as well as user have to specify all fields, team name, module code and tutorial class in order to add a new team successfully.
+- **Alternative 1 (current choice):** Using `null` to represent an optional team size cand tutorial class is required when adding classes into the TAHelper system, as well as user have to specify all fields, team name, module code and tutorial class in order to add a new team successfully.
   - Pros: Ensures that all teams are unique and not repeated. This helps facilitate other commands such as allocate student to teams to find a match in team easily without duplicates.
   - Cons: Users may inadvertently provide incorrect or non-existent module codes or tutorial class identifiers, leading to errors in the system. This could result in frustration and a poor user experience.
 
@@ -793,42 +797,50 @@ The implementation of adding a class is facilitated by the `DeleteTeamCommand` a
 `Command` class and contains auxillary operations that supports the mechanism.
 
 Given below is an example usage scenario and how the add mechanism behaves at each step.
-
-Example: `/delete_team module/CS2103T tutorial/T09 name/Team 1`
+Format: `/delete_team module/MODULE tutorial/TUTORIAL team/TEAM_NAME`
+Example: `/delete_team module/CS2103T tutorial/T09 team/Team 1`
 
 <puml src="diagrams/DeleteTeamSequence.puml" alt="DeleteTeamSequence" />
 
 Execution steps:
-Step 1. The user inputs and executes `/delete_team module/CS2103T tutorial/T09 name/Team 1` command to delete a team `Team 1` in tutorial `T09` of module `CS2103T`.
+Step 1. The user inputs and executes `/delete_team module/CS2103T tutorial/T09 team/Team 1` command to delete a team `Team 1` in tutorial `T09` of module `CS2103T`.
 
 The `execute` command calls `AddressBookParser#parseCommand()`, which extracts the command word of the command and the arguments of the command.
 
-Step 2. The `AddressBookParser` then creates a new `DeleteTeamCommandParser` and calls `DeleteTeamCommandParser#parse()`, with `name/Team 1`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
+Step 2. The `AddressBookParser` then creates a new `DeleteTeamCommandParser` and calls `DeleteTeamCommandParser#parse()`, with `team/Team 1`, `module/CS2103T`, `tutorial/T09` as the arguments for the function.
 
 Step 3. The `DeleteTeamCommandParser` parses the arguments and get the values of the user input associated with the prefixes, from there determine the tutorial of the module to delete.
 
 <box type="info" seamless>
 
-**Important Note:** All fields must be specified. There must be a valid value for module and tutorial.
-Additionally, module and tutorial must match with one of the values already present in the system to get achieve a successful delete.
-Tags here are optional and need not be specified.
+**Important Note:** All fields must be specified. There must be a valid value for module, tutorial and team, which must match with one of the values already present in the system to get achieve a successful delete.
+Additionally, two teams are considered equal if and only if they have the same team name and belong to the same tutorial class, irregardless of size.
 
 </box>
 
 Step 4. Based on the prefixes, `DeleteTeamCommandParser` creates an `DeleteTeamCommand` object. Each command contains all the required prefixes and values to used to create the command object.
 
-Step 5. `LogicManager` calls `DeleteTeamCommand#execute()`, passing `Model` as an argument. This method retrieves the adds the student to the TAHelper system.
-Throughout the process, error handling (e.g checking for duplicate module code or tutorial, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
+Step 5. `LogicManager` calls `DeleteTeamCommand#execute()`, passing `Model` as an argument. Within the execution process, the method retrieves the module and tutorial from the model. Thereafter, it retrieves the team from the tutorial class. 
+Throughout the process, error handling (e.g checking for valid module, tutorial and team, making sure references passed are not null) is utilised to mitigate potential errors and ensure valid execution.
 
 Step 6. Finally, a `CommandResult` is created and the team is deleted from the TAHelper system.
 
 #### Design considerations:
 
-**Aspect: Modularity and extensibility:**
+**Aspect: Functionality:**
 
-- **Alternative 1 (current choice):** A unique team name, module code and tutorial class is required when deleting teams from the TAHelper system, as well as user have to specify all fields, team name, module code and tutorial class in order to delete a team successfully.
-  - Pros: Ensures that the team is only deleted if there is a match in the system. Also ensure that the other teams of the tutorial class is not deleted if no team is specified.
-  - Cons: Users may inadvertently provide incorrect or non-existent team or module codes or tutorial class identifiers, leading to errors in the system. This could result in frustration and a poor user experience.
+- **Alternative 1 (current choice):** Team size is not included in equality check of teams.
+  - Pros:
+    - **Simplification of team identity**: Excluding team size simplifies the concept of what defines a team, making it easier to manage teams, especially if the team size changes. In most cases, team size is less relevant to its identity and more about its functional role or participation
+  - Cons:
+    - **Potential for ambiguity/Inaccurate representation**: Not considering team size might lead to situations where teams with the same name but of different sizes are treated the same, which can cause issues in contexts where size is a significant factor. However, this is mitigated by also including tutorial class in the equality check (i.e there can be multiple teams of the same name within the system as long as they are in different tutorials)
+
+- **Alternative 2 :** Team size is included in equality check of teams.
+  - Pros: 
+    - **Precision**: Including team size allows the system to distinguish between teams more precisely.
+    - **Data integrity**: This method can prevent confusion or errors in operations where the specific composition of the team (including its size) is crucial, especially for future enhancements such as scheduling.
+  - Cons: 
+    - **Complexity in team management**:  might complicate the management of teams, especially in dynamic settings where team sizes can fluctuate. Changes in team size would necessitate creating a new team or redefining the team entity.
 
 ### \[Implemented\] Allocate student to team
 
@@ -933,6 +945,10 @@ _{More to be added}_
 
 #### Use case 1: Add new students
 
+**Actor**: User
+
+**System**: TAHelper
+
 **MSS:**
 
 1. User specifies the student to be added.
@@ -960,6 +976,10 @@ _{More to be added}_
 
 #### Use case 2: Delete students
 
+**Actor**: User
+
+**System**: TAHelper
+
 **MSS:**
 
 1. User specifies the student to be deleted.
@@ -982,6 +1002,10 @@ _{More to be added}_
 
 #### Use case 3: Search for students
 
+**Actor**: User
+
+**System**: TAHelper
+
 **MSS:**
 
 1. User specifies the student to be searched for.
@@ -1002,10 +1026,14 @@ _{More to be added}_
 
 #### Use case 4: View all students
 
+**Actor**: User
+
+**System**: TAHelper
+
 **MSS:**
 
 1. User wants to view all students' information.
-2. System displays all students information (name, email, student id and tutorial class).
+2. System displays all the student's information (name, email, student id).
    Use case ends.
 
 **Extensions:**
@@ -1020,6 +1048,10 @@ _{More to be added}_
     <br>
 
 #### Use case 5: Add new tutorial class
+
+**Actor**: User
+
+**System**: TAHelper
 
 **MSS:**
 
@@ -1042,6 +1074,10 @@ _{More to be added}_
 
 #### Use case 6: Delete tutorial class
 
+**Actor**: User
+
+**System**: TAHelper
+
 **MSS:**
 
 1. User specifies the class to be deleted.
@@ -1060,6 +1096,10 @@ _{More to be added}_
 
 #### Use case 7: View all classes
 
+**Actor**: User
+
+**System**: TAHelper
+
 **MSS**
 
 1. User wants to view all classes.
@@ -1072,11 +1112,64 @@ _{More to be added}_
   - 1a1. Return an error indicating command not recognised and provides the correct command format.
   - Use case ends.
 - 1b. Additional arguments are specified after the command.
-  - 1b1. System will ignore those arguments and execute the comamnd as usual.
+  - 1b1. System will ignore those arguments and execute the command as usual.
 - 2a. There are no existing classes.
   - 2a1. System will return a message indicating that there are no existing classes in the list.
     <br>
 
+#### Use case 8: Allocate Student to tutorial team
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS**
+1. User specifies the student id of the student, the module code, tutorial class, and the tutorial team name
+in the tutorial class to allocate the student into.
+2. User enters the command and along with the details.
+3. System allocates student into tutorial team and displays a message. 
+   Use case ends.
+
+**Extensions**
+
+- 1a. The specified student is not in the system.
+  - 1a1. TAHelper returns an error indicating that student is not in the system.
+  - Use case ends.
+- 1b. The specified student is not in the tutorial class of the specified module.
+  - 1b1. TAHelper returns an error indicating that student needs to be in the specified tutorial class of the specified module first.
+  - Use case ends.
+- 1c. The specified tutorial team is not in the tutorial class.
+  - 1c1: TAHelper returns an error indicating that the team does not exist in the tutorial class.
+  - Use case ends.
+- 1d. The tutorial class is not in the system.
+  - 1d1: TAHelper returns an error indicating that the tutorial class is not in the specified module.
+  - Use case ends.
+
+### Use case 9: Randomly allocating a list of students in the tutorial class into teams.
+
+**Actor**: User
+
+**System**: TAHelper
+
+**MSS**
+1. User specifies the module code, tutorial class, and number of teams to split the list of students in the tutorial class into.
+2. User enters the command along with the details.
+3. System allocates the list of students in the tutorial class into different tutorial teams and displays a message.
+   Use case ends.
+
+**Extensions**
+
+- 1a. The specified tutorial class does not exist under the module specified.
+  - 1a1. TAHelper returns an error message.
+  - Use case ends.
+- 1b. The specified module does not exist.
+  - 1b1. TAHelper returns an error message indicating that module does not exist in the system.
+  - Use case ends.
+- 1c. The specified number of teams is invalid.
+  - 1c1. TAHelper returns an error message indicating that the number of teams is invalid.
+  - Use case ends.
+
+---
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
@@ -1118,17 +1211,35 @@ testers are expected to do more _exploratory_ testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
       Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+---
+### Adding a person
+1. Adding a new person into the TAHelper system.
 
+  1. Prerequisites: NIL.
+
+  1. Test case 1: Entering `/add_student name/Dohn Joe email/johndoe@gmail.com id/A0123456A` for the first time<br>
+      Expected: A new student is successfully added into the TAHelper system.
+
+  2. Test case 2: Entering `/add_student name/Dohn Joe email/johndoe@gmail.com id/A6543210A` with the same email<br>
+      Expected: An error message displayed. A person with the same email cannot be added because a student with the same email already exist in the TAHelper system.
+  
+  3. Test case 3: `/add_student name/Dohn Joe email/johndoe@gmail.com id/0123`
+      Expected: An error message is displayed as the input id value is invalid.
+
+  4. Test case 4: `/add_student name/john email/john@gmail.com id/A9876543A tag/Tutee`
+      Expected: A new student is successfully added into the TAHelper system.
+
+
+---
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -1144,6 +1255,31 @@ testers are expected to do more _exploratory_ testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
+
+---
+### Allocating a student to a team in tutorial class.
+1. Allocating a student to a team in the tutorial class by studentId, email or index that they belong to in the tutorial class list.
+
+   1. Prerequisites: 
+      1. The student (Person's object) should already been in the module's tutorial class list of students.
+      2. The module and tutorial class in that module must already exist in the system.
+      3. The team to allocate the student into must exist in that tutorial class.
+      4. The student to allocate must already exist in TAHelper system.
+
+   2. To set up these prerequisites: visit [] to add student into tutorial class, and visit [] to add tutorial team into the tutorial class.
+
+   3. Test case 1 (Allocating by student id): `/allocate_team id/A9876543A module/CS2101 tutorial/T02 team/Team1`
+      Expected: Student successfully added to Team1 of tutorial T02.
+
+   4. Test case 2 (Allocating by email) (Assuming Test case 1 is not executed on the same person): `/allocate_team email/Jared@example.com module/CS2101 tutorial/T02 team/Team1`
+      Expected: Student successfully added to Team1 of tutorial T02.
+
+   5. Test case 3 (Allocating a student that is not in that tutorial group): `/allocate_team id/A1111111Z module/CS2101 tutorial/T02 team/Team1`
+      Expected: An error message is displayed indicating that the student needs to be in the tutorial group first.
+
+   6. Test case 4 (Allocating a student that is not in the TAHelper system): `/allocate_team id/A0987654A module/CS2101 tutorial/T02 team/Team1`
+      Expected: An error message is played indicating that the student is not in TAHelper system.
+
 1. _{ more test cases …​ }_
 
 ### Saving data
@@ -1153,3 +1289,61 @@ testers are expected to do more _exploratory_ testing.
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
+---
+
+## **Appendix: Planned Enhancements**
+
+## Planned Enhancements
+---
+
+### Name value regular expression (regex) validation improvements
+
+**Current implementation**
+1. Currently, the name class employs a slightly less strict regular expression in order to validate the name that users input when adding a new Person. This means that currently, the system accepts a Person's name that is solely consisting of integers.
+which in most cases, is not culturally accepted or possible in the world. Furthermore, it does not support names with higher complexity such as "Jai S/O John". However, such names are perfectly acceptable formats and such formats appear in many names in Singapore and around the world.
+
+**Proposed enhancement(s)**
+1. We look to implement a stricter validation regular expression (regex) for the name valid value so that the system is able to accept names that have special symbols in them.
+2. Furthermore, we also want to implement a regex expression that ensures that a Person's name cannot solely contain all integer values.
+
+---
+
+### Email value regular expression (regex) validation improvements
+
+**Current implementation**
+1. Currently, the email class employs a slightly less strict regular expression in order to validate the email that users input when adding a new Person. This means that user are able to input email format that is not a valid email by convention.
+Current implementation only mainly checks if the `@` symbol is present, and does not check if a valid domain has been entered.
+
+**Proposed enhancement(s)**
+1. We look to implement a stricter validation regular expression (regex) for the email valid value so that the system is only able to accept email values that are more appropriate and valid in terms of real world context.
+This enhancements could come in the form of ensure that a valid domain name has been passed in, as well as ensuring that the `.com` format for the wider public or the `u.nus.edu.sg` format for example, is specified in the context of NUS students.
+
+---
+
+### More detailed error messages for AddStudentCommand
+
+**Current implementation**
+1. Currently, when a user tries to add a student with the same email or student id as any student in the system, the system will display a generic error message that tells user the person they want to add already exist in the system.
+However, it does not tell users which value, email or student id, clashes with another Person object in the system.
+
+**Proposed enhancement(s)**
+1. We look to implement a more detailed error message that specifies which field, email or id, or both, that violated the unique valid policy of a person object in the system.
+This way, it will improve user experience as users are able to fix the issue with more specific aid/help.
+
+
+---
+
+### Add column labels on UI to improve readability.
+
+**Current implementation**
+1. Current implementation for the columns does not show what the entries in the columns represent. Although we can safely assume that upon seeing the entries in each column, our target audience would be able to understand what the column means,
+but it can sometimes get confusing and overwhelming, especially for the last column, which handles the entries of students.
+
+**Proposed enhancement(s)**
+1. Firstly, we look to implement a label that tells users that the left column represents the list of modules, middle column represents the list of tutorial classes in that module,
+and the right column represents the list of students.
+2. Secondly, we want to implement even more specific label, such as when user enters the module to view the list of classes for that module, the label for the middle column (the column displaying the list of tutorial classes) should show that something like
+'CS2101 tutorial classes', something that is specific to the module.
+3. Thirdly, similar to point 2, we want to implement even more specific person column label, such as when user enters to view the list of students in a tutorial class, the label shows something like 'T01's class list'.
+This will greatly aid user's readability, and it is an enhancement we want to make.
